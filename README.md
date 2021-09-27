@@ -30,6 +30,7 @@ The app will automatically reload if you change any of the source files.
 ## Project Structure 
 
 ### App Folder
+```
 ├── ...
 ├── app                     
 │   ├── core                        # For `Service`, `utils`, `enum`, `model` (Global use)
@@ -41,18 +42,21 @@ The app will automatically reload if you change any of the source files.
 │   └── app.component.html          # Main html
 │   └── ...
 └── ....
+```
 
 ### Core Folder
+```
 ├── ...
 ├── core                    
-│   ├── authentication            # Login/Logout service
-│   ├── http                      # API url setting, service about calling API define here
-│   ├── models                    # Define class for type 
-│   ├── service                   # Define Common service for common logic
-│   ├── utils                     # Define some tool for code
-│   ├── enum                      # Define come constant
+│   ├── authentication     # Login/Logout service
+│   ├── http               # API url setting, service about calling API define here
+│   ├── models             # Define class for type 
+│   ├── service            # Define Common service for common logic
+│   ├── utils              # Define some tool for code
+│   ├── enum               # Define come constant
 │   └── ...
 └── ....
+```
 
 ## For Developer Guideline
 ### [1. Commit Guideline](https://www.notion.so/Commit-4a5c182851aa4c75b19861a6858870f9)
