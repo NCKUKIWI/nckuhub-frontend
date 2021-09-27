@@ -1,27 +1,86 @@
-# Angular
+# [NCKU HUB](https://nckuhub.com/) Frontend
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 11.0.6.
+* This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 11.0.6.
+* Using
+    - Angular Universal
+    - Yarn
 
-## Development server
+## Setup
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+- Install [yarn](https://classic.yarnpkg.com/en/docs/install) first!
 
-## Code scaffolding
+## Attention
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+- Use **yarn** instead of **npm**
 
-## Build
+## Start Angular SSR Server
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+```
+yarn dev:ssr
+```
+Run `yarn dev:ssr` for a SSR server. Navigate to `http://localhost:4200/`. 
 
-## Running unit tests
+## Start Frontend Server
+```
+yarn start
+```
+Run `yarn start` for a frontend server. Navigate to `http://localhost:4200/`. 
+The app will automatically reload if you change any of the source files.
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+## Project Structure 
 
-## Running end-to-end tests
+### App Folder
+├── ...
+├── app                     
+│   ├── core                        # For `Service`, `utils`, `enum`, `model` (Global use)
+│   ├── shared                      # Angular share `directive`, `pipes`, `components`
+│   ├── app-routing.module.ts       # Main router
+│   ├── app.module.ts               # Main module
+│   ├── app-server.module.ts        # SSR server module
+│   ├── app.component.ts            # Main component
+│   └── app.component.html          # Main html
+│   └── ...
+└── ....
 
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
+### Core Folder
+├── ...
+├── core                    
+│   ├── authentication            # Login/Logout service
+│   ├── http                      # API url setting, service about calling API define here
+│   ├── models                    # Define class for type 
+│   ├── service                   # Define Common service for common logic
+│   ├── utils                     # Define some tool for code
+│   ├── enum                      # Define come constant
+│   └── ...
+└── ....
 
-## Further help
+## For Developer Guideline
+### [1. Commit Guideline](https://www.notion.so/Commit-4a5c182851aa4c75b19861a6858870f9)
+```
+<type>: <short summary>
+  │            │
+  │            └─⫸ Summary in present tense. Not capitalized. No period at the end.
+  │  
+  └─⫸ Commit Type: build|ci|docs|feat|fix|perf|refactor|test
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+build: Changes that affect the build system or external dependencies (example scopes: gulp, broccoli, npm)
+ci: Changes to our CI configuration files and scripts (example scopes: Circle, BrowserStack, SauceLabs)
+docs: Documentation only changes
+feat: A new feature
+fix: A bug fix
+perf: A code change that improves performance
+refactor: A code change that neither fixes a bug nor adds a feature
+test: Adding missing tests or correcting existing tests
+```
+
+### [2. Branch name style](https://www.notion.so/Commit-4a5c182851aa4c75b19861a6858870f9)
+```
+{feature|hotfix}/{Issue No.}-{(feature|hotfix)-description}
+```
+### [3. Git Flow](https://www.notion.so/Git-Flow-07e0a1f720374e9c8802b84898531c91)
+
+### [4. Develop Flow](https://www.notion.so/c659d713ff724890af1b8b604cc6fdf4)
+
+### [5. Deploy Flow](https://www.notion.so/e3288456661349dd9ca03dbcad3a3422)
+
+## Key Packages

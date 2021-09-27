@@ -1,11 +1,11 @@
 import { Injectable } from "@angular/core";
 import { Observable, of } from "rxjs";
 import { map, tap } from "rxjs/operators";
-import { User } from "src/app/shared/models/user.model";
+import { User } from "src/app/core/models/user.model";
 import { UserStatusEnum } from "../enum/user-staus";
 import { AppService } from "../http/app.service";
 import { AppUrl } from "../http/app.setting";
-import { NckuhubResponse } from "../http/http-vo-model";
+import { NckuhubResponse } from "../models/http-vo-model";
 
 /**
  * 使用者資料 service <br/>

@@ -2,7 +2,7 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from "@angular/core";
 import { defer, Observable } from "rxjs";
 import { AppSettings } from "./app.setting";
-import { AppRequestContext, NckuhubResponse } from "./http-vo-model";
+import { AppRequestContext, NckuhubResponse } from "../models/http-vo-model";
 import { finalize, tap, timeout } from 'rxjs/operators';
 import { LoadingService } from './loading.service';
 
