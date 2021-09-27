@@ -1,0 +1,18 @@
+{
+    "root": true,
+    "ignorePatterns": [
+      "projects/**/*"
+    ],
+    "overrides": [
+      {
+        "files": [
+          "*.ts"
+        ]
+      },
+      {
+        "files": [
+          "*.html"
+        ]
+      }
+    ]
+  }
