@@ -1,5 +1,5 @@
 {
-  "name": "KIWI_ANGULAR",
+  "name": "nckuhub-frontend",
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
@@ -8,10 +8,10 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "dev:ssr": "ng run KIWI_ANGULAR:serve-ssr",
-    "serve:ssr": "node dist/KIWI_ANGULAR/server/main.js",
-    "build:ssr": "ng build --prod && ng run KIWI_ANGULAR:server:production",
-    "prerender": "ng run KIWI_ANGULAR:prerender"
+    "dev:ssr": "ng run nckuhub-frontend:serve-ssr",
+    "serve:ssr": "node dist/nckuhub-frontend/server/main.js",
+    "build:ssr": "ng build --prod && ng run nckuhub-frontend:server:production",
+    "prerender": "ng run nckuhub-frontend:prerender"
   },
   "private": true,
   "dependencies": {
