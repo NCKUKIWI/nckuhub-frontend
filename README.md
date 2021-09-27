@@ -40,7 +40,7 @@ The app will automatically reload if you change any of the source files.
 │   ├── app.module.ts               # Main module
 │   ├── app-server.module.ts        # SSR server module
 │   ├── app.component.ts            # Main component
-│   └── app.component.html          # Main html
+│   ├── app.component.html          # Main html
 │   └── ...
 └── ....
 ```
