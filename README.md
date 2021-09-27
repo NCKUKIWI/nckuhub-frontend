@@ -5,31 +5,31 @@
     - Angular Universal
     - Yarn
 
-## Setup
+## I. Setup
 
 - Install [yarn](https://classic.yarnpkg.com/en/docs/install) first!
 
-## Attention
+## II. Attention
 
 - Use **yarn** instead of **npm**
 
-## Start Angular SSR Server
+## III. Start Angular SSR Server
 
 ```
 yarn dev:ssr
 ```
 Run `yarn dev:ssr` for a SSR server. Navigate to `http://localhost:4200/`. 
 
-## Start Frontend Server
+## IV. Start Frontend Server
 ```
 yarn start
 ```
 Run `yarn start` for a frontend server. Navigate to `http://localhost:4200/`. 
 The app will automatically reload if you change any of the source files.
 
-## Project Structure 
+## V. Project Structure 
 
-### App Folder
+### 1. App Folder
 ```
 ├── ...
 ├── app                     
@@ -44,7 +44,7 @@ The app will automatically reload if you change any of the source files.
 └── ....
 ```
 
-### Core Folder
+### 2. Core Folder
 ```
 ├── ...
 ├── core                    
@@ -58,7 +58,7 @@ The app will automatically reload if you change any of the source files.
 └── ....
 ```
 
-## For Developer Guideline
+## VI. For Developer Guideline
 ### [1. Commit Guideline](https://www.notion.so/Commit-4a5c182851aa4c75b19861a6858870f9)
 ```
 <type>: <short summary>
@@ -87,4 +87,8 @@ test: Adding missing tests or correcting existing tests
 
 ### [5. Deploy Flow](https://www.notion.so/e3288456661349dd9ca03dbcad3a3422)
 
-## Key Packages
+## VII. Key Packages
+
+## VIII. Usage
+
+## IX. License
