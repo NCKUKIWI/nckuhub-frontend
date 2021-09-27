@@ -35,6 +35,7 @@ The app will automatically reload if you change any of the source files.
 ├── ...
 ├── app                     
 │   ├── core                        # For `Service`, `utils`, `enum`, `model` (Global use)
+│   ├── pages                       # Each view component in project
 │   ├── shared                      # Angular share `directive`, `pipes`, `components`
 │   ├── app-routing.module.ts       # Main router
 │   ├── app.module.ts               # Main module
@@ -55,6 +56,15 @@ The app will automatically reload if you change any of the source files.
 │   ├── service            # Define Common service for common logic
 │   ├── utils              # Define some tool for code
 │   ├── enum               # Define come constant
+│   └── ...
+└── ....
+```
+
+### 3. Pages Folder
+```
+├── ...
+├── pages                    
+│   ├── pages.module.ts         # .....
 │   └── ...
 └── ....
 ```
