@@ -1,6 +1,7 @@
 # [NCKU HUB](https://nckuhub.com/) Frontend
 
 * This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 11.0.6.
+* An Frontend for NCKUHUB websit
 * Using
     - Angular Universal
     - Yarn
