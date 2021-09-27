@@ -82,7 +82,7 @@ Run `yarn dev:ssr` for a SSR server. Navigate to `http://localhost:4200/`.
   │            │
   │            └─⫸ Summary in present tense. Not capitalized. No period at the end.
   │  
-  └─⫸ Commit Type: build|ci|docs|feat|fix|perf|refactor|test
+  └─⫸ Commit Type: build|ci|docs|feat|fix|perf|refactor|test|chore|style|revert
 
 ```
 - `build`: Changes that affect the build system or external dependencies (example scopes: gulp, broccoli, npm)
