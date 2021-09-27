@@ -77,7 +77,7 @@ The app will automatically reload if you change any of the source files.
   │            │
   │            └─⫸ Summary in present tense. Not capitalized. No period at the end.
   │  
-  └─⫸ Commit Type: build|ci|docs|feat|fix|perf|refactor|test
+  └─⫸ Commit Type: build|ci|docs|feat|fix|perf|refactor|test|chore|style|revert
 
 ```
 - `build`: Changes that affect the build system or external dependencies (example scopes: gulp, broccoli, npm)
