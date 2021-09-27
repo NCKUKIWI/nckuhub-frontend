@@ -62,5 +62,6 @@
   },
   "engines" : { 
     "node" : ">=0.14"
-  }
+  },
+  "engineStrict": true
 }
