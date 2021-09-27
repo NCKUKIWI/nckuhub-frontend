@@ -18,7 +18,7 @@
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
-            "aot": false,
+            "aot": true,
             "assets": [
               "src/favicon.ico",
               "src/assets"
@@ -35,6 +35,9 @@
             "namedChunks": true
           },
           "configurations": {
+            "development": {
+              "aot": false
+            },
             "production": {
               "fileReplacements": [
                 {
@@ -135,6 +138,9 @@
             "extractLicenses": false
           },
           "configurations": {
+            "development": {
+              "outputHashing": "media"
+            },
             "production": {
               "outputHashing": "media",
               "fileReplacements": [
@@ -154,8 +160,8 @@
           "builder": "@nguniversal/builders:ssr-dev-server",
           "configurations": {
             "development": {
-              "browserTarget": "nckuhub-frontend:build",
-              "serverTarget": "nckuhub-frontend:server"
+              "browserTarget": "nckuhub-frontend:build:development",
+              "serverTarget": "nckuhub-frontend:server:development"
             },
             "production": {
               "browserTarget": "nckuhub-frontend:build:production",
