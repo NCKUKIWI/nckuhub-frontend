@@ -12,7 +12,7 @@ import { DialogService } from './core/service/dialog.service';
     AppComponent
   ],
   imports: [
-    BrowserModule.withServerTransition({ appId: 'serverApp' }),
+    BrowserModule,
     AppRoutingModule,     // router
   ],
   providers: [
