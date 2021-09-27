@@ -83,11 +83,14 @@ The app will automatically reload if you change any of the source files.
 - `build`: Changes that affect the build system or external dependencies (example scopes: gulp, broccoli, npm)
 - `ci`: Changes to our CI configuration files and scripts (example scopes: Circle, BrowserStack, SauceLabs)
 - `docs`: Documentation only changes
-- `feat`: A new feature
-- `fix`: A bug fix
-- `perf`: A code change that improves performance
-- `refactor`: A code change that neither fixes a bug nor adds a feature
-- `test`: Adding missing tests or correcting existing tests
+- `feat`: 新增/修改功能 (feature)。
+- `fix`: 修補 bug (bug fix)。
+- `perf`:  改善效能 (A code change that improves performance)。
+- `refactor`: 重構 (既不是新增功能，也不是修補 bug 的程式碼變動)。
+- `test`: 增加測試 (when adding missing tests)。
+- `chore`: 建構程序或輔助工具的變動 (maintain)。
+- `style`: 格式 (不影響程式碼運行的變動 white-space, formatting, missing semi colons, etc)。
+- `revert`: 撤銷回覆先前的 commit 例如：revert: type(scope): subject (回覆版本：xxxx)。
 
 ### [2. Branch name style](https://www.notion.so/Commit-4a5c182851aa4c75b19861a6858870f9)
 ```
