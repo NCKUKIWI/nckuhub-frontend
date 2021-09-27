@@ -154,8 +154,8 @@
           "builder": "@nguniversal/builders:ssr-dev-server",
           "configurations": {
             "development": {
-              "browserTarget": "nckuhub-frontend:build:development",
-              "serverTarget": "nckuhub-frontend:server:development"
+              "browserTarget": "nckuhub-frontend:build",
+              "serverTarget": "nckuhub-frontend:server"
             },
             "production": {
               "browserTarget": "nckuhub-frontend:build:production",
