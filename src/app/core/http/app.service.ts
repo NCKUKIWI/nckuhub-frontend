@@ -47,6 +47,28 @@ export class AppService {
     }
 
     /**
+     * 以HTTP GET方式傳送訊息
+     * @param context 
+     * @return n/a
+     */
+    get(context: AppRequestContext){
+        return defer(() => {
+            // setting httpOptions
+            const httpOptions = this.setHttpOptions(context.param);
+
+            // post
+            return this.http.get<NckuhubResponse>(AppSettings.API_ENDPOINT + context.url, httpOptions)
+            .pipe(
+                // 設定幾秒鐘timeout
+                // timeout(AppSettings.APP_TIME_OUT),
+                finalize(() => {
+                    this.loadingService.hide();
+                })
+            )
+        });
+    }
+
+    /**
      * 設定 http options
      * @param params 
      * @returns 
