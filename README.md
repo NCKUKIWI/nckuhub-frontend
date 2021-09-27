@@ -13,21 +13,22 @@
 
 - Use **yarn** instead of **npm**
 
-## III. Start Angular SSR Server
+## III. Start Deployment
+### 1. Start SSR Server
 
 ```
 yarn dev:ssr
 ```
 Run `yarn dev:ssr` for a SSR server. Navigate to `http://localhost:4200/`. 
 
-## IV. Start Frontend Server
+### 2. Start Frontend Server
 ```
 yarn start
 ```
 Run `yarn start` for a frontend server. Navigate to `http://localhost:4200/`. 
 The app will automatically reload if you change any of the source files.
 
-## V. Project Structure 
+## IV. Project Structure 
 
 ### 1. App Folder
 ```
@@ -58,7 +59,7 @@ The app will automatically reload if you change any of the source files.
 └── ....
 ```
 
-## VI. For Developer Guideline
+## V. For Developer Guideline
 ### [1. Commit Guideline](https://www.notion.so/Commit-4a5c182851aa4c75b19861a6858870f9)
 ```
 <type>: <short summary>
@@ -87,8 +88,8 @@ test: Adding missing tests or correcting existing tests
 
 ### [5. Deploy Flow](https://www.notion.so/e3288456661349dd9ca03dbcad3a3422)
 
-## VII. Key Packages
+## VI. Key Packages
 
-## VIII. Usage
+## VII. Usage
 
-## IX. License
+## VIII. License
