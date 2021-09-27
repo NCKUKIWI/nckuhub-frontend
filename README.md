@@ -68,15 +68,15 @@ The app will automatically reload if you change any of the source files.
   │  
   └─⫸ Commit Type: build|ci|docs|feat|fix|perf|refactor|test
 
-build: Changes that affect the build system or external dependencies (example scopes: gulp, broccoli, npm)
-ci: Changes to our CI configuration files and scripts (example scopes: Circle, BrowserStack, SauceLabs)
-docs: Documentation only changes
-feat: A new feature
-fix: A bug fix
-perf: A code change that improves performance
-refactor: A code change that neither fixes a bug nor adds a feature
-test: Adding missing tests or correcting existing tests
 ```
+`build`: Changes that affect the build system or external dependencies (example scopes: gulp, broccoli, npm)
+`ci`: Changes to our CI configuration files and scripts (example scopes: Circle, BrowserStack, SauceLabs)
+`docs`: Documentation only changes
+`feat`: A new feature
+`fix`: A bug fix
+`perf`: A code change that improves performance
+`refactor`: A code change that neither fixes a bug nor adds a feature
+`test`: Adding missing tests or correcting existing tests
 
 ### [2. Branch name style](https://www.notion.so/Commit-4a5c182851aa4c75b19861a6858870f9)
 ```
