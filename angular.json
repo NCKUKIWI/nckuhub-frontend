@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "KIWI_ANGULAR": {
+    "nckuhub-frontend": {
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -13,7 +13,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/KIWI_ANGULAR/browser",
+            "outputPath": "dist/nckuhub-frontend/browser",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -61,18 +61,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "KIWI_ANGULAR:build"
+            "browserTarget": "nckuhub-frontend:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "KIWI_ANGULAR:build:production"
+              "browserTarget": "nckuhub-frontend:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "KIWI_ANGULAR:build"
+            "browserTarget": "nckuhub-frontend:build"
           }
         },
         "test": {
@@ -110,18 +110,18 @@
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
             "protractorConfig": "e2e/protractor.conf.js",
-            "devServerTarget": "KIWI_ANGULAR:serve"
+            "devServerTarget": "nckuhub-frontend:serve"
           },
           "configurations": {
             "production": {
-              "devServerTarget": "KIWI_ANGULAR:serve:production"
+              "devServerTarget": "nckuhub-frontend:serve:production"
             }
           }
         },
         "server": {
           "builder": "@angular-devkit/build-angular:server",
           "options": {
-            "outputPath": "dist/KIWI_ANGULAR/server",
+            "outputPath": "dist/nckuhub-frontend/server",
             "main": "server.ts",
             "tsConfig": "tsconfig.server.json"
           },
@@ -142,21 +142,21 @@
         "serve-ssr": {
           "builder": "@nguniversal/builders:ssr-dev-server",
           "options": {
-            "browserTarget": "KIWI_ANGULAR:build",
-            "serverTarget": "KIWI_ANGULAR:server"
+            "browserTarget": "nckuhub-frontend:build",
+            "serverTarget": "nckuhub-frontend:server"
           },
           "configurations": {
             "production": {
-              "browserTarget": "KIWI_ANGULAR:build:production",
-              "serverTarget": "KIWI_ANGULAR:server:production"
+              "browserTarget": "nckuhub-frontend:build:production",
+              "serverTarget": "nckuhub-frontend:server:production"
             }
           }
         },
         "prerender": {
           "builder": "@nguniversal/builders:prerender",
           "options": {
-            "browserTarget": "KIWI_ANGULAR:build:production",
-            "serverTarget": "KIWI_ANGULAR:server:production",
+            "browserTarget": "nckuhub-frontend:build:production",
+            "serverTarget": "nckuhub-frontend:server:production",
             "routes": [
               "/"
             ]
@@ -168,5 +168,5 @@
       }
     }
   },
-  "defaultProject": "KIWI_ANGULAR"
+  "defaultProject": "nckuhub-frontend"
 }
