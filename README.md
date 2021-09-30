@@ -14,20 +14,21 @@
 
 - Use **yarn** instead of **npm**
 
-## III. Start Deployment
-### 1. Start SSR Server
+## III. Start Development
 
-```
-yarn dev:ssr
-```
-Run `yarn dev:ssr` for a SSR server. Navigate to `http://localhost:4200/`. 
-
-### 2. Start Frontend Server
+### Start Frontend Server
 ```
 yarn start
 ```
 Run `yarn start` for a frontend server. Navigate to `http://localhost:4200/`. 
 The app will automatically reload if you change any of the source files.
+
+### or Start SSR Server
+
+```
+yarn dev:ssr
+```
+Run `yarn dev:ssr` for a SSR server. Navigate to `http://localhost:4200/`. 
 
 ## IV. Project Structure 
 
@@ -65,8 +66,12 @@ The app will automatically reload if you change any of the source files.
 ```
 ├── ...
 ├── pages                    
-│   ├── pages.module.ts         # .....
-│   └── ...
+│   ├── pages.module.ts         # Export all the page components
+│   ├── homepage                # Showing all courses
+│   ├── course                  # Showing single course with comments
+│   ├── timetable               # Showing timetable
+│   ├── user                    # Showing user's comments
+│   └── page-not-found          # For 404
 └── ....
 ```
 
