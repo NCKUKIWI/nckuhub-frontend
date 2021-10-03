@@ -50,6 +50,7 @@ Run `yarn dev:ssr` for a SSR server. Navigate to `http://localhost:4200/`.
 ```
 
 ### 2. Core Folder
+> 全站共用的放這
 ```
 ├── ...
 ├── core                    
