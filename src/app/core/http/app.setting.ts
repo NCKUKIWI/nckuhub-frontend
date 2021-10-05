@@ -22,6 +22,10 @@ export class AppUrl {
     public static USER_TOKEN_FAIL_URL = environment.logoutUrl;
     public static USER_LOGOUT_URL = '/user/logout';
     public static USER_LOGOUT_REDIRECT_URL = environment.logoutUrl;
+
+    public static COURSE_URL = '/course'
+
+    public static WISH_LIST_URL = '/post/setWish'
 }
 
 
