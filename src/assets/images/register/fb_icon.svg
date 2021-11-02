@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="18px" height="18px" viewBox="0 0 18 18" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 48.2 (47327) - http://www.bohemiancoding.com/sketch -->
+    <title>Icon</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="註冊｜起始畫面" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" transform="translate(-778.000000, -494.000000)">
+        <g id="右側｜註冊帳號" transform="translate(686.000000, 170.000000)" fill-rule="nonzero">
+            <g id="連接-Facebook" transform="translate(68.000000, 307.000000)">
+                <g id="Icon" transform="translate(24.000000, 17.000000)">
+                    <path d="M17.006608,18 C17.5551632,18 18,17.5551667 18,17.006476 L18,0.993454111 C18,0.444693639 17.5552331,0 17.006608,0 L0.993461821,0 C0.44469709,0 0,0.444693639 0,0.993454111 L0,17.006476 C0,17.5550968 0.444627246,18 0.993461821,18 L17.006608,18 Z" id="Blue_1_" fill="#FFFFFF"></path>
+                    <path d="M12.1927268,18 L12.1927268,11.1577733 L14.5513545,11.1577733 L14.9045255,8.49123609 L12.1927268,8.49123609 L12.1927268,6.78882059 C12.1927268,6.01679654 12.4128954,5.49068763 13.5498583,5.49068763 L15,5.49007061 L15,3.10509838 C14.7492035,3.07260221 13.8883843,3 12.8868881,3 C10.7960958,3 9.3646829,4.24267008 9.3646829,6.52473777 L9.3646829,8.49123609 L7,8.49123609 L7,11.1577733 L9.3646829,11.1577733 L9.3646829,18 L12.1927268,18 Z" id="f" fill="#3B5998"></path>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

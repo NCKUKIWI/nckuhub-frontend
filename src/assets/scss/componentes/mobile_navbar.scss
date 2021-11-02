@@ -1,0 +1,204 @@
+
+@import "import";
+
+@media only screen and (min-width: 966px) {
+}
+
+@media only screen and (max-width: 965px) { 
+    .hub_navbar__link, .hub_navbar__profile {
+        display: none;
+    }
+    .hub_navbar__logo {
+        display: none;
+    }
+    .hub_navbar__right_area {
+        width: 0;
+    }
+    .hub_navbar__search__dropdown {
+        z-index: 10;
+        left: 0;
+        width: 100vw;
+        max-height: 210px;
+    }
+    .hub_navbar__left_area {
+        display: none;
+        &.mobile_on {
+            display: inline-block;
+            margin-left: 0;
+            width: 100vw;
+            background-color: rgba(255,255,255,0.25);
+            .hub_navbar__search {
+                margin-left: 0;
+                padding: 17px 0;
+                padding-left: 52px;
+                width: calc(100vw - 48px);
+                background-size: 40px;
+                background-position: 10px center;
+                background-color: transparent;
+                &:focus {
+                    box-shadow: none;
+                }
+                &__cancel {
+                    position: absolute;
+                    display: inline-block;
+                    height: 100%;
+                    width: 48px;
+                    background-image: url("../../images/table/icon_cancel.svg");
+                    // background-color: rgba(255,255,255,0.25);
+                    background-size: 30px;
+                    background-repeat: no-repeat;
+                    background-position: center left;
+                    cursor: pointer;
+                }
+            } 
+        }
+    }
+    .hub_navbar__mobile {
+        position: absolute;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-start;
+        top: 0;
+        left: 0;
+        margin-left: 5vw;
+        height: 100%;
+        width: 90vw;
+        &__menu_icon {
+            display: inline-block;
+            height: 100%;
+            width: 24px;
+            background-image: url("../../images/table/icon_menu.svg");
+            background-size: 100%;
+            background-repeat: no-repeat;
+            background-position: center;
+            cursor: pointer;
+        }
+        &__back_icon {
+            display: inline-block;
+            height: 100%;
+            width: 24px;
+            background-image: url("../../images/table/icon_back.svg");
+            background-size: 50%;
+            background-repeat: no-repeat;
+            background-position: center;
+            cursor: pointer;
+        }
+        &__title_text {
+            margin-left: 15px;
+            margin-right: 8px;
+            color: $white;
+        }
+        &__drop_icon {
+            display: inline-block;
+            height: 100%;
+            width: 12px;
+            background-image: url("../../images/table/icon_triangle.svg");
+            background-size: 100%;
+            background-repeat: no-repeat;
+            background-position: center;
+            cursor: pointer;
+            transition: $material_trans .3s;
+            &.on {
+                transform: rotate(180deg);
+            }
+        }
+        &__search_icon {
+            position: absolute;
+            right: -1vw;
+            display: inline-block;
+            height: 100%;
+            width: 40px;
+            background-image: url("../../images/table/icon_search.svg");
+            background-size: 100%;
+            background-repeat: no-repeat;
+            background-position: center;
+            cursor: pointer;
+        }
+    }
+    .hub_navbar__profile__dropdown {
+        position: fixed;
+        z-index: 10;
+        height: 100vh;
+        left: 0;
+        margin-top: 0;
+        border-bottom: none;
+        padding: 0px;
+        border: none;
+        @include box_shadow_2();
+        &__info {
+            background: $blue;
+            flex-direction: column;
+            align-items: flex-start;
+            padding: 20px;
+            padding-top: 30px;
+            background-image: url("../../images/table/nav_logo_pure.svg");
+            background-size: 30px;
+            background-repeat: no-repeat;
+            background-position: 92% 14%;
+            &.not_login {
+                background: $dark;
+            }
+            &__photo {
+                border: none;
+            }
+            &__detail {
+                margin-top: 10px;
+                margin-left: 5px;
+                .nav_profile_name, .nav_profile_dept, .nav_profile_grade {
+                    color: $white;
+                }
+                .nav_profile_name {
+                    font-size: 18px;
+                    line-height: 32px;
+                }
+            }
+        }
+        &__links > a {
+            width: calc(100% - 50px);
+            left: 0px;
+            padding: 0 25px;
+        }
+    }
+    .hub_navbar__profile__dropdown__goto {
+        color: white;
+        background: rgba(255,255,255,0.2);
+        @include box_shadow_1();
+        margin-top: 6px;
+        margin-left: 0;
+        margin-bottom: 0;
+        width: 90px;
+        border-radius: 20px;
+        &.disabled {
+            color: white;
+            background: rgba(255,255,255,0.2);
+            @include box_shadow_1();
+            opacity: 0.5;
+            &:hover {
+                background: rgba(255,255,255,0.2);
+            }
+            &:active {
+                filter: brightness(100%);
+            }
+        }
+    }
+    .dark_screen {
+        position: fixed;
+        display: block;
+        left: 0;
+        top: 0;
+        height: 100vh;
+        width: 100vw;
+        background: rgba(0,0,0,0.15);
+        z-index: 5;
+        &.search {
+            top: 64px;
+        }
+    }
+    .list_course_item_mid {
+        padding-right: 20px;
+    }
+    .window__self.big {
+        max-width: 350px;
+    }
+}

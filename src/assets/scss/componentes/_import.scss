@@ -1,0 +1,122 @@
+// ------- 供所有 scss 共用 ---------------
+
+
+
+
+// 顏色
+
+$bg_color: #FAFAFA;
+$black: #4A4A4A;
+$dark: #9B9B9B;
+$gray: #CBCBCB;
+$light_2: #EEEEEE;
+// $light_2: #EAEAEA;  // test
+$light_1: #FAFAFA;
+// $light_1: #EAEAEA;  // test
+$light_0: #F5F5F5;
+$white: #FFFFFF;
+$red: #F35A5A;
+$blue: #18ABD6;
+$blue_darken: #19A3CB;
+$deep_blue: #1A6CBD;
+$pink: #FF6097;
+$green: #17CF94;
+$warning_red: #c62828;
+$default: $dark;
+
+
+
+// 動態參數
+
+$material_trans: cubic-bezier(0.0, 0.0, 0.2, 1);
+
+
+
+// 陰影
+
+@mixin box_shadow_1() {
+  box-shadow: 0 0 14px 0 rgba(0,0,0,0.06);
+}
+
+@mixin box_shadow_2() {
+  box-shadow: 0 0 14px 0 rgba(0,0,0,0.10);
+}
+
+@mixin box_shadow_3() {
+  box-shadow: 0 0 24px 0 rgba(0,0,0,0.28);
+}
+
+@mixin box_shadow_4() {
+  box-shadow: 0 5px 14px 5px rgba(0,0,0,0.10);
+}
+
+@mixin box_shadow_1_hover {
+  transition: box-shadow .2s $material_trans;
+  &:hover {
+    box-shadow: 0 0 28px 0 rgba(0,0,0,0.10);
+  }
+}
+
+@mixin box_shadow_2_hover {
+  transition: box-shadow .2s $material_trans;
+  &:hover {
+    box-shadow: 0 0 28px 0 rgba(0,0,0,0.16);
+  }
+}
+
+@mixin box_shadow_3_hover {
+  transition: box-shadow .3s $material_trans;
+  &:hover {
+    box-shadow: 0 0 38px 0 rgba(0,0,0,0.32);
+  }
+}
+
+
+// 文字刪節號
+
+@mixin ellipsis() {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+
+// 排版定位
+
+@mixin flex_center($direction: 'row') {
+  display: flex;
+  flex-direction: $direction;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin inline_flex_center($direction: 'row') {
+  display: inline-flex;
+  flex-direction: $direction;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin flex_center_top() {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+@mixin inline_flex_center_top() {
+  display: inline-flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+@mixin flex_center_left() {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+@mixin inline_flex_center_left() {
+  display: inline-flex;
+  flex-direction: column;
+  justify-content: center;
+}

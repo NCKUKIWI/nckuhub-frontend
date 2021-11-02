@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="23px" height="23px" viewBox="0 0 23 23" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 48.2 (47327) - http://www.bohemiancoding.com/sketch -->
+    <title>Icon</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="註冊｜輸入年級" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" transform="translate(-783.000000, -837.000000)">
+        <g id="右側｜註冊帳號" transform="translate(686.000000, 170.000000)">
+            <g id="完成註冊" transform="translate(68.000000, 642.000000)">
+                <g id="Icon" transform="translate(29.000000, 25.000000)">
+                    <path d="M2.55555556,0 C1.15,0 0,1.15 0,2.55555556 L0,20.4444444 C0,21.85 1.15,23 2.55555556,23 L20.4444444,23 C21.85,23 23,21.85 23,20.4444444 L23,2.55555556 C23,1.15 21.85,0 20.4444444,0 L2.55555556,0 Z" id="Fill-1" fill="#EEEEEE"></path>
+                    <polygon id="Shape" fill="#FFFFFF" points="12.5 7 11.5375 7.9625 15.3875 11.8125 7 11.8125 7 13.1875 15.3875 13.1875 11.5375 17.0375 12.5 18 18 12.5"></polygon>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

@@ -1,0 +1,37 @@
+
+@import 'import';
+
+.notification_area {
+    position: fixed;
+    z-index: 500;
+    right: 0;
+    top: 80px;
+    .notification {
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: $white;
+        padding: 0 18px;
+        border-radius: 6px;
+        margin: 10px 0;
+        overflow: hidden;
+        transition: opacity .3s $material_trans, margin-right .8s $material_trans;;
+        @include box-shadow_3();
+        opacity: 0;
+        height: 40px;
+        margin-right: 0;
+        color: $deep_blue;
+        &.on {
+            opacity: 0.8;
+            margin-right: 36px;
+        }
+        &:hover {
+            opacity: 1;
+            cursor: pointer;
+        }
+        &:active {
+            filter: brightness(98%);
+        }
+    }
+}

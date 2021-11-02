@@ -1,0 +1,351 @@
+
+@import "import";
+
+
+// Add Review Window
+
+.add_review {
+  z-index: 200;
+  &__window {
+    position: fixed;
+    z-index: 300;
+    display: flex;
+    flex-direction: column;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+    height: 90vh;
+    max-height: 620px;
+    width: 90vw;
+    max-width: 800px;
+    background: $white;
+    @include box_shadow_3();
+    &__top_bar {
+      position: relative;
+      display: flex;
+      width: 100%;
+      height: 48px;
+      background: $black;
+      box-sizing: border-box;
+      border: $black 1px solid;
+      padding: 0 20px;
+      cursor: default;
+      &__title {
+        display: flex;
+        align-items: center;
+        height: 100%;
+        width: 100%;
+        .add_review_title {
+          color: $white;
+          opacity: 0.95;
+        }
+      }
+      &__icons {
+        display: flex;
+        align-items: center;
+        height: 100%;
+        width: auto;
+        .add_review_icon {
+          height: 14px;
+          width: 14px;
+          cursor: pointer;
+          transition: .2s $material_trans;
+          &:hover {
+            opacity: 0.8;
+          }
+          &:active {
+            opacity: 0.6;
+          }
+          &.close {
+            background-image: url("../../images/add_review/icon_close.svg");
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+          }
+        }
+      }
+    }
+    &__mid_cont {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      height: calc( 100% - 108px );
+      background: $white;
+      box-sizing: border-box;
+      border: $light_2 1px solid;
+      border-right: none;
+      &__top_row {
+        position: relative;
+        display: flex;
+        width: 100%;
+        height: 45px;
+        box-sizing: border-box;
+        border-bottom: $light_2 1px solid;
+        .add_review_info {
+          width: 100%;
+          line-height: 45px;
+          outline: none;
+          box-sizing: border-box;
+          border-right: $light_2 1px solid;
+          padding: 0 20px;
+          position: relative;
+          background-color: $white;
+          @include ellipsis();
+          &::placeholder {
+            color: $black;
+          }
+          &.title {
+            flex: 6;
+          }
+          &.semester {
+            flex: 2;
+          }
+          &.teacher {
+            flex: 3;
+          }
+          &.semester, &.teacher {
+            background-image: url("../../images/add_review/icon_down_arrow.svg");
+            background-color: $white;
+            background-repeat: no-repeat;
+            background-position: 90% center;
+            opacity: 0.4;
+            &.enabled {
+              cursor: pointer;
+              opacity: 1;
+              &:hover {
+                filter: brightness( 98% );
+              }
+              &:active {
+                filter: brightness( 95% );
+              }
+            }
+          }
+        }
+        .add_review_dropdowns {
+          position: absolute;
+          z-index: 100;
+          display: flex;
+          width: 100%;
+          top: 45px;
+          box-sizing: border-box;
+          // border-bottom: $light_2 1px solid;
+          .add_review_dropdown {
+            position: relative;
+            opacity: 0;
+            height: 0px;
+            width: 100%;
+            outline: none;
+            box-sizing: border-box;
+            padding: 0 20px;
+            border-right: $light_2 1px solid;
+            background-color: $white;
+            overflow-x: hidden;
+            overflow-y: scroll;
+            -webkit-overflow-scrolling: touch;
+            @include box_shadow_1();
+            transition: height 5s $material_trans;
+            & p {
+              display: block;
+              height: 45px;
+              width: 100%;
+              margin: 0 -20px;
+              padding: 0 20px;
+              line-height: 45px;
+              @include ellipsis();
+              transition: .2s $material_trans;
+              &:hover {
+                cursor: pointer;
+                background: $light_1;
+              }
+              &:active {
+                filter: brightness( 98% );
+              }
+            }
+            &.visible {
+              opacity: 1;
+              height: auto;
+              max-height: 180px;
+            }
+            &.title {
+              flex: 6;
+            }
+            &.semester {
+              flex: 2;
+            }
+            &.teacher {
+              flex: 3;
+            }
+          }
+        }
+      }
+      &__mid_area {
+        position: relative;
+        display: flex;
+        width: 100%;
+        height: calc( 100% - 90px );
+        box-sizing: border-box;
+        border: $light_2 0px solid;
+        border-right: $light_2 1px solid;
+        resize: none;
+        outline: none;
+        padding: 25px 20px;
+        &:disabled {
+          opacity: 0.4;
+        }
+        &::placeholder {
+          color: $black;
+        }
+      }
+      &__bottom_row {
+        position: relative;
+        display: flex;
+        width: 100%;
+        height: 45px;
+        box-sizing: border-box;
+        border-top: $light_2 1px solid;
+        opacity: 0.4;
+        &.enabled {
+          opacity: 1;
+          .add_review_rate__button {
+            cursor: pointer;
+            transition: .3s $material_trans;
+            &:hover {
+              filter: brightness(95%);
+            }
+            &:active {
+              filter: brightness(90%);
+            }
+          }
+        }
+        .add_review_rate {
+          display: flex;
+          align-items: center;
+          height: 100%;
+          width: 100%;
+          box-sizing: border-box;
+          border-right: $light_2 1px solid;
+          padding: 0 20px;
+          &__left_area {
+            display: flex;
+            align-items: center;
+            height: 100%;
+            width: 100%;
+            cursor: default;
+            .add_review_rate__name {
+              color: $black;
+            }
+          }
+          &__right_area {
+            display: flex;
+            align-items: center;
+            height: 100%;
+            width: auto;
+            .add_review_rate__score {
+              color: $black;
+              margin: 0 18px;
+              cursor: default;
+              display: block;
+              width: 18px;
+              text-align: center;
+            }
+            .add_review_rate__button {
+              display: block;
+              height: 20px;
+              width: 20px;
+              &.go_down {
+                background-image: url("../../images/add_review/icon_left_arrow_round.svg");
+                background-size: contain;
+                background-repeat: no-repeat;
+                background-position: center;
+              }
+              &.go_up {
+                background-image: url("../../images/add_review/icon_right_arrow_round.svg");
+                background-size: contain;
+                background-repeat: no-repeat;
+                background-position: center;
+              }
+            }
+          }
+        }
+      }
+    }
+    &__bottom_bar {
+      position: relative;
+      display: flex;
+      width: 100%;
+      height: 60px;
+      background: $light_1;
+      box-sizing: border-box;
+      border: $light_2 1px solid;
+      border-top: none;
+      padding: 0 20px;
+      &__status {
+        display: flex;
+        align-items: center;
+        height: 100%;
+        cursor: default;
+        .add_review_status {
+          color: $dark;
+        }
+      }
+      &__buttons {
+        display: flex;
+        align-items: center;
+        width: auto;
+        margin-left: auto;
+        .add_review_button {
+          display: flex;
+          justify-content: center;
+          border-radius: 50px;
+          padding: 5px 15px;
+          background-color: $white;
+          margin-left: 8px;
+          @include box_shadow_1();
+          cursor: default;
+          &.enabled {
+            cursor: pointer;
+            &:hover {
+              @include box_shadow_2();
+            }
+            &:active {
+              filter: brightness(98%);
+            }
+          }
+          &.give_up {
+            color: $gray;
+            &.enabled {
+              color: $dark;
+            }
+          }
+          &.send_review {
+            img {
+              margin-right: 5px;
+            }
+            color: $gray;
+            opacity: 0.7;
+            &.enabled {
+              opacity: 1;
+              p, span {
+                color: $red;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  &__background {
+    position: fixed;
+    z-index: 200;
+    content: '';
+    display: block;
+    left: 0;
+    right: 0;
+    height: 100vh;
+    width: 100vw;
+    background: rgba(0,0,0,0.6);
+  }
+}

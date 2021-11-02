@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="20px" height="20px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 48.2 (47327) - http://www.bohemiancoding.com/sketch -->
+    <title>Shape</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Material/Icons-black/cancel" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" transform="translate(-2.000000, -2.000000)">
+        <path d="M12,22 C6.5,22 2,17.5 2,12 C2,6.5 6.5,2 12,2 C17.5,2 22,6.5 22,12 C22,17.5 17.5,22 12,22 L12,22 Z M17,8.4 L15.6,7 L12,10.6 L8.4,7 L7,8.4 L10.6,12 L7,15.6 L8.4,17 L12,13.4 L15.6,17 L17,15.6 L13.4,12 L17,8.4 L17,8.4 Z" id="Shape" fill="#EEEEEE" transform="translate(12.000000, 12.000000) scale(1, -1) translate(-12.000000, -12.000000) "></path>
+    </g>
+</svg>

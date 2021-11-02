@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="36px" height="36px" viewBox="0 0 36 36" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 48.2 (47327) - http://www.bohemiancoding.com/sketch -->
+    <title>關閉視窗</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="個人｜驗證小幫手" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" transform="translate(-966.000000, -218.000000)">
+        <g id="視窗｜驗證小幫手" transform="translate(403.000000, 182.000000)" fill="#EEEEEE">
+            <path d="M581,72 C571.058875,72 563,63.9411255 563,54 C563,44.0588745 571.058875,36 581,36 C590.941125,36 599,44.0588745 599,54 C599,63.9411255 590.941125,72 581,72 Z M587,49.2 L585.8,48 L581,52.8 L576.2,48 L575,49.2 L579.8,54 L575,58.8 L576.2,60 L581,55.2 L585.8,60 L587,58.8 L582.2,54 L587,49.2 Z" id="關閉視窗"></path>
+        </g>
+    </g>
+</svg>

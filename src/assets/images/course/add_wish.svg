@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="15px" height="13px" viewBox="0 0 15 13" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 48.2 (47327) - http://www.bohemiancoding.com/sketch -->
+    <title>Icon</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="內頁｜起始畫面" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" transform="translate(-305.000000, -251.000000)">
+        <g id="視窗｜課程內頁" transform="translate(185.000000, 0.000000)" fill="#4A4A4A">
+            <g id="左側｜基本資訊" transform="translate(55.000000, 0.000000)">
+                <g id="加入清單" transform="translate(50.000000, 242.000000)">
+                    <path d="M22.25,11.4166667 C21.7102778,10.0214444 20.19825,9 18.625,9 C16.5764722,9 15,10.5563333 15,12.625 C15,15.4678056 18.0554722,17.6661667 22.25,21.8888889 C26.4445278,17.6661667 29.5,15.4678056 29.5,12.625 C29.5,10.5563333 27.9235278,9 25.875,9 C24.3001389,9 22.7897222,10.0214444 22.25,11.4166667 Z" id="Icon"></path>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

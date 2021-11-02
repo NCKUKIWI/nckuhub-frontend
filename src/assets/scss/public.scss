@@ -1,0 +1,68 @@
+@import "./componentes/import";
+
+// 基本設定
+
+body {
+  background: $bg_color;
+  overflow: hidden;
+}
+
+div {
+  box-sizing: border-box;
+}
+
+body, div, p, a, span {
+  // font-family: 'Noto Sans', helvetica, serif, sans-serif, monospace;
+  font-size: 14px;
+  line-height: 150%;
+  color: $black;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+}
+
+a {
+  text-decoration: none;
+}
+
+
+// 字體大小
+
+.text {
+  &_26 {
+    font-size: 20px;
+  }
+  &_24 {
+    font-size: 18px;
+  }
+  &_20 {
+    font-size: 16px;
+  }
+  &_18 {
+    font-size: 15px;
+  }
+  &_16 {
+    font-size: 14px;
+  }
+  &_14 {
+    font-size: 12px;
+  }
+  &_12 {
+    font-size: 10px;
+  }
+  &_dark {
+    color: $dark;
+    opacity: 0.8;
+  }
+  &_white {
+    color: $white;
+  }
+  &_deep_blue {
+    color: $deep_blue;
+  }
+  &_red {
+    color: $red;
+  }
+  &_bold {
+    font-weight: bold;
+  }
+}

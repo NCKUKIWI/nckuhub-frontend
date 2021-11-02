@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="18px" height="19px" viewBox="0 0 18 19" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 48.2 (47327) - http://www.bohemiancoding.com/sketch -->
+    <title>Group</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="選單｜個人選單（未登入）" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" transform="translate(-92.000000, -930.000000)">
+        <g id="使用背景">
+            <g id="左側｜願望清單" transform="translate(66.000000, 522.000000)">
+                <g id="Group" transform="translate(26.000000, 408.000000)">
+                    <path d="M16,0 L2,0 C0.9,0 0,0.922058824 0,2.04901961 L0,16.3921569 C0,17.5191176 0.9,18.4411765 2,18.4411765 L16,18.4411765 C17.1,18.4411765 18,17.5191176 18,16.3921569 L18,2.04901961 C18,0.922058824 17.1,0 16,0" id="Fill-1" fill="#F35A5A"></path>
+                    <polygon id="Shape" fill="#FFFFFF" points="9.5 4 8.5375 4.9625 12.3875 8.8125 4 8.8125 4 10.1875 12.3875 10.1875 8.5375 14.0375 9.5 15 15 9.5"></polygon>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

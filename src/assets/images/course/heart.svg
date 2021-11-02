@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="53px" height="52px" viewBox="0 0 53 52" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 48.2 (47327) - http://www.bohemiancoding.com/sketch -->
+    <title>加入列表</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="課程（有心得）-@-課程列表" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" transform="translate(-787.000000, -25.000000)">
+        <g id="加入列表" transform="translate(787.614350, 25.000000)">
+            <circle id="Oval" fill="#EEEEEE" cx="26" cy="26" r="26"></circle>
+            <path d="M26.5,36 L25.17,34.7065217 C20.23,30.4565217 17,27.5923913 17,24.0815217 C17,21.2173913 19.28,19 22.225,19 C23.84,19 25.455,19.7391304 26.5,20.9402174 C27.545,19.7391304 29.16,19 30.775,19 C33.72,19 36,21.2173913 36,24.0815217 C36,27.5923913 32.77,30.4565217 27.83,34.7065217 L26.5,36 L26.5,36 Z" id="Shape" fill="#9B9B9B"></path>
+        </g>
+    </g>
+</svg>
