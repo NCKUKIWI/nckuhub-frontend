@@ -5,6 +5,7 @@ import { User } from "src/app/core/models/user.model";
 import { UserStatusEnum } from "../enum/user-staus";
 import { AppService } from "../http/app.service";
 import { AppUrl } from "../http/app.setting";
+import { Course } from "../models/course.model";
 import { NckuhubResponse } from "../models/http-vo-model";
 
 /**
@@ -25,7 +26,53 @@ export class UserService{
     /** 心得 */
     /** 基本資料 */
     /** 願望清單 */
+    wishCourses: Course[] = []
+
+    /**
+     * 抓取現在使用者的願望清單
+     */
+    getCurrentUserWishes() {
+        // TODO: 抓取現在使用者的願望清單
+    }
+
+    /**
+     * 新增現在使用者的願望
+     */
+    addUserWish(courseId: number) {
+        // TODO: 新增現在使用者的願望
+    }
+
+    /**
+     * 刪除現在使用者的願望
+     */
+    deleteUserFavorite(courseId: number) {
+        // TODO: 刪除現在使用者的願望
+    }
+
+    /**
+     * 判斷是否已經被加入願望清單
+     */
+    isInWishes(courseId: number) {
+        return !!this.wishCourses.find(course => course.id === courseId)
+    }
+
+
     /** 課表 */
+    table: number[] = []
+
+    /**
+     * 抓取現在使用者的課表
+     */
+    getCurrentUserTable() {
+        // TODO: 抓取現在使用者的課表
+    }
+
+    /**
+     * 儲存現在使用者的課表
+     */
+    saveCurrentUserTable() {
+        // TODO: 儲存現在使用者的課表
+    }
    
     /**
      * 取得 當前使用者

@@ -1,9 +1,10 @@
 # [NCKU HUB](https://nckuhub.com/) Frontend
 
-* This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 11.0.6.
+* This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 12.2.7
 * An Frontend for NCKUHUB websit
 * Using
-    - Angular Universal
+    - Angular Universal 
+    - Angular 12.2.7
     - Yarn
 
 ## I. Setup
@@ -14,20 +15,21 @@
 
 - Use **yarn** instead of **npm**
 
-## III. Start Deployment
-### 1. Start SSR Server
+## III. Start Development
 
-```
-yarn dev:ssr
-```
-Run `yarn dev:ssr` for a SSR server. Navigate to `http://localhost:4200/`. 
-
-### 2. Start Frontend Server
+### Start Frontend Server
 ```
 yarn start
 ```
 Run `yarn start` for a frontend server. Navigate to `http://localhost:4200/`. 
 The app will automatically reload if you change any of the source files.
+
+### or Start SSR Server
+
+```
+yarn dev:ssr
+```
+Run `yarn dev:ssr` for a SSR server. Navigate to `http://localhost:4200/`. 
 
 ## IV. Project Structure 
 
@@ -48,6 +50,7 @@ The app will automatically reload if you change any of the source files.
 ```
 
 ### 2. Core Folder
+> 全站共用的放這
 ```
 ├── ...
 ├── core                    
@@ -65,8 +68,12 @@ The app will automatically reload if you change any of the source files.
 ```
 ├── ...
 ├── pages                    
-│   ├── pages.module.ts         # .....
-│   └── ...
+│   ├── pages.module.ts         # Export all the page components
+│   ├── homepage                # Showing all courses
+│   ├── course                  # Showing single course with comments
+│   ├── timetable               # Showing timetable
+│   ├── user                    # Showing user's comments
+│   └── page-not-found          # For 404
 └── ....
 ```
 
@@ -77,7 +84,7 @@ The app will automatically reload if you change any of the source files.
   │            │
   │            └─⫸ Summary in present tense. Not capitalized. No period at the end.
   │  
-  └─⫸ Commit Type: build|ci|docs|feat|fix|perf|refactor|test
+  └─⫸ Commit Type: build|ci|docs|feat|fix|perf|refactor|test|chore|style|revert
 
 ```
 - `build`: Changes that affect the build system or external dependencies (example scopes: gulp, broccoli, npm)

@@ -24,7 +24,7 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.css"
+              "src/styles.scss"
             ],
             "scripts": [],
             "vendorChunk": true,
@@ -35,7 +35,10 @@
             "namedChunks": true
           },
           "configurations": {
+            "development": {
+            },
             "production": {
+              "aot": true,
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
@@ -94,7 +97,7 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.css"
+              "src/styles.scss"
             ],
             "scripts": []
           }
@@ -135,6 +138,9 @@
             "extractLicenses": false
           },
           "configurations": {
+            "development": {
+              "outputHashing": "media"
+            },
             "production": {
               "outputHashing": "media",
               "fileReplacements": [
