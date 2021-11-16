@@ -1,16 +1,22 @@
-import { NgModule } from '@angular/core'
-import { RouterModule, Routes } from '@angular/router'
+import { NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
+import {PageNotFoundComponent} from './pages/page-not-found/page-not-found.component';
 const routes: Routes = [
   {
-    path: '',
-    loadChildren: () => import('src/app/pages/pages-routing.module').then((m) => m.PagesRoutingModule),
+    path: 'course',
+    loadChildren: () =>
+      import('src/app/pages/course/course.module').then(m => m.CourseModule)
   },
   {
-    path: '**',
-    redirectTo: '',
-    pathMatch: 'full',
+    path: '',
+    redirectTo: '/course',
+    pathMatch: 'full'
   },
-]
+  { path: '**',
+    pathMatch: 'full',
+    component: PageNotFoundComponent
+  },
+];
 
 @NgModule({
   imports: [

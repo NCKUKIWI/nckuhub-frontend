@@ -7,12 +7,11 @@ import { finalize, tap, timeout } from 'rxjs/operators';
 import { LoadingService } from './loading.service';
 
 
-
 /**
  * 應用程式共用服務 <br/>
  */
 @Injectable({
-    providedIn: "root",
+    providedIn: 'root',
 })
 export class AppService {
 
@@ -23,7 +22,7 @@ export class AppService {
 
     /**
      * 以HTTP POST方式傳送訊息
-     * @param context 
+     * @param context
      * @return n/a
      */
     post(context: AppRequestContext): Observable<NckuhubResponse> {
@@ -70,8 +69,8 @@ export class AppService {
 
     /**
      * 設定 http options
-     * @param params 
-     * @returns 
+     * @param params
+     * @returns
      */
     private setHttpOptions(params: HttpParams): Object{
         return  { 
