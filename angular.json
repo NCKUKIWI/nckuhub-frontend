@@ -24,7 +24,7 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.scss"
+              "src/styles.scss",
             ],
             "scripts": [],
             "vendorChunk": true,
@@ -32,7 +32,12 @@
             "buildOptimizer": false,
             "sourceMap": true,
             "optimization": false,
-            "namedChunks": true
+            "namedChunks": true,
+            "stylePreprocessorOptions": {
+              "includePaths": [
+                "src/assets/scss" // 讓_import.scss can import
+              ]
+            }
           },
           "configurations": {
             "development": {
