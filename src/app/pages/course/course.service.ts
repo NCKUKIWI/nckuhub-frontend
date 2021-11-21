@@ -21,15 +21,15 @@ export class CourseService{
   constructor (
     private appService: AppService
   ) {
-    this.fetchCurrentSemeterCourses();
+    this.fetchCurrentSemesterCourses();
   }
 
   /**
    * 抓取 當學期 所有課程資料
    */
-  private fetchCurrentSemeterCourses(): void {
+  private fetchCurrentSemesterCourses(): void {
     this.appService
-      .get({ url: AppUrl.COURSE_URL })
+      .get({ url: AppUrl.CURRENT_SEMESTER_COURSE })
       .pipe(
         tap(response => {
           const courses = response.model.courses as Course[];

@@ -12,7 +12,8 @@
     "dev:ssr": "ng run nckuhub-frontend:serve-ssr",
     "serve:ssr": "node dist/nckuhub-frontend/server/main.js",
     "build:ssr": "ng build && ng run nckuhub-frontend:server",
-    "prerender": "ng run nckuhub-frontend:prerender"
+    "prerender": "ng run nckuhub-frontend:prerender",
+    "prepare": "husky install"
   },
   "private": true,
   "dependencies": {
@@ -28,6 +29,7 @@
     "@nguniversal/express-engine": "^12.1.0",
     "@schematics/angular": "^12.2.12",
     "express": "^4.15.2",
+    "pretty-quick": "^3.1.2",
     "primeng": "^12.2.0-rc.1",
     "rxjs": "~6.6.0",
     "tailwindcss": "^2.2.16",
@@ -51,6 +53,9 @@
     "@typescript-eslint/parser": "4.28.2",
     "codelyzer": "^6.0.0",
     "eslint": "^7.26.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "husky": "^7.0.4",
     "jasmine-core": "~3.6.0",
     "jasmine-spec-reporter": "~5.0.0",
     "karma": "~6.3.4",
@@ -58,6 +63,7 @@
     "karma-coverage": "~2.0.3",
     "karma-jasmine": "~4.0.0",
     "karma-jasmine-html-reporter": "^1.5.0",
+    "prettier": "^2.4.1",
     "protractor": "~7.0.0",
     "ts-node": "~8.3.0",
     "tslint": "~6.1.0",
