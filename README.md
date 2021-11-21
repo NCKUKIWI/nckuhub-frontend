@@ -24,6 +24,12 @@ yarn start
 Run `yarn start` for a frontend server. Navigate to `http://localhost:4200/`. 
 The app will automatically reload if you change any of the source files.
 
+### Start Frontend Server with proxy
+```
+yarn start-proxy
+```
+* Run `yarn start-proxy` if you need proxy `https://nckuhub.com`
+
 ### or Start SSR Server
 
 ```
