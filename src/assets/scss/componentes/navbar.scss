@@ -1,19 +1,16 @@
-
-
-@import "src/assets/scss/import";
-
+@import 'src/assets/scss/import';
 
 // Nav Bar
 
 .hub_navbar {
-    position: fixed ;
-    display: block ;
-    z-index: 100 ;
-    top: 0 ;
-    left: 0 ;
-    height: 64px ;
-    width: 100vw ;
-    background: $blue ;
+    position: fixed;
+    display: block;
+    z-index: 100;
+    top: 0;
+    left: 0;
+    height: 64px;
+    width: 100vw;
+    background: $blue;
     @include box_shadow_3();
     &__left_area {
         position: absolute;
@@ -25,7 +22,7 @@
         left: 0;
         margin-left: 4vw;
         height: 100%;
-        width: calc( 65vw - 4vw );
+        width: calc(65vw - 4vw);
     }
     &__right_area {
         position: absolute;
@@ -33,17 +30,17 @@
         flex-direction: row;
         align-items: center;
         justify-content: flex-end;
-        top: 0 ;
-        right: 0 ;
+        top: 0;
+        right: 0;
         margin-right: 4vw;
         height: 100%;
-        width: calc( 35vw - 4vw );
+        width: calc(35vw - 4vw);
     }
     &__logo {
         display: inline-block;
         height: 100%;
         width: 160px;
-        background-image: url("../../images/table/nav_logo.svg");
+        background-image: url('../../images/table/nav_logo.svg');
         background-size: 100%;
         background-repeat: no-repeat;
         background-position: center;
@@ -52,20 +49,20 @@
     &__search {
         display: inline-block;
         box-sizing: border-box;
-        width: calc( 100% - 2vw - 160px);
+        width: calc(100% - 2vw - 160px);
         margin-left: 2vw;
-        line-height: 30px ;
-        padding: 6px 0px ;
+        line-height: 30px;
+        padding: 6px 0px;
         padding-left: 50px;
         font-size: 14px;
-        color: white ;
-        background-image: url("../../images/table/icon_search.svg");
+        color: white;
+        background-image: url('../../images/table/icon_search.svg');
         background-repeat: no-repeat;
         background-position: 8px center;
-        background-color: rgba( 255, 255, 255, 0.25 );
+        background-color: rgba(255, 255, 255, 0.25);
         border: transparent 0px solid;
         @include ellipsis();
-        transition: box-shadow .2s $material_trans;
+        transition: box-shadow 0.2s $material_trans;
         &:focus {
             @include ellipsis();
             @include box_shadow_1();
@@ -79,9 +76,9 @@
             display: block;
             height: auto;
             max-height: 280px;
-            width: calc( 65vw - 6vw - 160px);
+            width: calc(65vw - 6vw - 160px);
             top: 64px;
-            left: calc( 4vw + 160px + 2vw );
+            left: calc(4vw + 160px + 2vw);
             border: $light_2 1px solid;
             box-sizing: border-box;
             overflow: scroll;
@@ -128,7 +125,7 @@
                 height: 16px;
                 width: 16px;
                 margin-right: 1px;
-                background-image: url("../../images/table/icon_heart_blue.svg");
+                background-image: url('../../images/table/icon_heart_blue.svg');
                 background-repeat: no-repeat;
                 background-position: center;
             }
@@ -212,7 +209,7 @@
                                 height: 14px;
                                 width: 12px;
                                 margin-left: 6px;
-                                background-image: url("../../images/table/icon_star_dark_blue.svg");
+                                background-image: url('../../images/table/icon_star_dark_blue.svg');
                                 background-repeat: no-repeat;
                                 background-position: center;
                                 background-size: 100%;
@@ -224,7 +221,6 @@
                         color: $dark;
                         line-height: 16px;
                         @include ellipsis();
-
                     }
                     .nav_profile_grade {
                         font-size: 12px;
@@ -250,7 +246,7 @@
                 margin-bottom: 18px;
                 @include box_shadow_1();
                 cursor: pointer;
-                transition: .2s $material_trans;
+                transition: 0.2s $material_trans;
                 text-decoration: none;
                 &:hover {
                     background: $blue_darken;
@@ -271,7 +267,8 @@
                         filter: brightness(100%);
                     }
                 }
-                &:link, &:visited {
+                &:link,
+                &:visited {
                     color: $black;
                 }
             }
@@ -284,11 +281,11 @@
                     display: block;
                     font-size: 14px;
                     line-height: 38px;
-                    width: calc( 250px - 35px );
+                    width: calc(250px - 35px);
                     left: -25px;
                     padding-left: 35px;
                     cursor: pointer;
-                    transition: .2s $material_trans;
+                    transition: 0.2s $material_trans;
                     text-decoration: none;
                     &:hover {
                         background: $light_1;
@@ -296,7 +293,8 @@
                     &:active {
                         opacity: 0.8;
                     }
-                    &:link, &:visited {
+                    &:link,
+                    &:visited {
                         color: $black;
                     }
                 }

@@ -1,4 +1,4 @@
-import {Injectable} from '@angular/core';
+import { Injectable } from '@angular/core';
 
 /**
  * 課程資訊 service <br/>
@@ -7,8 +7,6 @@ import {Injectable} from '@angular/core';
  * @date 2021/09/20
  */
 @Injectable({
-  providedIn: 'root',
+    providedIn: 'root',
 })
-export class WishListService{
-
-}
+export class WishListService {}

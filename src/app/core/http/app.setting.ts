@@ -1,4 +1,4 @@
-import { environment } from "src/environments/environment";
+import { environment } from 'src/environments/environment';
 
 /**
  * 系統參數設定 <br/>
@@ -28,7 +28,6 @@ export class AppUrl {
 
     public static WISH_LIST_URL = '/post/setWish';
 }
-
 
 /**
  * 應用程式訊息設定 <br/>

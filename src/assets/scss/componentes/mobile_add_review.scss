@@ -1,16 +1,15 @@
-
-@import "src/assets/scss/import";
+@import 'src/assets/scss/import';
 
 @media only screen and (min-width: 966px) {
 }
 
-@media only screen and (max-width: 965px) { 
+@media only screen and (max-width: 965px) {
     .add_review__window {
         height: 85vh;
         max-height: none;
     }
     .add_review__window__mid_cont {
-        height: calc( 100% - 140px);
+        height: calc(100% - 140px);
     }
     .add_review__window__mid_cont__top_row {
         flex-wrap: wrap;
@@ -44,7 +43,7 @@
         top: 47px;
     }
     .add_review__window__mid_cont__mid_area {
-        height: calc( 100% - 230px);
+        height: calc(100% - 230px);
     }
     .add_review__window__mid_cont__bottom_row {
         height: 138px;

@@ -1,7 +1,7 @@
 /* You can add global styles to this file, and also import other style files */
-@import "tailwindcss/base";
-@import "tailwindcss/components";
-@import "tailwindcss/utilities";
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
 
 // 字體
 @import url('https://fonts.googleapis.com/css?family=Noto+Sans');
@@ -21,4 +21,4 @@
 //@import "src/assets/scss/componentes/windows.scss";
 
 // NCKUHUB 共用 scss
-@import "assets/scss/public.scss";
+@import 'assets/scss/public.scss';

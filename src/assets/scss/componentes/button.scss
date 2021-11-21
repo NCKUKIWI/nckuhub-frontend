@@ -1,86 +1,84 @@
-
-
-@import "src/assets/scss/import";
-
+@import 'src/assets/scss/import';
 
 .fixed_button_area {
-  position: fixed;
-  z-index: 1;
-  display: block;
-  bottom: 40px;
-  right: 40px;
-  height: 130px;
-  width: 65px;
-  &:hover {
-    .minor_button {
-      bottom: 120px;
-    }
-  }
-  &.locked:hover {
-    .minor_button {
-      bottom: 50px;
-    }
-  }
-  .major_button {
     position: fixed;
-    z-index: 100;
+    z-index: 1;
     display: block;
     bottom: 40px;
     right: 40px;
-    height: 65px;
+    height: 130px;
     width: 65px;
-    border-radius: 100%;
-    cursor: pointer;
-    @include box_shadow_3();
-    @include box_shadow_3_hover();
-    transition: background-color .5s $material_trans, box-shadow .5s $material_trans ;
-    &:active {
-      filter: brightness(80%);
+    &:hover {
+        .minor_button {
+            bottom: 120px;
+        }
     }
-    &.deep_blue_edit {
-      background-image: url("../../images/table/icon_edit.svg") ;
-      background-size: 40% ;
-      background-repeat: no-repeat ;
-      background-position: center ;
-      background-color: $deep_blue;
+    &.locked:hover {
+        .minor_button {
+            bottom: 50px;
+        }
     }
-    &.red_done {
-      background-image: url("../../images/table/icon_done.svg") ;
-      background-size: 40% ;
-      background-repeat: no-repeat ;
-      background-position: center ;
-      background-color: $red;
+    .major_button {
+        position: fixed;
+        z-index: 100;
+        display: block;
+        bottom: 40px;
+        right: 40px;
+        height: 65px;
+        width: 65px;
+        border-radius: 100%;
+        cursor: pointer;
+        @include box_shadow_3();
+        @include box_shadow_3_hover();
+        transition: background-color 0.5s $material_trans,
+            box-shadow 0.5s $material_trans;
+        &:active {
+            filter: brightness(80%);
+        }
+        &.deep_blue_edit {
+            background-image: url('../../images/table/icon_edit.svg');
+            background-size: 40%;
+            background-repeat: no-repeat;
+            background-position: center;
+            background-color: $deep_blue;
+        }
+        &.red_done {
+            background-image: url('../../images/table/icon_done.svg');
+            background-size: 40%;
+            background-repeat: no-repeat;
+            background-position: center;
+            background-color: $red;
+        }
+        &.red_add {
+            background-image: url('../../images/table/icon_add.svg');
+            background-size: 40%;
+            background-repeat: no-repeat;
+            background-position: center;
+            background-color: $red;
+        }
     }
-    &.red_add {
-      background-image: url("../../images/table/icon_add.svg") ;
-      background-size: 40% ;
-      background-repeat: no-repeat ;
-      background-position: center ;
-      background-color: $red;
+    .minor_button {
+        position: fixed;
+        z-index: 90;
+        display: block;
+        bottom: 50px;
+        right: 50px;
+        height: 45px;
+        width: 45px;
+        border-radius: 100%;
+        cursor: pointer;
+        @include box_shadow_2();
+        @include box_shadow_2_hover();
+        transition: 0.3s $material_trans;
+        &:active {
+            filter: brightness(80%);
+        }
+        &.dark_cancel {
+            background-image: url('../../images/table/icon_close.svg');
+            background-size: 30%;
+            background-repeat: no-repeat;
+            background-position: center;
+            background-color: $dark;
+        }
     }
-  }
-  .minor_button {
-    position: fixed;
-    z-index: 90;
-    display: block;
-    bottom: 50px;
-    right: 50px;
-    height: 45px;
-    width: 45px;
-    border-radius: 100%;
-    cursor: pointer;
-    @include box_shadow_2();
-    @include box_shadow_2_hover();
-    transition: .3s $material_trans;
-    &:active {
-      filter: brightness(80%);
-    }
-    &.dark_cancel {
-      background-image: url("../../images/table/icon_close.svg") ;
-      background-size: 30% ;
-      background-repeat: no-repeat ;
-      background-position: center ;
-      background-color: $dark;
-    }
-  }
 }

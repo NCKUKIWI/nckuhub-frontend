@@ -3,14 +3,13 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-    production : false,
-    title : 'NCKUHUB DEV',
-    appEndPoint : 'http://localhost:4200',
+    production: false,
+    title: 'NCKUHUB DEV',
+    appEndPoint: 'http://localhost:4200',
     logoutUrl: '/login',
     resetParamFlag: true,
     errorRedirectFlag: false,
 };
-
 
 /*
  * For easier debugging in development mode, you can import the following file

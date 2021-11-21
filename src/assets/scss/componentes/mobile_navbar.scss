@@ -1,11 +1,11 @@
-
-@import "src/assets/scss/import";
+@import 'src/assets/scss/import';
 
 @media only screen and (min-width: 966px) {
 }
 
-@media only screen and (max-width: 965px) { 
-    .hub_navbar__link, .hub_navbar__profile {
+@media only screen and (max-width: 965px) {
+    .hub_navbar__link,
+    .hub_navbar__profile {
         display: none;
     }
     .hub_navbar__logo {
@@ -26,7 +26,7 @@
             display: inline-block;
             margin-left: 0;
             width: 100vw;
-            background-color: rgba(255,255,255,0.25);
+            background-color: rgba(255, 255, 255, 0.25);
             .hub_navbar__search {
                 margin-left: 0;
                 padding: 17px 0;
@@ -43,14 +43,14 @@
                     display: inline-block;
                     height: 100%;
                     width: 48px;
-                    background-image: url("../../images/table/icon_cancel.svg");
+                    background-image: url('../../images/table/icon_cancel.svg');
                     // background-color: rgba(255,255,255,0.25);
                     background-size: 30px;
                     background-repeat: no-repeat;
                     background-position: center left;
                     cursor: pointer;
                 }
-            } 
+            }
         }
     }
     .hub_navbar__mobile {
@@ -68,7 +68,7 @@
             display: inline-block;
             height: 100%;
             width: 24px;
-            background-image: url("../../images/table/icon_menu.svg");
+            background-image: url('../../images/table/icon_menu.svg');
             background-size: 100%;
             background-repeat: no-repeat;
             background-position: center;
@@ -78,7 +78,7 @@
             display: inline-block;
             height: 100%;
             width: 24px;
-            background-image: url("../../images/table/icon_back.svg");
+            background-image: url('../../images/table/icon_back.svg');
             background-size: 50%;
             background-repeat: no-repeat;
             background-position: center;
@@ -93,12 +93,12 @@
             display: inline-block;
             height: 100%;
             width: 12px;
-            background-image: url("../../images/table/icon_triangle.svg");
+            background-image: url('../../images/table/icon_triangle.svg');
             background-size: 100%;
             background-repeat: no-repeat;
             background-position: center;
             cursor: pointer;
-            transition: $material_trans .3s;
+            transition: $material_trans 0.3s;
             &.on {
                 transform: rotate(180deg);
             }
@@ -109,7 +109,7 @@
             display: inline-block;
             height: 100%;
             width: 40px;
-            background-image: url("../../images/table/icon_search.svg");
+            background-image: url('../../images/table/icon_search.svg');
             background-size: 100%;
             background-repeat: no-repeat;
             background-position: center;
@@ -132,7 +132,7 @@
             align-items: flex-start;
             padding: 20px;
             padding-top: 30px;
-            background-image: url("../../images/table/nav_logo_pure.svg");
+            background-image: url('../../images/table/nav_logo_pure.svg');
             background-size: 30px;
             background-repeat: no-repeat;
             background-position: 92% 14%;
@@ -145,7 +145,9 @@
             &__detail {
                 margin-top: 10px;
                 margin-left: 5px;
-                .nav_profile_name, .nav_profile_dept, .nav_profile_grade {
+                .nav_profile_name,
+                .nav_profile_dept,
+                .nav_profile_grade {
                     color: $white;
                 }
                 .nav_profile_name {
@@ -162,7 +164,7 @@
     }
     .hub_navbar__profile__dropdown__goto {
         color: white;
-        background: rgba(255,255,255,0.2);
+        background: rgba(255, 255, 255, 0.2);
         @include box_shadow_1();
         margin-top: 6px;
         margin-left: 0;
@@ -171,11 +173,11 @@
         border-radius: 20px;
         &.disabled {
             color: white;
-            background: rgba(255,255,255,0.2);
+            background: rgba(255, 255, 255, 0.2);
             @include box_shadow_1();
             opacity: 0.5;
             &:hover {
-                background: rgba(255,255,255,0.2);
+                background: rgba(255, 255, 255, 0.2);
             }
             &:active {
                 filter: brightness(100%);
@@ -189,7 +191,7 @@
         top: 0;
         height: 100vh;
         width: 100vw;
-        background: rgba(0,0,0,0.15);
+        background: rgba(0, 0, 0, 0.15);
         z-index: 5;
         &.search {
             top: 64px;

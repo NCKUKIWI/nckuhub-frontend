@@ -3,8 +3,7 @@
  *
  * @version 1.0, Feb 12, 2019
  */
- export class StringUtils {
-
+export class StringUtils {
     private static _constructor = (() => {
         // alert('StringUtils Static constructor');
     })();
@@ -21,7 +20,7 @@
         '>': 'gt',
         '"': 'quot',
         '&': 'amp',
-        '\'': '#39'
+        "'": '#39',
     };
 
     /** HTML entities */
@@ -37,7 +36,7 @@
         gt: '>',
         quot: '"',
         amp: '&',
-        apos: '\''
+        apos: "'",
     };
 
     /**
@@ -52,7 +51,6 @@
         if (characters === undefined) {
             return '\\s';
         } else {
-
             return '[' + StringUtils.escapeRegExp(characters) + ']';
         }
     }
@@ -61,15 +59,17 @@
      * regular expression for escape char
      */
     private static escapeRegExp(str: Object) {
-        return StringUtils.makeString(str).replace(/([.*+?^=!:${}()|[\]\/\\])/g, '\\$1');
-
+        return StringUtils.makeString(str).replace(
+            /([.*+?^=!:${}()|[\]\/\\])/g,
+            '\\$1'
+        );
     }
 
     /**
      * to positive
      */
     private static toPositive(num: number): number {
-        return num < 0 ? 0 : (+num || 0);
+        return num < 0 ? 0 : +num || 0;
     }
 
     /**
@@ -82,7 +82,6 @@
         return '' + object;
     }
 
-
     /**
      * Converts entity characters to HTML equivalents.
      * This function supports cent, yen, euro, pound, lt, gt, copy, reg, quote, amp, apos, nbsp.
@@ -91,24 +90,26 @@
      * </pre>
      */
     public static unescapeHTML(str: string): string {
+        return StringUtils.makeString(str).replace(
+            /\&([^;]+);/g,
+            function (entity, entityCode) {
+                let match: string;
 
-
-        return StringUtils.makeString(str).replace(/\&([^;]+);/g, function (entity, entityCode) {
-            let match: string;
-
-            if (entityCode in StringUtils.htmlEntities) {
-                return StringUtils.htmlEntities[entityCode];
-                /*eslint no-cond-assign: 0*/
-            } else if (match = entityCode.match(/^#x([\da-fA-F]+)$/)) {
-                return String.fromCharCode(parseInt(match[1], 16));
-                /*eslint no-cond-assign: 0*/
-            } else if (match = entityCode.match(/^#(\d+)$/)) {
-                return String.fromCharCode(Math.floor(parseInt(match[1], 10)));
-            } else {
-                return entity;
+                if (entityCode in StringUtils.htmlEntities) {
+                    return StringUtils.htmlEntities[entityCode];
+                    /*eslint no-cond-assign: 0*/
+                } else if ((match = entityCode.match(/^#x([\da-fA-F]+)$/))) {
+                    return String.fromCharCode(parseInt(match[1], 16));
+                    /*eslint no-cond-assign: 0*/
+                } else if ((match = entityCode.match(/^#(\d+)$/))) {
+                    return String.fromCharCode(
+                        Math.floor(parseInt(match[1], 10))
+                    );
+                } else {
+                    return entity;
+                }
             }
-        });
-
+        );
     }
 
     /**
@@ -126,7 +127,12 @@
      *  // => "https://edtsech@bitbucket.org/epeli/underscore.strings"
      * </pre>
      */
-    public static splice(str: string, i: number, howmany: number, substr: string): string {
+    public static splice(
+        str: string,
+        i: number,
+        howmany: number,
+        substr: string
+    ): string {
         const arr: string[] = StringUtils.chars(str);
 
         arr.splice(i, howmany, substr);
@@ -163,10 +169,17 @@
      *  startsWith(".vimrc", "vim", 1);   // => true
      * </pre>
      */
-    public static startsWith(str: string, starts: string, position?: number): boolean {
+    public static startsWith(
+        str: string,
+        starts: string,
+        position?: number
+    ): boolean {
         str = StringUtils.makeString(str);
         starts = '' + starts;
-        position = (position === undefined) ? 0 : Math.min(StringUtils.toPositive(position), str.length);
+        position =
+            position === undefined
+                ? 0
+                : Math.min(StringUtils.toPositive(position), str.length);
         return str.lastIndexOf(starts, position) === position;
     }
 
@@ -177,13 +190,19 @@
      *  endsWith("image.old.gif", "old", 9);    // => true
      * </pre>
      */
-    public static endsWith(str: string, ends: string, position?: number): boolean {
+    public static endsWith(
+        str: string,
+        ends: string,
+        position?: number
+    ): boolean {
         str = StringUtils.makeString(str);
         ends = '' + ends;
         if (position === undefined) {
             position = str.length - ends.length;
         } else {
-            position = Math.min(StringUtils.toPositive(position), str.length) - ends.length;
+            position =
+                Math.min(StringUtils.toPositive(position), str.length) -
+                ends.length;
         }
         return position >= 0 && str.indexOf(ends, position) === position;
     }
@@ -194,9 +213,11 @@
      * </pre>
      */
     public static titleize(str: string): string {
-        return StringUtils.makeString(str).toLowerCase().replace(/(?:^|\s|-)\S/g, function (c) {
-            return c.toUpperCase();
-        });
+        return StringUtils.makeString(str)
+            .toLowerCase()
+            .replace(/(?:^|\s|-)\S/g, function (c) {
+                return c.toUpperCase();
+            });
     }
 
     /**
@@ -207,7 +228,6 @@
      * </pre>
      */
     public static trim(str: string, characters?: string): string {
-
         str = StringUtils.makeString(str);
 
         if (characters === undefined) {
@@ -215,7 +235,10 @@
         }
 
         characters = StringUtils.defaultToWhiteSpace(characters);
-        return str.replace(new RegExp('^' + characters + '+|' + characters + '+$', 'g'), '');
+        return str.replace(
+            new RegExp('^' + characters + '+|' + characters + '+$', 'g'),
+            ''
+        );
     }
 
     /**
@@ -226,7 +249,6 @@
 
         characters = StringUtils.defaultToWhiteSpace(characters);
         return str.replace(new RegExp('^' + characters + '+'), '');
-
     }
 
     /**
@@ -261,8 +283,8 @@
     public static strRight(str: string, sep: string): string {
         str = StringUtils.makeString(str);
         sep = StringUtils.makeString(sep);
-        const pos: number = (sep === undefined) ? -1 : str.indexOf(sep);
-        return (pos >= 0) ? str.slice(pos + sep.length, str.length) : str;
+        const pos: number = sep === undefined ? -1 : str.indexOf(sep);
+        return pos >= 0 ? str.slice(pos + sep.length, str.length) : str;
     }
 
     /**
@@ -273,8 +295,8 @@
     public static strRightBack(str: string, sep: string): string {
         str = StringUtils.makeString(str);
         sep = StringUtils.makeString(sep);
-        const pos: number = (sep === undefined) ? -1 : str.lastIndexOf(sep);
-        return (pos >= 0) ? str.slice(pos + sep.length, str.length) : str;
+        const pos: number = sep === undefined ? -1 : str.lastIndexOf(sep);
+        return pos >= 0 ? str.slice(pos + sep.length, str.length) : str;
     }
 
     /**
@@ -285,8 +307,8 @@
     public static strLeft(str: string, sep: string): string {
         str = StringUtils.makeString(str);
         sep = StringUtils.makeString(sep);
-        const pos: number = (sep === undefined) ? -1 : str.indexOf(sep);
-        return (pos >= 0) ? str.slice(0, pos) : str;
+        const pos: number = sep === undefined ? -1 : str.indexOf(sep);
+        return pos >= 0 ? str.slice(0, pos) : str;
     }
 
     /**
@@ -298,7 +320,7 @@
         str = StringUtils.makeString(str);
         sep = StringUtils.makeString(sep);
         const pos: number = str.lastIndexOf(sep);
-        return (pos >= 0) ? str.slice(0, pos) : str;
+        return pos >= 0 ? str.slice(0, pos) : str;
     }
 
     /**
@@ -333,9 +355,13 @@
      *  replaceAll("foo", "o", "a"); // => "faa"
      * </pre>
      */
-    public static replaceAll(str: string, find: string, replace: string, ignorecase?: boolean): string {
-
-        const flags: string = (ignorecase === true) ? 'gi' : 'g';
+    public static replaceAll(
+        str: string,
+        find: string,
+        replace: string,
+        ignorecase?: boolean
+    ): string {
+        const flags: string = ignorecase === true ? 'gi' : 'g';
         const reg: RegExp = new RegExp(find, flags);
 
         return StringUtils.makeString(str).replace(reg, replace);
@@ -346,7 +372,6 @@
      * This function supports cent, yen, euro, pound, lt, gt, copy, reg, quote, amp, apos.f
      */
     public static escapeHTML(str: string): string {
-
         let regexString = '[';
 
         for (const key in StringUtils.escapeChars) {
@@ -358,11 +383,9 @@
 
         const regex = new RegExp(regexString, 'g');
 
-
         return StringUtils.makeString(str).replace(regex, function (m) {
             return '&' + StringUtils.escapeChars[m] + ';';
         });
-
     }
 
     /**
@@ -407,7 +430,6 @@
      * </pre>
      */
     public static trimToEmpty(str: string): string {
-
         str = StringUtils.makeString(str);
 
         return StringUtils.trim(str);
@@ -422,7 +444,6 @@
      * 不能取名叫length
      */
     public static strLen(str: string): number {
-
         str = StringUtils.makeString(str);
 
         return str.length;
@@ -466,7 +487,6 @@
         const value: number = Number(s);
 
         return !isNaN(value);
-
     }
 
     /**
@@ -478,11 +498,10 @@
      * </pre>
      */
     public static equalsIgnoreCase(s1: string, s2: string): boolean {
-
         if (s1 === s2) {
             return true;
         }
-        if ((s1 === undefined) || (s2 === undefined)) {
+        if (s1 === undefined || s2 === undefined) {
             return false;
         }
         return StringUtils.toLowerCase(s1) === StringUtils.toLowerCase(s2);
@@ -494,7 +513,6 @@
      * </pre>
      */
     public static split(str: string, sep: string, howmany?: number): string[] {
-
         if (str === undefined) {
             return [];
         }
@@ -540,7 +558,6 @@
         }
 
         return StringUtils.substring(str, str.length - len);
-
     }
 
     /**
@@ -554,7 +571,6 @@
         }
 
         return StringUtils.substring(str, 0, len);
-
     }
 
     /**
@@ -592,7 +608,11 @@
      *  indexOf("Hello world!", "world"); => 6
      * </pre>
      */
-    public static indexOf(str: string, searchValue: string, fromIndex?: number): number {
+    public static indexOf(
+        str: string,
+        searchValue: string,
+        fromIndex?: number
+    ): number {
         if (str === undefined) {
             return -1;
         }
@@ -607,7 +627,11 @@
      *  indexOf("Hello world!", "world"); => 6
      * </pre>
      */
-    public static lastIndexOf(str: string, searchValue: string, fromIndex?: number): number {
+    public static lastIndexOf(
+        str: string,
+        searchValue: string,
+        fromIndex?: number
+    ): number {
         if (str === undefined) {
             return -1;
         }
@@ -624,7 +648,7 @@
      * </pre>
      */
     public static isBlank(str: string): boolean {
-        return (/^\s*$/).test(StringUtils.makeString(str));
+        return /^\s*$/.test(StringUtils.makeString(str));
     }
 
     /**
@@ -648,9 +672,11 @@
     public static capitalize(str: string, lowercaseRest?: boolean): string {
         str = StringUtils.makeString(str);
 
-        lowercaseRest = (lowercaseRest === undefined) ? false : true;
+        lowercaseRest = lowercaseRest === undefined ? false : true;
 
-        const remainingChars = !lowercaseRest ? str.slice(1) : str.slice(1).toLowerCase();
+        const remainingChars = !lowercaseRest
+            ? str.slice(1)
+            : str.slice(1).toLowerCase();
 
         return str.charAt(0).toUpperCase() + remainingChars;
     }
@@ -688,7 +714,8 @@
         let iLeft = 0;
         const iDataLen: number = str.length;
         while (iLeft < iDataLen) {
-            const iRight: number = (iLeft + len) > iDataLen ? iDataLen : iLeft + len;
+            const iRight: number =
+                iLeft + len > iDataLen ? iDataLen : iLeft + len;
             const sToken: string = str.substring(iLeft, iRight);
             iLeft += len;
             tokens.push(sToken);
@@ -709,7 +736,6 @@
 
         return StringUtils.makeString(str).indexOf(needle) !== -1;
     }
-
 
     /**
      * Returns number of occurrences of substring in string.
@@ -752,8 +778,8 @@
     }
 
     /**
-    * 半形轉全形
-    */
+     * 半形轉全形
+     */
     public static toFullWidth(str: string) {
         if (!str) return '';
         var ascii = '';
@@ -761,7 +787,8 @@
             let charCode = str[i].charCodeAt(0);
             if (charCode <= 126 && charCode >= 33) {
                 charCode += 65248;
-            } else if (charCode == 32) { // 半形空白轉全形
+            } else if (charCode == 32) {
+                // 半形空白轉全形
                 charCode = 12288;
             }
             ascii += String.fromCharCode(charCode);
@@ -770,8 +797,8 @@
     }
 
     /**
-    * 全形轉半形
-    */
+     * 全形轉半形
+     */
     public static toHalfWith(str: string) {
         if (!str) return;
         var ascii = '';
@@ -779,34 +806,33 @@
             var c = str[i].charCodeAt(0);
 
             // make sure we only convert half-full width char
-            if (c >= 0xFF00 && c <= 0xFFEF) {
-                c = 0xFF & (c + 0x20);
+            if (c >= 0xff00 && c <= 0xffef) {
+                c = 0xff & (c + 0x20);
             }
 
             // space transfer
-            if(c == 0x20){
-                ascii += String.fromCharCode(32); 
-            }
-            else {
+            if (c == 0x20) {
+                ascii += String.fromCharCode(32);
+            } else {
                 ascii += String.fromCharCode(c);
-            } 
-
+            }
         }
         return ascii;
     }
 
-
     /**
      * 判斷全形(中文、英文、標點符號)
      */
-    public static isFullWidth(str: string): boolean{
-        return /^[\u4E00-\u9FFF|\uFF01-\uFF5E|\u3000\u3001-\u303F]+$/g.test(str);
+    public static isFullWidth(str: string): boolean {
+        return /^[\u4E00-\u9FFF|\uFF01-\uFF5E|\u3000\u3001-\u303F]+$/g.test(
+            str
+        );
     }
 
     /**
      * 判斷全形
      */
-    public static isHalfWidth(str: string): boolean{
+    public static isHalfWidth(str: string): boolean {
         return /[\u0000-\u00ff]/g.test(str);
     }
 
@@ -814,30 +840,30 @@
      * 判斷中文
      * @param str
      */
-    public static isChinese(str: string): boolean{
+    public static isChinese(str: string): boolean {
         return this.regexChinese.test(str);
     }
 
     /**
      * 是否為 特殊符號
-     * @param str 
+     * @param str
      */
-    public static isSpecialChar(str: string): boolean{
+    public static isSpecialChar(str: string): boolean {
         // 去除中文字
-        const withoutChinese = str.replace(this.regexChinese, "");
+        const withoutChinese = str.replace(this.regexChinese, '');
         // 找出非英文數字
         return /\W+/g.test(withoutChinese);
     }
 
-    public static appendIfMissing(str: string, missingStr: string): string{
-        if(str && !this.isEmptyStr(str) && !this.endsWith(str, missingStr)){
+    public static appendIfMissing(str: string, missingStr: string): string {
+        if (str && !this.isEmptyStr(str) && !this.endsWith(str, missingStr)) {
             return str + missingStr;
         }
         return str ?? '';
     }
 
-    public static prependIfMissing(str: string, missingStr: string): string{
-        if(str && !this.isEmptyStr(str) && !this.startsWith(str, missingStr)){
+    public static prependIfMissing(str: string, missingStr: string): string {
+        if (str && !this.isEmptyStr(str) && !this.startsWith(str, missingStr)) {
             return missingStr + str;
         }
         return str ?? '';

@@ -1,5 +1,4 @@
-
-@import "src/assets/scss/import";
+@import 'src/assets/scss/import';
 
 @media only screen and (min-width: 966px) {
     .mobile_only {
@@ -7,7 +6,7 @@
     }
 }
 
-@media only screen and (max-width: 965px) { 
+@media only screen and (max-width: 965px) {
     .desktop_only {
         display: none !important;
     }
@@ -31,7 +30,7 @@
             margin-top: 60px;
             background: $white;
             padding: 4vh 8vw;
-            box-shadow: 0 0 14px 0 rgba(0,0,0,0.10);
+            box-shadow: 0 0 14px 0 rgba(0, 0, 0, 0.1);
             .quick_search_area {
                 height: auto;
             }
@@ -47,7 +46,7 @@
             .block_title > p {
                 color: $deep_blue;
             }
-            .block_title>p::after {
+            .block_title > p::after {
                 display: none;
             }
             .checkmark {
@@ -70,7 +69,7 @@
         padding: 0;
     }
     #course_item {
-        background: $bg_color;        
+        background: $bg_color;
     }
     .courseList__sideList__itemBox {
         height: 100%;
@@ -84,7 +83,7 @@
         bottom: 20px !important;
         right: 20px !important;
     }
-    
+
     .list_course_item_right {
         padding: 0;
         .large_right--circle {
@@ -197,5 +196,4 @@
             margin: 6px 0;
         }
     }
-
 }

@@ -1,4 +1,3 @@
-
 @import 'src/assets/scss/import';
 
 .notification_area {
@@ -16,7 +15,8 @@
         border-radius: 6px;
         margin: 10px 0;
         overflow: hidden;
-        transition: opacity .3s $material_trans, margin-right .8s $material_trans;;
+        transition: opacity 0.3s $material_trans,
+            margin-right 0.8s $material_trans;
         @include box-shadow_3();
         opacity: 0;
         height: 40px;
