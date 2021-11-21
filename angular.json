@@ -35,7 +35,8 @@
             "namedChunks": true,
             "stylePreprocessorOptions": {
               "includePaths": [
-                "src/assets/scss" // 讓_import.scss can import
+                // 讓_import.scss can import
+                "src/assets/scss"
               ]
             }
           },
@@ -76,12 +77,12 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "nckuhub-frontend:build"
+            "browserTarget": "nckuhub-frontend:build",
           },
           "configurations": {
             "production": {
               "browserTarget": "nckuhub-frontend:build:production"
-            }
+            },
           }
         },
         "extract-i18n": {

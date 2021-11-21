@@ -1,0 +1,8 @@
+{
+  "/": {
+    "target": "https://nckuhub.com",
+    "secure": false,
+    "logLevel": "debug",
+    "changeOrigin": true
+  }
+}
