@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core'
+import {CourseService} from '../../core/service/course.service';
 
 @Component({
   selector: 'app-course',
@@ -6,7 +7,9 @@ import { Component, OnInit } from '@angular/core'
   styleUrls: ['./course.component.css'],
 })
 export class CourseComponent implements OnInit {
-  constructor() {}
+  constructor(
+    private course: CourseService
+  ) {}
 
   ngOnInit(): void {
     // TODO: get parameter about course_Id

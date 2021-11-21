@@ -15,28 +15,28 @@ import { Course } from "../models/course.model";
     providedIn: 'root'
 })
 export class CourseService{
-  private courses = new BehaviorSubject<Course[]>([])
-  courses$ = this.courses.asObservable()
+  private courses = new BehaviorSubject<Course[]>([]);
+  courses$ = this.courses.asObservable();
 
   constructor (
     private appService: AppService
   ) {
-    this.fetchCourses()
+    this.fetchCurrentSemeterCourses();
   }
 
   /**
-   * 抓取所有課程資料
+   * 抓取 當學期 所有課程資料
    */
-  private fetchCourses(): void {
+  private fetchCurrentSemeterCourses(): void {
     this.appService
       .get({ url: AppUrl.COURSE_URL })
       .pipe(
         tap(response => {
-          const courses = response.model as Course[]
-          courses.sort((a, b) => a.comment_num > b.comment_num ? -1 : 1)
-          this.courses.next(courses)
+          const courses = response.model.courses as Course[];
+          courses.sort((a, b) => a.comment_num > b.comment_num ? -1 : 1);
+          this.courses.next(courses);
         })
-      ).subscribe()
+      ).subscribe();
   }
 
   /**

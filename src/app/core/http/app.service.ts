@@ -3,7 +3,7 @@ import { Injectable } from "@angular/core";
 import { defer, Observable } from "rxjs";
 import { AppSettings } from "./app.setting";
 import { AppRequestContext, NckuhubResponse } from "../models/http-vo-model";
-import { finalize, tap, timeout } from 'rxjs/operators';
+import {finalize, map, tap, timeout} from 'rxjs/operators';
 import { LoadingService } from './loading.service';
 
 
@@ -38,6 +38,7 @@ export class AppService {
             .pipe(
                 // 設定幾秒鐘timeout
                 // timeout(AppSettings.APP_TIME_OUT),
+                map(this.dataMapping),
                 finalize(() => {
                     this.loadingService.hide();
                 })
@@ -55,16 +56,27 @@ export class AppService {
             // setting httpOptions
             const httpOptions = this.setHttpOptions(context.param);
 
-            // post
             return this.http.get<NckuhubResponse>(AppSettings.API_ENDPOINT + context.url, httpOptions)
             .pipe(
                 // 設定幾秒鐘timeout
                 // timeout(AppSettings.APP_TIME_OUT),
+                map(this.dataMapping),
                 finalize(() => {
                     this.loadingService.hide();
                 })
-            )
+            );
         });
+    }
+
+    /**
+     * mapping data from backend
+     * TODO: 要把後端跟前端資料型態統一
+     * @param res
+     */
+    private dataMapping = (res: any): NckuhubResponse => {
+        const newRes = new NckuhubResponse();
+        newRes.model = res;
+        return newRes;
     }
 
     /**
