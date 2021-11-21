@@ -7,7 +7,7 @@
         "start-proxy": "ng serve --proxy-config ./proxy.config.json",
         "build": "ng build",
         "test": "ng test",
-        "lint": "ng lint  --cache",
+        "lint": "ng lint",
         "e2e": "ng e2e",
         "dev:ssr": "ng run nckuhub-frontend:serve-ssr",
         "serve:ssr": "node dist/nckuhub-frontend/server/main.js",

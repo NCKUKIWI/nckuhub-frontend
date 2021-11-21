@@ -1,9 +1,9 @@
-import { BehaviorSubject } from 'rxjs';
-import { tap } from 'rxjs/operators';
-import { AppService } from '../../core/http/app.service';
-import { AppUrl } from '../../core/http/app.setting';
-import { Course } from '../../core/models/course.model';
-import { Injectable } from '@angular/core';
+import { BehaviorSubject, Observable } from "rxjs";
+import { tap } from "rxjs/operators";
+import { AppService } from "../../core/http/app.service";
+import { AppUrl } from "../../core/http/app.setting";
+import { Course } from "../../core/models/course.model";
+import { Injectable } from "@angular/core";
 
 /**
  * 課程資訊 service <br/>
@@ -12,7 +12,7 @@ import { Injectable } from '@angular/core';
  * @date 2021/09/20
  */
 @Injectable({
-    providedIn: 'root',
+    providedIn: "root",
 })
 export class CourseService {
     private courses = new BehaviorSubject<Course[]>([]);
@@ -43,9 +43,10 @@ export class CourseService {
     /**
      * 抓取課程資料與心得
      * @param courseId
+     * TODO: return type
      * @returns
      */
-    fetchCourseWithComments(courseId: number) {
+    fetchCourseWithComments(courseId: number): Observable<any> {
         return this.appService.get({ url: `AppUrl.COURSE_URL/${courseId}` });
     }
 

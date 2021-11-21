@@ -1,4 +1,4 @@
-import { HttpHeaders, HttpParams } from '@angular/common/http';
+import { HttpParams } from "@angular/common/http";
 
 export class Request {
     constructor(
@@ -17,13 +17,13 @@ export class NckuhubHeader {
     public txnCode: string;
     public txnTime: string;
     public unitCode: string;
-    public authorizerCode: String;
+    public authorizerCode: string;
 }
 
 export class Response {
     public model: any;
     public paging: Paging;
-    public responseTime: Date; //for search time field
+    public responseTime: Date;
     public resultCode: string;
     public resultModel: any;
     public resultDescription: string;

@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable } from "@angular/core";
 
 /**
  * loading 動畫 service <br/>
@@ -7,20 +7,20 @@ import { Injectable } from '@angular/core';
  * @date 2021/09/20
  */
 @Injectable({
-    providedIn: 'root',
+    providedIn: "root",
 })
 export class LoadingService {
     /** 動畫是否顯示 */
-    isShow: boolean = false;
+    isShow = false;
 
-    show() {
+    show(): void {
         if (!this.isShow) {
             this.isShow = true;
             // TODO
         }
     }
 
-    hide() {
+    hide(): void {
         if (this.isShow) {
             // TODO
         }

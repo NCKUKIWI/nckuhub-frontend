@@ -1,16 +1,16 @@
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { defer, Observable } from 'rxjs';
-import { AppSettings } from './app.setting';
-import { AppRequestContext, NckuhubResponse } from '../models/http-vo-model';
-import { finalize, map, tap, timeout } from 'rxjs/operators';
-import { LoadingService } from './loading.service';
+import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
+import { Injectable } from "@angular/core";
+import { defer, Observable } from "rxjs";
+import { AppSettings } from "./app.setting";
+import { AppRequestContext, NckuhubResponse } from "../models/http-vo-model";
+import { finalize, map } from "rxjs/operators";
+import { LoadingService } from "./loading.service";
 
 /**
  * 應用程式共用服務 <br/>
  */
 @Injectable({
-    providedIn: 'root',
+    providedIn: "root",
 })
 export class AppService {
     constructor(
@@ -52,9 +52,8 @@ export class AppService {
     /**
      * 以HTTP GET方式傳送訊息
      * @param context
-     * @return n/a
      */
-    get(context: AppRequestContext) {
+    get(context: AppRequestContext): Observable<NckuhubResponse> {
         return defer(() => {
             // setting httpOptions
             const httpOptions = this.setHttpOptions(context.param);
@@ -84,17 +83,17 @@ export class AppService {
         const newRes = new NckuhubResponse();
         newRes.model = res;
         return newRes;
-    };
+    }
 
     /**
      * 設定 http options
      * @param params
      * @returns
      */
-    private setHttpOptions(params: HttpParams): Object {
+    private setHttpOptions(params: HttpParams): any {
         return {
-            headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
-            params: params,
+            headers: new HttpHeaders({ "Content-Type": "application/json" }),
+            params,
         };
     }
 

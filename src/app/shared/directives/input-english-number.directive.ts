@@ -1,9 +1,9 @@
-import { Directive, ElementRef, OnInit, OnDestroy } from '@angular/core';
-import { NgControl } from '@angular/forms';
-import { Subscription } from 'rxjs/internal/Subscription';
+import { Directive, ElementRef, OnInit, OnDestroy } from "@angular/core";
+import { NgControl } from "@angular/forms";
+import { Subscription } from "rxjs/internal/Subscription";
 
 @Directive({
-    selector: '[englishNumbersOnly]',
+    selector: "[appEnglishNumbersOnly]",
 })
 export class EnglishNumberDirective implements OnInit, OnDestroy {
     constructor(private _el: ElementRef, private ngControl: NgControl) {}
@@ -19,7 +19,7 @@ export class EnglishNumberDirective implements OnInit, OnDestroy {
             }
         );
 
-        this._el.nativeElement.addEventListener('input', (value) => {
+        this._el.nativeElement.addEventListener("input", () => {
             this._el.nativeElement.value = this.transData(
                 this._el.nativeElement.value
             );
@@ -29,9 +29,9 @@ export class EnglishNumberDirective implements OnInit, OnDestroy {
         });
     }
 
-    transData(oldValue) {
-        if (typeof oldValue === 'string') {
-            return oldValue.replace(/[^a-zA-Z0-9]*/g, '');
+    transData(oldValue: string): string {
+        if (typeof oldValue === "string") {
+            return oldValue.replace(/[^a-zA-Z0-9]*/g, "");
         } else {
             return oldValue;
         }
