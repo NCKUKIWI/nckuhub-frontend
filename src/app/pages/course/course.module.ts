@@ -8,7 +8,6 @@ import {NavbarComponent} from './navbar/navbar.component';
 import {CourseSearchComponent} from './course-search/course-search.component';
 import {WishListComponent} from './wish-list/wish-list.component';
 import {CourseUserComponent} from './user/course-user.component';
-import {CourseService} from '../../core/service/course.service';
 
 
 @NgModule({

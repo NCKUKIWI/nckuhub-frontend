@@ -1,9 +1,9 @@
-import { Injectable } from "@angular/core";
-import { BehaviorSubject } from "rxjs";
-import { tap } from "rxjs/operators";
-import { AppService } from "../http/app.service";
-import { AppUrl } from "../http/app.setting";
-import { Course } from "../models/course.model";
+import {BehaviorSubject} from 'rxjs';
+import {tap} from 'rxjs/operators';
+import {AppService} from '../../core/http/app.service';
+import {AppUrl} from '../../core/http/app.setting';
+import {Course} from '../../core/models/course.model';
+import {Injectable} from '@angular/core';
 
 /**
  * 課程資訊 service <br/>
@@ -11,8 +11,8 @@ import { Course } from "../models/course.model";
  * @author Nick Liao
  * @date 2021/09/20
  */
- @Injectable({
-    providedIn: 'root'
+@Injectable({
+  providedIn: 'root',
 })
 export class CourseService{
   private courses = new BehaviorSubject<Course[]>([]);

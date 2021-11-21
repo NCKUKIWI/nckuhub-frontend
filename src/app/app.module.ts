@@ -4,7 +4,6 @@ import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
 import {CourseRoutingModule} from './pages/course/course-routing.module';
 import {SharedModule} from './shared/share.module';
-import {CourseService} from './core/service/course.service';
 import {HttpClientModule} from '@angular/common/http';
 
 
