@@ -25,6 +25,10 @@ const routes: Routes = [
         {
           path: 'wish-list',
           component: WishListComponent
+        },
+        {
+          path: ':course_id',
+          component: CourseComponent
         }
       ]
   }

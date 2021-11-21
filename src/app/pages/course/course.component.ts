@@ -8,5 +8,7 @@ import { Component, OnInit } from '@angular/core'
 export class CourseComponent implements OnInit {
   constructor() {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    // TODO: get parameter about course_Id
+  }
 }
