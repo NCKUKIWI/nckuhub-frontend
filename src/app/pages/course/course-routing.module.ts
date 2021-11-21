@@ -4,6 +4,7 @@ import { CourseComponent } from './course.component';
 import {TimetableComponent} from './timetable/timetable.component';
 import {CourseSearchComponent} from './course-search/course-search.component';
 import {CourseUserComponent} from './user/course-user.component';
+import {WishListComponent} from './wish-list/wish-list.component';
 const routes: Routes = [
   {
       path: '',
@@ -20,6 +21,10 @@ const routes: Routes = [
         {
           path: 'user',
           component: CourseUserComponent
+        },
+        {
+          path: 'wish-list',
+          component: WishListComponent
         }
       ]
   }
