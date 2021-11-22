@@ -3,14 +3,16 @@ import { CommonModule } from '@angular/common';
 import { SharedModule } from 'src/app/shared/share.module';
 import { CourseRoutingModule } from './course-routing.module';
 import { CourseComponent } from './course.component';
-import { TimetableComponent } from './timetable/timetable.component';
-import { NavbarComponent } from './navbar/navbar.component';
-import { CourseSearchComponent } from './course-search/course-search.component';
-import { WishListComponent } from './wish-list/wish-list.component';
-import { CourseUserComponent } from './user/course-user.component';
+import { TimetableComponent } from './components/timetable/timetable.component';
+import { NavbarComponent } from './components/navbar/navbar.component';
+import { CourseSearchComponent } from './components/course-search/course-search.component';
+import { WishListComponent } from './components/wish-list/wish-list.component';
+import { CourseUserComponent } from './components/user/course-user.component';
+import {CourseContentComponent} from './components/course-content/course-content.component';
 
 @NgModule({
     declarations: [
+        CourseContentComponent,
         CourseComponent,
         TimetableComponent,
         NavbarComponent,

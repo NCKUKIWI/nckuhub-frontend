@@ -5,7 +5,7 @@ import { User } from 'src/app/core/models/user.model';
 import { UserStatusEnum } from '../enum/user-staus';
 import { AppService } from '../http/app.service';
 import { AppUrl } from '../http/app.setting';
-import { Course } from '../models/course.model';
+import { Course } from '../../pages/course/models/course.model';
 import { NckuhubResponse } from '../models/http-vo-model';
 
 /**

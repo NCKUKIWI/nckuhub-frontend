@@ -1,8 +1,8 @@
 import { BehaviorSubject, Observable } from "rxjs";
 import { tap } from "rxjs/operators";
-import { AppService } from "../../core/http/app.service";
-import { AppUrl } from "../../core/http/app.setting";
-import { Course } from "../../core/models/course.model";
+import { AppService } from "../../../core/http/app.service";
+import { AppUrl } from "../../../core/http/app.setting";
+import { Course } from "../models/course.model";
 import { Injectable } from "@angular/core";
 
 /**
