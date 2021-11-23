@@ -1,8 +1,9 @@
 {
-    "/": {
+    "/api": {
         "target": "https://nckuhub.com",
-        "secure": false,
+        "secure": true,
         "logLevel": "debug",
-        "changeOrigin": true
+        "changeOrigin": true,
+        "pathRewrite": {"^/api" : ""}
     }
 }
