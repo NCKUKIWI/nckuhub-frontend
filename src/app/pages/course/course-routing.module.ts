@@ -6,6 +6,7 @@ import {CourseSearchComponent} from './components/course-search/course-search.co
 import {CourseUserComponent} from './components/user/course-user.component';
 import {CourseService} from './services/course.service';
 import {WishListService} from './services/wish-list.service';
+import {CourseContentComponent} from './components/course-content/course-content.component';
 
 const routes: Routes = [
     {
@@ -20,6 +21,7 @@ const routes: Routes = [
             {
                 path: 'timetable',
                 component: TimetableComponent,
+                // canActivate: []
             },
             {
                 path: 'search',
@@ -28,10 +30,11 @@ const routes: Routes = [
             {
                 path: 'user',
                 component: CourseUserComponent,
+                // canActivate: []
             },
             {
                 path: ':course_id',
-                component: CourseComponent,
+                component: CourseContentComponent,
             },
         ],
     },
