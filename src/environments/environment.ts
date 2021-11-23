@@ -5,7 +5,7 @@
 export const environment = {
     production: false,
     title: 'NCKUHUB DEV',
-    appEndPoint: 'http://localhost:4200',
+    appEndPoint: 'http://localhost:4200/api',
     logoutUrl: '/login',
     resetParamFlag: true,
     errorRedirectFlag: false,

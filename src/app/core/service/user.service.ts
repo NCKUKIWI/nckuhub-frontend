@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {EventEmitter, Injectable} from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import { User } from 'src/app/core/models/user.model';
@@ -18,6 +18,9 @@ import { NckuhubResponse } from '../models/http-vo-model';
     providedIn: 'root',
 })
 export class UserService {
+
+    loginStatus: EventEmitter<User>;
+
     constructor(private appService: AppService) {}
 
     /** 心得 */
