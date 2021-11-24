@@ -24,9 +24,12 @@ export class AppUrl {
     public static USER_LOGOUT_REDIRECT_URL = environment.logoutUrl;
 
     /** 當學期課程 */
-    public static CURRENT_SEMESTER_COURSE = '/course';
+    public static GET_CURRENT_SEMESTER_COURSE = `/course`;
 
     public static WISH_LIST_URL = '/post/setWish';
+
+    /** 取得 單一課程 */
+    public static GET_COURSE_BY_ID = (course_id: number): string => `/course/${course_id}`;
 }
 
 /**

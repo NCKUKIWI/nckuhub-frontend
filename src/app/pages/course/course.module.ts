@@ -9,6 +9,7 @@ import { CourseSearchComponent } from './components/course-search/course-search.
 import { WishListComponent } from './components/wish-list/wish-list.component';
 import { CourseUserComponent } from './components/user/course-user.component';
 import {CourseContentComponent} from './components/course-content/course-content.component';
+import { WriteCommentComponent } from './components/write-comment/write-comment.component';
 
 @NgModule({
     declarations: [
@@ -19,6 +20,7 @@ import {CourseContentComponent} from './components/course-content/course-content
         CourseSearchComponent,
         WishListComponent,
         CourseUserComponent,
+        WriteCommentComponent,
     ],
     imports: [CourseRoutingModule, CommonModule, SharedModule],
 })

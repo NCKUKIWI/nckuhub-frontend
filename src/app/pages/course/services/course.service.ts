@@ -27,7 +27,7 @@ export class CourseService {
      */
     private fetchCurrentSemesterCourses(): void {
         this.appService
-            .get({ url: AppUrl.CURRENT_SEMESTER_COURSE })
+            .get({ url: AppUrl.GET_CURRENT_SEMESTER_COURSE })
             .pipe(
                 tap((response) => {
                     const courses = response.model.courses as Course[];
@@ -40,6 +40,10 @@ export class CourseService {
             .subscribe();
     }
 
+    getCourse(): Observable<Course[]>{
+        return this.courses;
+    }
+
     /**
      * 抓取課程資料與心得
      * @param courseId
@@ -47,7 +51,9 @@ export class CourseService {
      * @returns
      */
     fetchCourseWithComments(courseId: number): Observable<any> {
-        return this.appService.get({ url: `AppUrl.COURSE_URL/${courseId}` });
+        return this.appService.get({
+            url: AppUrl.GET_COURSE_BY_ID(courseId),
+        })
     }
 
     /**
