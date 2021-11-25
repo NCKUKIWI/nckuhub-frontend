@@ -23,13 +23,27 @@ export class AppUrl {
     public static USER_LOGOUT_URL = '/user/logout';
     public static USER_LOGOUT_REDIRECT_URL = environment.logoutUrl;
 
-    /** 當學期課程 */
-    public static GET_CURRENT_SEMESTER_COURSE = `/course`;
+    /** Course 課程 */
+    /** 取得 課程 當學期資料 */
+    public static GET_CURRENT_SEMESTER_COURSE = (): string => '/course';
+    /** 取得 課程 系所資料 */
+    public static GET_COURSE_DEPT_INFO = (): string => '/course/allDpmt';
+    /** 取得 課程 歷史資料 */
+    public static GET_HISTORY_COURSE = (): string => '/course/allCoursePrev';
+    /** 取得 課程 某一筆資料 */
+    public static GET_COURSE_BY_ID = (courseId: number): string => `/course/${courseId}`;
 
-    public static WISH_LIST_URL = '/post/setWish';
-
-    /** 取得 單一課程 */
-    public static GET_COURSE_BY_ID = (course_id: number): string => `/course/${course_id}`;
+    /** User 使用者 */
+    /** 取得 使用者 課表、願望清單資訊 */
+    public static GET_USER_TABLE_WISHLIST = (userId: number): string => `/user/getList/${userId}`;
+    /** 取得 使用者 個人資料 */
+    public static GET_USER_INFO = (): string => '/user/info';
+    /** 修改 使用者 願望清單 */
+    public static SET_WISHLIST = (userId: number): string => `/post/setWish/${userId}`;
+    /** 修改 使用者 課表 */
+    public static SET_TABLE = (userId: number): string => `/post/setTable/${userId}`;
+    /** 取得 使用者 小幫手狀態 */
+    public static GET_HELPER_STATUS = (): string => `/user/findHelperService`;
 }
 
 /**

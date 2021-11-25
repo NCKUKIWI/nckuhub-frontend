@@ -27,7 +27,7 @@ export class CourseService {
      */
     private fetchCurrentSemesterCourses(): void {
         this.appService
-            .get({ url: AppUrl.GET_CURRENT_SEMESTER_COURSE })
+            .get({ url: AppUrl.GET_CURRENT_SEMESTER_COURSE() })
             .pipe(
                 tap((response) => {
                     const courses = response.model.courses as Course[];
