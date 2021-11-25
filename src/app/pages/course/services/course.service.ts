@@ -1,9 +1,11 @@
-import { BehaviorSubject, Observable } from "rxjs";
-import { tap } from "rxjs/operators";
-import { AppService } from "../../../core/http/app.service";
-import { AppUrl } from "../../../core/http/app.setting";
-import { Course } from "../models/course.model";
-import { Injectable } from "@angular/core";
+import { BehaviorSubject, Observable } from 'rxjs';
+import {map, take, tap} from 'rxjs/operators';
+import { AppService } from '../../../core/http/app.service';
+import { AppUrl } from '../../../core/http/app.setting';
+import { CourseModel } from '../models/Course.model';
+import { Injectable } from '@angular/core';
+import { CourseWithCommentModel } from '../models/CourseComment.model';
+import {UserService} from '../../../core/service/user.service';
 
 /**
  * 課程資訊 service <br/>
@@ -12,36 +14,34 @@ import { Injectable } from "@angular/core";
  * @date 2021/09/20
  */
 @Injectable({
-    providedIn: "root",
+    providedIn: 'root',
 })
 export class CourseService {
-    private courses = new BehaviorSubject<Course[]>([]);
-    courses$ = this.courses.asObservable();
+    private courses$ = new BehaviorSubject<CourseModel[]>([]);
 
-    constructor(private appService: AppService) {
-        this.fetchCurrentSemesterCourses();
+    constructor(
+      private appService: AppService,
+      private userService: UserService) {
+        this.initCurrentSemesterCourses();
+        console.log("course service");
     }
 
     /**
      * 抓取 當學期 所有課程資料
      */
-    private fetchCurrentSemesterCourses(): void {
-        this.appService
-            .get({ url: AppUrl.GET_CURRENT_SEMESTER_COURSE() })
-            .pipe(
-                tap((response) => {
-                    const courses = response.model.courses as Course[];
-                    courses.sort((a, b) =>
-                        a.comment_num > b.comment_num ? -1 : 1
-                    );
-                    this.courses.next(courses);
-                })
-            )
-            .subscribe();
+    private initCurrentSemesterCourses(): void {
+        this.appService.get({ url: AppUrl.GET_CURRENT_SEMESTER_COURSE() }).subscribe((res) => {
+            const courses = res.model.courses as CourseModel[];
+            courses.sort((a, b) => (a.comment_num > b.comment_num ? -1 : 1));
+            this.courses$.next(courses);
+        });
     }
 
-    getCourse(): Observable<Course[]>{
-        return this.courses;
+    /**
+     * 取得 當學期 所有課程
+     */
+    getCourseData(): Observable<CourseModel[]> {
+        return this.courses$.asObservable().pipe(take(1));
     }
 
     /**
@@ -50,10 +50,15 @@ export class CourseService {
      * TODO: return type
      * @returns
      */
-    fetchCourseWithComments(courseId: number): Observable<any> {
-        return this.appService.get({
-            url: AppUrl.GET_ONE_COURSE(courseId),
-        })
+    fetchCourseWithComments(courseId: number): Observable<CourseWithCommentModel> {
+        return this.appService
+            .get({
+                url: AppUrl.GET_ONE_COURSE(courseId),
+            })
+            .pipe(
+                map((res) => res.model as CourseWithCommentModel),
+                take(1)
+            );
     }
 
     /**
@@ -61,9 +66,7 @@ export class CourseService {
      * @param courseId
      * @returns `Course`
      */
-    getCourseById(courseId: number): Course {
-        return this.courses
-            .getValue()
-            .find((course) => course.id === courseId)!;
+    getCourseById(courseId: number): CourseModel {
+        return this.courses$.getValue().find((course) => course.id === courseId)!;
     }
 }

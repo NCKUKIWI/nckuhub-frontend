@@ -1,11 +1,11 @@
-import {EventEmitter, Injectable} from '@angular/core';
-import { Observable, of } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
+import { EventEmitter, Injectable } from '@angular/core';
+import { BehaviorSubject, Observable, of } from 'rxjs';
+import { map, take, tap } from 'rxjs/operators';
 import { User } from 'src/app/core/models/user.model';
 import { UserStatusEnum } from '../enum/user-staus';
 import { AppService } from '../http/app.service';
 import { AppUrl } from '../http/app.setting';
-import { Course } from '../../pages/course/models/course.model';
+import { CourseModel } from '../../pages/course/models/Course.model';
 import { NckuhubResponse } from '../models/http-vo-model';
 
 /**
@@ -18,15 +18,24 @@ import { NckuhubResponse } from '../models/http-vo-model';
     providedIn: 'root',
 })
 export class UserService {
+    loginStatus: BehaviorSubject<any>;
 
-    loginStatus: EventEmitter<User>;
-
-    constructor(private appService: AppService) {}
+    constructor(private appService: AppService) {
+        this.appService
+            .get({
+                url: AppUrl.GET_USER_INFO(),
+            })
+            .pipe(take(1))
+            .subscribe((value) => {
+                console.log('login', value);
+            });
+        console.log("user service");
+    }
 
     /** 心得 */
     /** 基本資料 */
     /** 願望清單 */
-    wishCourses: Course[] = [];
+    wishCourses: CourseModel[] = [];
 
     /**
      * 抓取現在使用者的願望清單
@@ -80,7 +89,7 @@ export class UserService {
     getCurrentUser(): Observable<User> {
         const currentUser = sessionStorage.getItem('currentUser');
         if (currentUser != null) {
-            let userJson = JSON.parse(decodeURI(atob(currentUser)));
+            const userJson = JSON.parse(decodeURI(atob(currentUser)));
             return of(userJson);
         }
         return this.receiveUserInfo();
@@ -160,7 +169,7 @@ export class UserService {
      * @param res
      * @returns */
     private toUser(res: NckuhubResponse): User {
-        let user = new User();
+        const user = new User();
         user.userId = res.model.userId;
         user.userName = res.model.userName;
         return user;

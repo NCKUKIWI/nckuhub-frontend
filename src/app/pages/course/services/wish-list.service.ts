@@ -1,4 +1,6 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
+import {UserService} from '../../../core/service/user.service';
+import {BehaviorSubject} from 'rxjs';
 
 /**
  * 課程資訊 service <br/>
@@ -9,4 +11,9 @@ import { Injectable } from '@angular/core';
 @Injectable({
     providedIn: 'root',
 })
-export class WishListService {}
+export class WishListService {
+    private wishList$ = new BehaviorSubject<[]>([]);
+
+    constructor(private userService: UserService) {
+    }
+}

@@ -1,9 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {CourseService} from '../../services/course.service';
-import {AppUrl} from '../../../../core/http/app.setting';
-import {tap} from 'rxjs/operators';
-import {Course} from '../../models/course.model';
-import {AppService} from '../../../../core/http/app.service';
 
 @Component({
     selector: 'app-course-search',

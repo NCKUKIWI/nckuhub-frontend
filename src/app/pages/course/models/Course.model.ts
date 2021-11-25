@@ -1,4 +1,4 @@
-export class Course {
+export class CourseModel {
     comment_num: number;
     id: number;
     學分: number;

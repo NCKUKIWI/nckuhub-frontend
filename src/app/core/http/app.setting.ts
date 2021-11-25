@@ -30,7 +30,7 @@ export class AppUrl {
     public static GET_COURSE_DEPT_INFO = (): string => '/course/allDpmt';
     /** 取得 課程 歷史資料 */
     public static GET_HISTORY_COURSE = (): string => '/course/allCoursePrev';
-    /** 取得 課程 某一筆資料 */
+    /** 取得 課程 心得 */
     public static GET_ONE_COURSE = (courseId: number): string => `/course/${courseId}`;
 
     /** User 使用者 */
