@@ -31,19 +31,19 @@ export class AppUrl {
     /** 取得 課程 歷史資料 */
     public static GET_HISTORY_COURSE = (): string => '/course/allCoursePrev';
     /** 取得 課程 某一筆資料 */
-    public static GET_COURSE_BY_ID = (courseId: number): string => `/course/${courseId}`;
+    public static GET_ONE_COURSE = (courseId: number): string => `/course/${courseId}`;
 
     /** User 使用者 */
     /** 取得 使用者 課表、願望清單資訊 */
     public static GET_USER_TABLE_WISHLIST = (userId: number): string => `/user/getList/${userId}`;
     /** 取得 使用者 個人資料 */
     public static GET_USER_INFO = (): string => '/user/info';
-    /** 修改 使用者 願望清單 */
-    public static SET_WISHLIST = (userId: number): string => `/post/setWish/${userId}`;
-    /** 修改 使用者 課表 */
-    public static SET_TABLE = (userId: number): string => `/post/setTable/${userId}`;
     /** 取得 使用者 小幫手狀態 */
     public static GET_HELPER_STATUS = (): string => `/user/findHelperService`;
+    /** 修改 使用者 課表 */
+    public static SET_TABLE = (userId: number): string => `/post/setTable/${userId}`;
+    /** 修改 使用者 願望清單 */
+    public static SET_WISHLIST = (userId: number): string => `/post/setWish/${userId}`;
 }
 
 /**

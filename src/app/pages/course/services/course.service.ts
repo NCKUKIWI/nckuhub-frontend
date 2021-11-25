@@ -52,7 +52,7 @@ export class CourseService {
      */
     fetchCourseWithComments(courseId: number): Observable<any> {
         return this.appService.get({
-            url: AppUrl.GET_COURSE_BY_ID(courseId),
+            url: AppUrl.GET_ONE_COURSE(courseId),
         })
     }
 
