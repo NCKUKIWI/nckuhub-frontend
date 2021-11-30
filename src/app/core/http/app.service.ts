@@ -21,35 +21,44 @@ export class AppService {
      * @return n/a
      */
     post(context: AppRequestContext): Observable<NckuhubResponse> {
-        return defer(() => {
-            if (context.autoLoading) {
-                this.loadingService.show();
-            }
-            // setting httpOptions
-            const httpOptions = this.setHttpOptions(context.param);
-
-            // post
-            return this.http.post<NckuhubResponse>(AppSettings.API_ENDPOINT + context.url, context.body ?? {}, httpOptions).pipe(
-                // 設定幾秒鐘timeout
-                // timeout(AppSettings.APP_TIME_OUT),
-                map(this.dataMapping),
-                finalize(() => {
-                    this.loadingService.hide();
-                })
-            );
-        });
+        // setting httpOptions for POST
+        const httpOptions = this.setHttpOptions(context.param);
+        return this.sendRequest(context, this.http.post(AppSettings.API_ENDPOINT + context.url, context.body ?? {}, httpOptions));
     }
 
     /**
-     * 以HTTP GET方式傳送訊息
+     * 以HTTP GET 方式傳送訊息
      * @param context
      */
     get(context: AppRequestContext): Observable<NckuhubResponse> {
-        return defer(() => {
-            // setting httpOptions
-            const httpOptions = this.setHttpOptions(context.param);
+        // setting httpOptions for GET
+        const httpOptions = this.setHttpOptions(context.param);
+        return this.sendRequest(context, this.http.get(AppSettings.API_ENDPOINT + context.url, httpOptions));
+    }
 
-            return this.http.get<NckuhubResponse>(AppSettings.API_ENDPOINT + context.url, httpOptions).pipe(
+    /**
+     * 以HTTP PUT 方式傳送訊息
+     * @param context
+     */
+    put(context: AppRequestContext): Observable<NckuhubResponse> {
+        // setting httpOptions for PUT
+        const httpOptions = this.setHttpOptions(context.param);
+        return this.sendRequest(context, this.http.put(AppSettings.API_ENDPOINT + context.url, context.body ?? {}, httpOptions));
+    }
+
+    /**
+     * 以HTTP DELETE 方式傳送訊息
+     * @param context
+     */
+    delete(context: AppRequestContext): Observable<NckuhubResponse> {
+        // setting httpOptions for DELETE
+        const httpOptions = this.setHttpOptions(context.param);
+        return this.sendRequest(context, this.http.delete(AppSettings.API_ENDPOINT + context.url, httpOptions));
+    }
+
+    private sendRequest(context: AppRequestContext, method: Observable<ArrayBuffer>): Observable<NckuhubResponse> {
+        return defer(() => {
+            return method.pipe(
                 // 設定幾秒鐘timeout
                 // timeout(AppSettings.APP_TIME_OUT),
                 map(this.dataMapping),
@@ -69,7 +78,7 @@ export class AppService {
         const newRes = new NckuhubResponse();
         newRes.model = res;
         return newRes;
-    };
+    }
 
     /**
      * 設定 http options
