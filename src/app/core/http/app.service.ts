@@ -56,15 +56,20 @@ export class AppService {
         return this.sendRequest(context, this.http.delete(AppSettings.API_ENDPOINT + context.url, httpOptions));
     }
 
+    /**
+     * Send API 共同處理行為
+     * 1. defer to create new observable when each subscribe
+     * 2. mapping res
+     * @param context
+     * @param method
+     * @private
+     */
     private sendRequest(context: AppRequestContext, method: Observable<ArrayBuffer>): Observable<NckuhubResponse> {
         return defer(() => {
             return method.pipe(
                 // 設定幾秒鐘timeout
                 // timeout(AppSettings.APP_TIME_OUT),
                 map(this.dataMapping),
-                finalize(() => {
-                    this.loadingService.hide();
-                })
             );
         });
     }
@@ -89,6 +94,7 @@ export class AppService {
         return {
             headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
             params,
+            // for cookie
             withCredentials: true,
         };
     }
