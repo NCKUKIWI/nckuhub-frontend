@@ -92,6 +92,4 @@ export class AppService {
             withCredentials: true,
         };
     }
-
-    // TODO: defer 原因
 }
