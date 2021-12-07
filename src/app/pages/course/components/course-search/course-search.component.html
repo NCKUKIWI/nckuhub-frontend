@@ -1,1 +1,103 @@
 <p>course-search works!</p>
+
+<div class="course__whole">
+    <!-- <div class="courseList__sidenav" id="courseFilter" :class="{ on: mobile_status == 'drop' }">
+        <div class="courseList__sidenav__deptChoose">
+            <div class="block_title">
+                <p class="text_18">開課單位</p>
+            </div>
+            <div class="quick_search_area" style="z-index:300">
+                <input class="quick_search_input" id="dpmtFilter" type="text" v-model.trim="keyword"
+                    placeholder="選擇「開課單位」" autocomplete="off" />
+                <button class="quick_search_delete" @click="deleteSearch()"></button>
+                <div class="quick_search_dropdown--course" v-if="keyword.replace(' ','') != ''">
+                    <p class="quick_search_dropdown--course__no_result text_dark" v-if="!search_result.length">查無此關鍵字結果。
+                    </p>
+                    <div class="search_result--course" v-for="(result, index) in search_result">
+                        <div @click="result_click(result.name,index)">
+                            <p>{{result.prefix}} {{result.name}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="courseList__sidenav__courseType" id="courseArrange">
+            <div class="block_title">
+                <p class="text_18 desktop_only">檢視選項</p>
+                <p class="text_16 mobile_only">檢視</p>
+            </div>
+            <div class="quick_search_area">
+                <label class="quick_search_custom">
+                    <input id="commentCheck" type="checkbox" @click="comment_filter()" /><span
+                        class="checkmark"></span><span>僅顯示有心得之課程</span>
+                </label>
+            </div>
+        </div>
+        <div class="wishlist courseList__sidenav__wishList in_course">
+            <div class="block_title">
+                <p class="text_18">願望清單（{{ wishlist_cont.length }}）</p>
+            </div>
+            <div class="wishlist_cont">
+                <p class="wishlist_cont__no_result text_dark" v-if="!wishlist_cont.length">尚未新增任何課程進入願望清單。</p>
+                <div class="list_course_item" v-for="item in wishlist_cont" style="justify-content:none">
+                    <div class="list_course_item_left">
+                        <p class="list_course_item_category text_20 text_white clickable" :class="item.dept_id"
+                            @click="deleteItem(item.id)">{{ item.category }}</p>
+                    </div>
+                    <div class="list_course_item_mid">
+                        <p class="list_course_item_title text_16">{{ item.dept_id }}-{{ item.class_id }}
+                            {{ item.title }}</p>
+                        <p class="list_course_item_description text_14 text_dark">{{ item.teacher }} — {{ item.time }}
+                        </p>
+                    </div>
+                    <div class="list_course_item_right"> </div>
+                </div>
+            </div>
+            <div class="quick_search_custom quick_search_custom--btn" @click="opentabletab()"><img
+                    src="./dist/images/course/arrange.svg" />
+                <p>加入完成，開始安排課表！</p>
+            </div>
+        </div>
+    </div> -->
+    <!-- <div class="flex-container dark_screen mobile_only" id="courseDarkScreen" v-if="mobile_status == 'drop'"></div> -->
+    <div class="flex-container courseList__sideList">
+        <div class="card courseList__sideList__itemBox" id="courseList">
+            <!-- <div id="course_item" v-on:scroll="handleScroll"> -->
+            <div id="course_item">
+                <!-- <div class="list_course_item blank_for_mobile mobile_only"></div> -->
+                <p class="list_course_item__no_result" *ngIf="!course_data.length">查無課程資訊。</p>
+                <!-- <div class="list_course_item" (click)="openCoursePage(course.id)" *ngFor="let course of course_data"> -->
+                <div class="list_course_item" *ngFor="let course of displayed_course_data">
+                    <div class="list_course_item_left">
+                        <p class="list_course_item_category text_white text_20" [ngClass]="course['系號']">
+                            {{deptTransCat(course['系號'],course['系所名稱'])}}</p>
+                    </div>
+                    <div class="list_course_item_mid">
+                        <p class="list_course_item_title text_16">{{course['系號']}}-{{course['選課序號']}} {{course['課程名稱']}}
+                        </p>
+                        <p class="list_course_item_description text_14 text_dark">{{course['系所名稱']}} — {{course['老師']}}
+                            —
+                            {{course['時間']}}</p>
+                    </div>
+                    <div class="list_course_item_right large_right">
+                        <div class="list_course_item_right--courseList"><img
+                                src="../../../../../assets/images/course/comment_num.svg" />
+                            <p class="text_14 text_dark" style="margin-right:15px">{{course['comment_num']}}</p>
+                        </div>
+                        <!-- <div class="large_right--circle" (click)="$event.stopPropagation(); setCourse(course.id)"> -->
+                        <div class="large_right--circle" (click)="$event.stopPropagation();">
+                            <div class="circle--img">
+                                <img src="../../../../../assets/images/course/heart.svg" />
+                            </div>
+                            <!-- <div class="circle--img" ng-show="userData.now_wishlist.includes(course.id)">
+                                <img src="../../../../../assets/images/course/heart_red.svg" />
+                            </div> -->
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="course_data_end" style="height:1px"></div>
+            </div>
+        </div>
+    </div>
+</div>
