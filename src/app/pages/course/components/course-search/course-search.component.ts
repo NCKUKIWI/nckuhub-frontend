@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit, HostListener } from '@angular/core';
 import { CourseService } from '../../services/course.service';
 import { CourseModel } from '../../models/Course.model';
 
@@ -7,51 +7,59 @@ import { CourseModel } from '../../models/Course.model';
     templateUrl: './course-search.component.html',
     styleUrls: ['./course-search.component.scss'],
 })
-export class CourseSearchComponent implements OnInit, AfterViewInit {
+export class CourseSearchComponent implements OnInit{
     //完整的本學期課程
-    course_data: CourseModel[] = [];
+    course_data_db: CourseModel[] = [];
     //部分的本學期課程，用於展示在課程列表
-    displayed_course_data: CourseModel[] = [];
+    course_data: CourseModel[] = [];
+
+    course_with_comment:CourseModel[]=[];
+
+    comment_only=false;
+    filter_with_dpmt=false;
+    count_height=1;
+    count_index=0;
+
+    keyword= '';
+    dept= [];
+    dept_dropdown: [];
+    filter_by_dpmt: [];
+    keyPrefix: '';
+
+    mobile_status: 'default';
 
     constructor(private courseService: CourseService) { }
 
-    //Implement infinite scroll with intersection observer API 
-    //紀錄目前已載入(batch_index-1)批的課程
-    private batch_index = 2;
-    //callback用來從course_data載入課程到displayed_course_data
-    private observer = new IntersectionObserver((entries, observer) => {
-        if (this.displayed_course_data.length < this.course_data.length) {
-            //每次載入的批量
-            const batch_size = 10;
-
-            this.displayed_course_data = this.displayed_course_data.concat(
-                this.course_data.slice(this.displayed_course_data.length,this.batch_index * batch_size));
-            ++this.batch_index;
-            console.log(`displayed_course_data.length：${this.displayed_course_data.length}`);
+    //listen scroll event
+    @HostListener('scroll',['$event.target'])
+    handleScroll(list: HTMLElement): void {
+        let list_height = list.offsetHeight;    //Need to use jquery
+        let scroll_height = list.scrollTop;
+        if(this.comment_only==false && this.filter_with_dpmt==false) {
+          if(scroll_height >= list_height * this.count_height){
+            for(var i = 200 + this.count_index*20; i< 200 + (this.count_index+1)*20;++i){
+              this.course_data.push(this.course_data_db[i]);
+            }
+            this.count_index++;
+            this.count_height++;
+          }
         }
-    }, { threshold:0 });
-    //放置於課程列表的DOM元素
-    private course_data_end: Element | null = null;
+    }
 
     ngOnInit(): void {
         this.getCourseData();
     }
 
-    ngAfterViewInit(): void {
-        //intersection observer開始觀察
-        this.course_data_end = document.querySelector('.course_data_end');
-        if (this.course_data_end)
-            this.observer.observe(this.course_data_end);
-        else
-            console.log("infinite scroll fail!!\n");
-    }
-
     //打API拿course_data
     getCourseData() {
         this.courseService.getCourseData().subscribe((courseData) => {
-            this.course_data = courseData;
-            this.displayed_course_data = this.course_data.slice(0, 10);
+            this.course_data_db = courseData;
+            this.course_data = this.course_data_db.slice(0, 200);
+            this.course_with_comment = this.course_data_db.filter(course => course.comment_num > 0)
             console.log("get course data", courseData.length);
+        },
+        (err:any)=>{
+            if(err) console.error(err);
         });
     }
 
@@ -77,5 +85,45 @@ export class CourseSearchComponent implements OnInit, AfterViewInit {
                 category = deptName.substring(0, 1);
         }
         return category;
+    }
+
+    openCoursePage(courseId: string) {
+
+    }
+
+    setCourse(courseId: string) {
+
+    }
+
+    deleteSearch() {
+        this.keyword="";
+    }
+
+    comment_filter() {  //angular material
+        let cCheck = <HTMLInputElement>document.getElementById("commentCheck");
+        if (cCheck.checked == true) {
+            this.comment_only = true;
+
+            // if (this.filter_with_dpmt == true) {
+            //     this.course_data = [];
+            //     for (let i in this.filter_by_dpmt) {
+            //         if (this.filter_by_dpmt[i].comment_num > 0) {
+            //             vue_course_item.course_data.push(this.filter_by_dpmt[i]);
+            //         }
+            //     }
+            // } else {
+            //     vue_course_item.course_data = [];
+            //     vue_course_item.course_data = vue_course_item.course_with_comment;
+            // }
+            this.course_data = [];
+            this.course_data = this.course_with_comment;
+        } else {
+            this.course_data = [];
+            this.comment_only = false;
+            for (var i = 0; i < 100; ++i) {
+                this.course_data.push(this.course_data_db[i]);
+            }
+            // console.log(this.course_data.length);
+        }
     }
 }
