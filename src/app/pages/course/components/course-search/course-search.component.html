@@ -6,18 +6,18 @@
                 <p class="text_18">開課單位</p>
             </div>
             <div class="quick_search_area" style="z-index:300">
-                <input class="quick_search_input" id="dpmtFilter" type="text" v-model.trim="keyword"
+                <input #dpmtFilter class="quick_search_input" id="dpmtFilter" type="text" (input)="searchDept(dpmtFilter.value)"
                     placeholder="選擇「開課單位」" autocomplete="off" />
                 <button class="quick_search_delete" (click)="deleteSearch()"></button>
-                <!-- <div class="quick_search_dropdown--course" v-if="keyword.replace(' ','') != ''">
-                    <p class="quick_search_dropdown--course__no_result text_dark" v-if="!search_result.length">查無此關鍵字結果。
+                <div class="quick_search_dropdown--course" *ngIf="keyword.replace(' ','') != ''">
+                    <p class="quick_search_dropdown--course__no_result text_dark" *ngIf="!dept_dropdown.length">查無此關鍵字結果。
                     </p>
-                    <div class="search_result--course" v-for="(result, index) in search_result">
-                        <div @click="result_click(result.name,index)">
-                            <p>{{result.prefix}} {{result.name}}</p>
+                    <div class="search_result--course" *ngFor="let candidate of dept_dropdown">
+                        <div (click)="result_click(candidate.DepPrefix,candidate.DepName)">
+                            <p>{{candidate.DepPrefix}} {{candidate.DepName}}</p>
                         </div>
                     </div>
-                </div> -->
+                </div>
             </div>
         </div>
 
