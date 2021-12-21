@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import {Observable, Subject} from 'rxjs';
 import {map, share, take} from 'rxjs/operators';
 import {AppService} from '../../../core/http/app.service';
@@ -6,6 +7,16 @@ import {CourseModel, CourseRawModel} from '../models/Course.model';
 import {Injectable} from '@angular/core';
 import {CourseWithCommentModel} from '../models/CourseComment.model';
 import {UserService} from '../../../core/service/user.service';
+=======
+import { BehaviorSubject, Observable } from 'rxjs';
+import { map, take, tap } from 'rxjs/operators';
+import { AppService } from '../../../core/http/app.service';
+import { AppUrl } from '../../../core/http/app.setting';
+import { CourseModel } from '../models/Course.model';
+import { Injectable } from '@angular/core';
+import { CourseWithCommentModel } from '../models/CourseComment.model';
+import { UserService } from '../../../core/service/user.service';
+>>>>>>> 67f47b1 (refactor:format)
 
 /**
  * 課程資訊 service <br/>
@@ -19,11 +30,9 @@ import {UserService} from '../../../core/service/user.service';
 export class CourseService {
     private courses$ = new Subject<CourseModel[]>();
 
-    constructor(
-      private appService: AppService,
-      private userService: UserService) {
+    constructor(private appService: AppService, private userService: UserService) {
         this.initCurrentSemesterCourses();
-        console.log("course service");
+        console.log('course service');
     }
 
     /**
@@ -55,7 +64,12 @@ export class CourseService {
      * 取得 當學期 所有課程
      */
     getCourseData(): Observable<CourseModel[]> {
+<<<<<<< HEAD
         return this.courses$.pipe(take(1), share());
+=======
+        // return this.courses$.asObservable().pipe(take(1));
+        return this.courses$.asObservable();
+>>>>>>> 67f47b1 (refactor:format)
     }
 
     /**
