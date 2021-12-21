@@ -10,6 +10,7 @@ import { WishListComponent } from './components/wish-list/wish-list.component';
 import { CourseUserComponent } from './components/user/course-user.component';
 import {CourseContentComponent} from './components/course-content/course-content.component';
 import { WriteCommentComponent } from './components/write-comment/write-comment.component';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 
 @NgModule({
     declarations: [
@@ -22,6 +23,6 @@ import { WriteCommentComponent } from './components/write-comment/write-comment.
         CourseUserComponent,
         WriteCommentComponent,
     ],
-    imports: [CourseRoutingModule, CommonModule, SharedModule],
+    imports: [CourseRoutingModule, CommonModule, SharedModule, FormsModule, ReactiveFormsModule],
 })
 export class CourseModule {}
