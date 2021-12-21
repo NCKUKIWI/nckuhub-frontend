@@ -19,6 +19,7 @@ export class CourseContentComponent implements OnInit {
     private comment_data: CourseComment[];
 
     constructor(private router: ActivatedRoute, private courseService: CourseService) {
+        // 抓取該課程的資料
         this.router.params.subscribe((param) => {
             const courseId: number = param.course_id;
 

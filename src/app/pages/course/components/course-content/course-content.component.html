@@ -9,7 +9,7 @@
         <div class="courseContentBody">
             <!-- 頁面左半邊 -->
             <div class="courseContentBody__left">
-                <span class="courseSerial" *ngIf="course_data['選課序號'] as string; else undefinedSerial" [ngClass]="course_data['系號']">{{ course_data['選課序號'] }}</span>
+                <span class="courseSerial" *ngIf="course_data['選課序號']; else undefinedSerial" [ngClass]="course_data['系號']">{{ course_data['選課序號'] }}</span>
                 <ng-template #undefinedSerial>
                     <span class="courseSerial">未定</span>
                 </ng-template>
