@@ -21,7 +21,7 @@ export class CourseSearchComponent implements OnInit, AfterViewInit {
     // 無限下拉 每次增加筆數
     SCROLL_ADD_NUM = 20;
     // 監聽 當下拉到end會觸發無限下拉
-    scrollEndListener = this.initInfiniteScrollAction();
+    scrollEndListener: IntersectionObserver;
 
     // 有評論的所有課程
     wholeCourseListWithComment: CourseModel[] = [];
@@ -234,6 +234,8 @@ export class CourseSearchComponent implements OnInit, AfterViewInit {
      * @private
      */
     private setInfiniteScroll(): void{
+        // init listener
+        this.scrollEndListener =  this.initInfiniteScrollAction();
         // 取得 顯示課程列表 最尾巴物件
         const scrollEndTargetElement = document.querySelector('.course_data_end');
         // 綁上監聽
