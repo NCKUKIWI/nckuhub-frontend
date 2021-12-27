@@ -2,6 +2,7 @@ import {Component, HostListener, OnInit} from '@angular/core';
 import {CourseService} from '../../services/course.service';
 import {CourseModel} from '../../models/Course.model';
 import {DepartmentModel} from '../../models/Department.model';
+import {add} from 'husky';
 
 @Component({
     selector: 'app-course-search',
@@ -35,16 +36,22 @@ export class CourseSearchComponent implements OnInit {
 
     mobile_status: 'default';
 
-    private observer = new IntersectionObserver(
+    private intersectionListener = new IntersectionObserver(
         (entries, observer) => {
-            if (this.comment_only === false && this.filter_with_dpmt === false) {
-                if (this.displayCourseList.length < this.course_data_db.length) {
-                    this.displayCourseList = this.displayCourseList.concat(
-                        // (新的course_data=目前的course_data+20筆新資料)<=course_data_db
-                        this.course_data_db.slice(this.displayCourseList.length, Math.min(this.course_data_db.length, this.displayCourseList.length + this.scrollAddCourseLength))
-                    );
-                    console.log('觸發更新', this.displayCourseList.length, this.course_data_db.length);
-                }
+            let needAddCourse = true;
+            // 是否要 增加顯示課程列表
+            needAddCourse = needAddCourse &&
+              // 無 篩選條件
+              (this.comment_only === false && this.filter_with_dpmt === false) &&
+              // 還沒 滑到底
+              this.displayCourseList.length < this.course_data_db.length;
+
+            if (needAddCourse) {
+                // 接下來的需插入課程 from raw data
+                // (新的course_data=目前的course_data+20筆新資料)<=course_data_db
+                const nextCourseList = this.course_data_db.slice(this.displayCourseList.length, Math.min(this.course_data_db.length, this.displayCourseList.length + this.scrollAddCourseLength));
+                this.displayCourseList = this.displayCourseList.concat(nextCourseList);
+                console.log('觸發更新', this.displayCourseList.length, this.course_data_db.length);
             }
         },
         { threshold: 0 }
@@ -60,7 +67,7 @@ export class CourseSearchComponent implements OnInit {
         setTimeout(() => {
             this.target = document.querySelector('.course_data_end');
             if (this.target) {
-                this.observer.observe(this.target);
+                this.intersectionListener.observe(this.target);
             }
         }, 0);
     }
