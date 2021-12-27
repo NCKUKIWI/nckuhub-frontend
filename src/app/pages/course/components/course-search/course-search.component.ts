@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {AfterViewInit, Component, OnInit} from '@angular/core';
 import {CourseService} from '../../services/course.service';
 import {CourseModel} from '../../models/Course.model';
 import {DepartmentModel} from '../../models/Department.model';
@@ -8,7 +8,7 @@ import {DepartmentModel} from '../../models/Department.model';
     templateUrl: './course-search.component.html',
     styleUrls: ['./course-search.component.scss'],
 })
-export class CourseSearchComponent implements OnInit {
+export class CourseSearchComponent implements OnInit, AfterViewInit {
     constructor(private courseService: CourseService) {}
     // 完整的本學期課程
     course_data_db: CourseModel[] = [];
@@ -18,6 +18,8 @@ export class CourseSearchComponent implements OnInit {
     maxCourseLength = 200;
     // 無限下拉 每次增加筆數
     scrollAddCourseLength = 20;
+    // 監聽 下拉到end
+    scrollEndListener = this.initInfiniteScrollAction();
 
 
     course_with_comment: CourseModel[] = [];
@@ -35,40 +37,16 @@ export class CourseSearchComponent implements OnInit {
 
     mobile_status: 'default';
 
-    private intersectionListener = new IntersectionObserver(
-        (entries, observer) => {
-            let needAddCourse = true;
-            // 是否要 增加顯示課程列表
-            needAddCourse = needAddCourse &&
-              // 無 篩選條件
-              (this.comment_only === false && this.filter_with_dpmt === false) &&
-              // 還沒 滑到底
-              this.displayCourseList.length < this.course_data_db.length;
-
-            if (needAddCourse) {
-                // 接下來的需插入課程 from raw data
-                // (新的course_data=目前的course_data+20筆新資料)<=course_data_db
-                const nextCourseList = this.course_data_db.slice(this.displayCourseList.length, Math.min(this.course_data_db.length, this.displayCourseList.length + this.scrollAddCourseLength));
-                this.displayCourseList = this.displayCourseList.concat(nextCourseList);
-                console.log('觸發更新', this.displayCourseList.length, this.course_data_db.length);
-            }
-        },
-        { threshold: 0 }
-    );
-    private target: Element | null = null;
-
     ngOnInit(): void {
         // 取得 課程資料
         this.getCourseData();
         // 取得 系所資料
         this.getDeptData();
-        // 監聽 IntersectionObserver 事件
-        setTimeout(() => {
-            this.target = document.querySelector('.course_data_end');
-            if (this.target) {
-                this.intersectionListener.observe(this.target);
-            }
-        }, 0);
+    }
+
+    ngAfterViewInit(): void {
+        // 監聽 無限下拉 功能
+        this.setInfiniteScroll();
     }
 
     // 打API拿course_data
@@ -211,5 +189,43 @@ export class CourseSearchComponent implements OnInit {
 
         // $(".quick_search_dropdown--course").css("display","none");
         (document.getElementsByClassName('quick_search_dropdown--course')[0] as HTMLElement).style.display = 'none';
+    }
+
+    /**
+     * 監聽 無限下拉 功能
+     * @private
+     */
+    private setInfiniteScroll(): void{
+        // 取得 顯示課程列表 最尾巴物件
+        const scrollEndTargetElement = document.querySelector('.course_data_end');
+        // 綁上監聽
+        this.scrollEndListener.observe(scrollEndTargetElement);
+    }
+
+    /**
+     * 下拉到EndTarget action
+     * @private
+     */
+    private initInfiniteScrollAction(): IntersectionObserver {
+        return new IntersectionObserver(
+          (entries, observer) => {
+              let needAddCourse = true;
+              // 是否要 插入課程
+              needAddCourse = needAddCourse &&
+                // 無 篩選條件
+                (this.comment_only === false && this.filter_with_dpmt === false) &&
+                // 是否 已經塞完所有課程
+                this.displayCourseList.length < this.course_data_db.length;
+
+              if (needAddCourse) {
+                  // 接下來的需插入課程 from raw data
+                      // (新的course_data=目前的course_data+20筆新資料)<=course_data_db
+                  const nextCourseList = this.course_data_db.slice(this.displayCourseList.length, Math.min(this.course_data_db.length, this.displayCourseList.length + this.scrollAddCourseLength));
+                  this.displayCourseList = this.displayCourseList.concat(nextCourseList);
+                  console.log('觸發更新', this.displayCourseList.length, this.course_data_db.length);
+              }
+          },
+          { threshold: 0 }
+        );
     }
 }
