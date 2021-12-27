@@ -11,28 +11,33 @@ import {DepartmentModel} from '../../models/Department.model';
 export class CourseSearchComponent implements OnInit, AfterViewInit {
     constructor(private courseService: CourseService) {}
     // 完整的本學期課程
-    course_data_db: CourseModel[] = [];
+    wholeCourseList: CourseModel[] = [];
     // 部分的本學期課程，用於展示在課程列表
     displayCourseList: CourseModel[] = [];
-    // 課程 顯示最大筆數 (for 非篩選的資料使用)
-    maxCourseLength = 200;
-    // 無限下拉 每次增加筆數
-    scrollAddCourseLength = 20;
-    // 監聽 下拉到end
+    // 展示用課程的起始筆數 (for 非篩選的資料使用)
+    INIT_COURSE_LENGTH = 200;
+
+    // 無限下拉 每次增加的筆數
+    SCROLL_ADD_COURSE_LENGTH = 20;
+    // 監聽 當下拉到end會觸發無限下拉
     scrollEndListener = this.initInfiniteScrollAction();
 
+    // 有評論的所有課程
+    wholeCourseListWithComment: CourseModel[] = [];
+    // 是否 有開啟評論篩選功能
+    isCommentOnly = false;
 
-    course_with_comment: CourseModel[] = [];
-
-    comment_only = false;
-    filter_with_dpmt = false;
-    count_height = 1;
-    count_index = 0;
-
+    // 是否 有開啟系所篩選功能
+    isDeptOnly = false;
+    // 系所搜尋的關鍵字
     keyword = '';
+    // 所有系所
     dept: DepartmentModel[] = [];
-    dept_dropdown: DepartmentModel[] = [];
-    filter_by_dpmt: CourseModel[] = [];
+    // 經過 關鍵字篩選 出的系所
+    deptSearchResult: DepartmentModel[] = [];
+    // 最近一次 經過系所篩選 的課程
+    wholeCourseListWithDept: CourseModel[] = [];
+    // 最近一次 經過系所篩選 的系所代號
     keyPrefix = '';
 
     mobile_status: 'default';
@@ -49,13 +54,15 @@ export class CourseSearchComponent implements OnInit, AfterViewInit {
         this.setInfiniteScroll();
     }
 
-    // 打API拿course_data
+    /**
+     *  打API拿 完整課程資料，取出部分初始化 展示用課程資料 和 有評論的課程資料
+     */
     getCourseData(): void {
         this.courseService.getCourseData().subscribe(
             (courseData) => {
-                this.course_data_db = courseData;
-                this.displayCourseList = this.course_data_db.slice(0, this.maxCourseLength);
-                this.course_with_comment = this.course_data_db.filter((course) => course.comment_num > 0);
+                this.wholeCourseList = courseData;
+                this.displayCourseList = this.wholeCourseList.slice(0, this.INIT_COURSE_LENGTH);
+                this.wholeCourseListWithComment = this.wholeCourseList.filter((course) => course.comment_num > 0);
             },
             (err: any) => {
                 if (err) {
@@ -65,6 +72,9 @@ export class CourseSearchComponent implements OnInit, AfterViewInit {
         );
     }
 
+    /**
+     * 打API拿 所有系所資料
+     */
     getDeptData(): void {
         this.courseService.fetchDepartments().subscribe(
             (Departments) => {
@@ -79,6 +89,12 @@ export class CourseSearchComponent implements OnInit, AfterViewInit {
         );
     }
 
+    /**
+     * 回傳 傳入課程 的所屬系所簡稱
+     * @param deptID 傳入課程的系所代號
+     * @param deptName 傳入課程的系所名稱
+     * @returns 傳入課程的所屬系所簡稱
+     */
     deptTransCat(deptID: string, deptName: string): string {
         let category: string;
         switch (deptID) {
@@ -103,91 +119,113 @@ export class CourseSearchComponent implements OnInit, AfterViewInit {
         return category;
     }
 
+    /**
+     * 為課程 打開課程內頁
+     * @param courseId 要打開課程內頁的課程的id
+     */
     openCoursePage(courseId: number): void {}
 
+    /**
+     * 把課程 加入願望清單
+     * @param courseId 要加入願望的課程的id
+     */
     setCourse(courseId: number): void {}
 
+    /**
+     * 解除 課程篩選狀態，依據評論篩選狀態 初始化 當前要展示的課程列表
+     */
     deleteSearch(): void {
         this.keyword = '';
-        this.filter_with_dpmt = false;
-        if (this.comment_only === true) {
-            this.displayCourseList = this.course_with_comment;
+        this.isDeptOnly = false;
+        // 如果 有開啟 評論篩選功能
+        if (this.isCommentOnly === true) {
+            this.displayCourseList = this.wholeCourseListWithComment;
         } else {
-            this.displayCourseList = [];
-            for (let i = 0; i < 200; ++i) {
-                this.displayCourseList.push(this.course_data_db[i]);
-            }
+            this.displayCourseList = this.wholeCourseList.slice(0,this.INIT_COURSE_LENGTH);
         }
     }
 
+    /**
+     * 處理 每次開關評論篩選，選擇 所需展示的課程資料
+     */
     comment_filter(): void {
-        // angular material
         const cCheck = document.getElementById('commentCheck') as HTMLInputElement;
+        // 如果 有開啟 評論篩選功能
         if (cCheck.checked === true) {
-            this.comment_only = true;
-
-            if (this.filter_with_dpmt === true) {
-                this.displayCourseList = this.filter_by_dpmt.filter((course) => course.comment_num > 0);
+            this.isCommentOnly = true;
+            
+            // 如果 有開啟 系所篩選功能
+            if (this.isDeptOnly === true) {
+                this.displayCourseList = this.wholeCourseListWithDept.filter((course) => course.comment_num > 0);
             } else {
-                this.displayCourseList = this.course_with_comment;
+                this.displayCourseList = this.wholeCourseListWithComment;
             }
         } else {
-            this.comment_only = false;
+            this.isCommentOnly = false;
 
-            if (this.filter_with_dpmt === true) {
-                this.displayCourseList = this.filter_by_dpmt;
+            // 如果 有開啟 系所篩選功能
+            if (this.isDeptOnly === true) {
+                this.displayCourseList = this.wholeCourseListWithDept;
             } else {
-                this.displayCourseList = this.course_data_db.slice(0, 200);
-                // for (let i = 0; i < 200; ++i) {
-                //     this.course_data.push(this.course_data_db[i]);
-                // }
-                // this.count_height = 1;
-                // this.count_index = 0;
+                this.displayCourseList = this.wholeCourseList.slice(0, this.INIT_COURSE_LENGTH);
             }
             // console.log(this.course_data.length);
         }
     }
 
-    searchDept(keyword: string): void {
+    /**
+     * 依據關鍵字 列出可能的系所 或 關閉並清除 篩選系所狀態
+     */
+    searchDept(keyword:string): void {
+        // this.keyword = this.keyword.trim();
         this.keyword = keyword.trim();
-        // console.log("keyword:"+this.keyword);
-        this.dept_dropdown = [];
-        if (this.keyword.length < 1) {
-            console.log('keyword < 1');
+        this.deptSearchResult = [];
+        if (this.keyword === '') {
+            this.deleteSearch();
         }
-        if (this.keyword !== '') {
-            // 自動完成、偵測空值變回全部
+        else {
+            // 關鍵字可能是系號
+            console.log("keyword:"+this.keyword)
             this.keyword = this.keyword.toUpperCase();
             for (const i in this.dept) {
                 if (this.dept[i].DepPrefix.match(this.keyword) || this.dept[i].DepName.match(this.keyword)) {
                     const result_candidate = Object.assign({}, this.dept[i]);
-                    this.dept_dropdown.push(result_candidate);
+                    this.deptSearchResult.push(result_candidate);
                 }
             }
 
-            if (this.comment_only === true) {
-                // 顯示上次搜尋結果
-                this.displayCourseList = this.course_with_comment.filter((course) => course.系號 === this.keyPrefix);
+            // 此時課程列表 顯示 上次搜尋結果
+            // 如果 有開啟評論篩選功能
+            if (this.isCommentOnly === true) {
+                this.displayCourseList = this.wholeCourseListWithComment.filter((course) => course.系號 === this.keyPrefix);
             } else {
-                this.displayCourseList = this.course_data_db.filter((course) => course.系號 === this.keyPrefix);
+                // this.displayCourseList = this.wholeCourseListWithDept;
+                this.displayCourseList = this.wholeCourseList.filter((course) => course.系號 === this.keyPrefix);
             }
         }
     }
 
+    /**
+     * 使用者 點擊 目標系所後，顯示 目標系所下的課程
+     * @param resultPrefix 目標系所的系號
+     * @param resultName 目標系所的名稱
+     */
     result_click(resultPrefix: string, resultName: string): void {
         this.keyword = resultName;
         this.keyPrefix = resultPrefix;
 
-        this.filter_with_dpmt = true;
-        this.filter_by_dpmt = this.course_data_db.filter((courses) => courses.系號 === this.keyPrefix);
+        this.isDeptOnly = true;
+        this.wholeCourseListWithDept = this.wholeCourseList.filter((courses) => courses.系號 === this.keyPrefix);
 
-        if (this.comment_only === true) {
-            this.displayCourseList = this.course_with_comment.filter((course) => course.系號 === this.keyPrefix);
+        // 如果 有開啟 評論篩選功能
+        if (this.isCommentOnly === true) {
+            this.displayCourseList = this.wholeCourseListWithDept.filter((course) => course.comment_num>0);
         } else {
-            this.displayCourseList = this.course_data_db.filter((course) => course.系號 === this.keyPrefix);
+            this.displayCourseList = this.wholeCourseListWithDept;
         }
 
-        // $(".quick_search_dropdown--course").css("display","none");
+        // 關閉 可能的篩選結果
+        // this.deptSearchResult=[]
         (document.getElementsByClassName('quick_search_dropdown--course')[0] as HTMLElement).style.display = 'none';
     }
 
@@ -213,16 +251,18 @@ export class CourseSearchComponent implements OnInit, AfterViewInit {
               // 是否要 插入課程
               needAddCourse = needAddCourse &&
                 // 無 篩選條件
-                (this.comment_only === false && this.filter_with_dpmt === false) &&
-                // 是否 已經塞完所有課程
-                this.displayCourseList.length < this.course_data_db.length;
+                (this.isCommentOnly === false && this.isDeptOnly === false) &&
+                // 未 塞完所有課程
+                this.displayCourseList.length < this.wholeCourseList.length;
 
               if (needAddCourse) {
-                  // 接下來的需插入課程 from raw data
-                      // (新的course_data=目前的course_data+20筆新資料)<=course_data_db
-                  const nextCourseList = this.course_data_db.slice(this.displayCourseList.length, Math.min(this.course_data_db.length, this.displayCourseList.length + this.scrollAddCourseLength));
+                  // 從完整的課程資料 最多抽出 接下來的20筆新資料
+                  // 新的展示課程資料 <= 完整的課程資料
+
+                  // 20筆新資料
+                  const nextCourseList = this.wholeCourseList.slice(this.displayCourseList.length, Math.min(this.wholeCourseList.length, this.displayCourseList.length + this.SCROLL_ADD_COURSE_LENGTH));
                   this.displayCourseList = this.displayCourseList.concat(nextCourseList);
-                  console.log('觸發更新', this.displayCourseList.length, this.course_data_db.length);
+                  console.log('觸發更新', this.displayCourseList.length, this.wholeCourseList.length);
               }
           },
           { threshold: 0 }

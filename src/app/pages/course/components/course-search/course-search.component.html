@@ -10,9 +10,9 @@
                     placeholder="選擇「開課單位」" autocomplete="off" />
                 <button class="quick_search_delete" style="display:inline-block" (click)="deleteSearch()"></button>
                 <div class="quick_search_dropdown--course" *ngIf="keyword.replace(' ','') != ''">
-                    <p class="quick_search_dropdown--course__no_result text_dark" *ngIf="!dept_dropdown.length">查無此關鍵字結果。
+                    <p class="quick_search_dropdown--course__no_result text_dark" *ngIf="!deptSearchResult.length">查無此關鍵字結果。
                     </p>
-                    <div class="search_result--course" *ngFor="let candidate of dept_dropdown">
+                    <div class="search_result--course" *ngFor="let candidate of deptSearchResult">
                         <div (click)="result_click(candidate.DepPrefix,candidate.DepName)">
                             <p>{{candidate.DepPrefix}} {{candidate.DepName}}</p>
                         </div>
