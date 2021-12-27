@@ -2,6 +2,7 @@ import {AfterViewInit, Component, OnInit} from '@angular/core';
 import {CourseService} from '../../services/course.service';
 import {CourseModel} from '../../models/Course.model';
 import {DepartmentModel} from '../../models/Department.model';
+import {take} from 'rxjs/operators';
 
 @Component({
     selector: 'app-course-search',
@@ -58,7 +59,7 @@ export class CourseSearchComponent implements OnInit, AfterViewInit {
      *  打API拿 完整課程資料，取出部分初始化 展示用課程資料 和 有評論的課程資料
      */
     getCourseData(): void {
-        this.courseService.getCourseData().subscribe(
+        this.courseService.getCourseData().pipe(take(1)).subscribe(
             (courseData) => {
                 this.allCourseInNewSemester = courseData;
                 this.displayCourseList = this.allCourseInNewSemester.slice(0, this.MAX_COURSE_DISPLAY_NUM);
@@ -76,7 +77,7 @@ export class CourseSearchComponent implements OnInit, AfterViewInit {
      * 打API拿 所有系所資料
      */
     getDeptData(): void {
-        this.courseService.fetchDepartments().subscribe(
+        this.courseService.fetchDepartments().pipe(take(1)).subscribe(
             (Departments) => {
                 this.dept = Departments;
                 console.log('get dept data', Departments.length);
