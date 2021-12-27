@@ -14,11 +14,11 @@ export class CourseSearchComponent implements OnInit, AfterViewInit {
     allCourseInNewSemester: CourseModel[] = [];
     // 部分的本學期課程，用於展示在課程列表
     displayCourseList: CourseModel[] = [];
-    // 展示用課程的起始筆數 (for 非篩選的資料使用)
-    INIT_COURSE_LENGTH = 200;
 
-    // 無限下拉 每次增加的筆數
-    SCROLL_ADD_COURSE_LENGTH = 20;
+    // 展示用課程的起始筆數 (for 非篩選的資料使用)
+    MAX_COURSE_DISPLAY_NUM = 200;
+    // 無限下拉 每次增加筆數
+    SCROLL_ADD_NUM = 20;
     // 監聽 當下拉到end會觸發無限下拉
     scrollEndListener = this.initInfiniteScrollAction();
 
@@ -61,7 +61,7 @@ export class CourseSearchComponent implements OnInit, AfterViewInit {
         this.courseService.getCourseData().subscribe(
             (courseData) => {
                 this.allCourseInNewSemester = courseData;
-                this.displayCourseList = this.allCourseInNewSemester.slice(0, this.INIT_COURSE_LENGTH);
+                this.displayCourseList = this.allCourseInNewSemester.slice(0, this.MAX_COURSE_DISPLAY_NUM);
                 this.wholeCourseListWithComment = this.allCourseInNewSemester.filter((course) => course.commentNum > 0);
             },
             (err: any) => {
@@ -141,7 +141,7 @@ export class CourseSearchComponent implements OnInit, AfterViewInit {
         if (this.isCommentOnly === true) {
             this.displayCourseList = this.wholeCourseListWithComment;
         } else {
-            this.displayCourseList = this.allCourseInNewSemester.slice(0,this.INIT_COURSE_LENGTH);
+            this.displayCourseList = this.allCourseInNewSemester.slice(0,this.MAX_COURSE_DISPLAY_NUM);
         }
     }
 
@@ -167,7 +167,7 @@ export class CourseSearchComponent implements OnInit, AfterViewInit {
             if (this.isDeptOnly === true) {
                 this.displayCourseList = this.wholeCourseListWithDept;
             } else {
-                this.displayCourseList = this.allCourseInNewSemester.slice(0, this.INIT_COURSE_LENGTH);
+                this.displayCourseList = this.allCourseInNewSemester.slice(0, this.MAX_COURSE_DISPLAY_NUM);
             }
             // console.log(this.course_data.length);
         }
@@ -259,7 +259,7 @@ export class CourseSearchComponent implements OnInit, AfterViewInit {
                   // 新的展示課程資料 <= 完整的課程資料
 
                   // 下一個插入的end index
-                  const nextEndIndex = Math.min(this.allCourseInNewSemester.length, this.displayCourseList.length + this.scrollAddCourseLength);
+                  const nextEndIndex = Math.min(this.allCourseInNewSemester.length, this.displayCourseList.length + this.SCROLL_ADD_NUM);
                   // 接下來的需插入課程 from raw data
                   const nextCourseList = this.allCourseInNewSemester.slice(this.displayCourseList.length, nextEndIndex);
                   this.displayCourseList = this.displayCourseList.concat(nextCourseList);
