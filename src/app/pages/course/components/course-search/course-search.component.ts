@@ -235,7 +235,7 @@ export class CourseSearchComponent implements OnInit, AfterViewInit {
      */
     private setInfiniteScroll(): void{
         // init listener
-        this.scrollEndListener =  this.initInfiniteScrollAction();
+        this.scrollEndListener = this.initInfiniteScrollAction();
         // 取得 顯示課程列表 最尾巴物件
         const scrollEndTargetElement = document.querySelector('.course_data_end');
         // 綁上監聽
