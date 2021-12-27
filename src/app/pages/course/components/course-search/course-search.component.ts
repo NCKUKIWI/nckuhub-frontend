@@ -258,8 +258,10 @@ export class CourseSearchComponent implements OnInit, AfterViewInit {
                   // 從完整的課程資料 最多抽出 接下來的20筆新資料
                   // 新的展示課程資料 <= 完整的課程資料
 
-                  // 20筆新資料
-                  const nextCourseList = this.allCourseInNewSemester.slice(this.displayCourseList.length, Math.min(this.allCourseInNewSemester.length, this.displayCourseList.length + this.SCROLL_ADD_COURSE_LENGTH));
+                  // 下一個插入的end index
+                  const nextEndIndex = Math.min(this.allCourseInNewSemester.length, this.displayCourseList.length + this.scrollAddCourseLength);
+                  // 接下來的需插入課程 from raw data
+                  const nextCourseList = this.allCourseInNewSemester.slice(this.displayCourseList.length, nextEndIndex);
                   this.displayCourseList = this.displayCourseList.concat(nextCourseList);
                   console.log('觸發更新', this.displayCourseList.length, this.allCourseInNewSemester.length);
               }
