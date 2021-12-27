@@ -1,8 +1,7 @@
-import {Component, HostListener, OnInit} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {CourseService} from '../../services/course.service';
 import {CourseModel} from '../../models/Course.model';
 import {DepartmentModel} from '../../models/Department.model';
-import {add} from 'husky';
 
 @Component({
     selector: 'app-course-search',
