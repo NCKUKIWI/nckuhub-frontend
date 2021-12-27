@@ -13,7 +13,12 @@ export class CourseSearchComponent implements OnInit {
     // 完整的本學期課程
     course_data_db: CourseModel[] = [];
     // 部分的本學期課程，用於展示在課程列表
-    course_data: CourseModel[] = [];
+    displayCourseList: CourseModel[] = [];
+    // 課程 顯示最大筆數 (for 非篩選的資料使用)
+    maxCourseLength = 200;
+    // 無限下拉 每次增加筆數
+    scrollAddCourseLength = 20;
+
 
     course_with_comment: CourseModel[] = [];
 
@@ -33,12 +38,12 @@ export class CourseSearchComponent implements OnInit {
     private observer = new IntersectionObserver(
         (entries, observer) => {
             if (this.comment_only === false && this.filter_with_dpmt === false) {
-                if (this.course_data.length < this.course_data_db.length) {
-                    this.course_data = this.course_data.concat(
+                if (this.displayCourseList.length < this.course_data_db.length) {
+                    this.displayCourseList = this.displayCourseList.concat(
                         // (新的course_data=目前的course_data+20筆新資料)<=course_data_db
-                        this.course_data_db.slice(this.course_data.length, Math.min(this.course_data_db.length, this.course_data.length + 20))
+                        this.course_data_db.slice(this.displayCourseList.length, Math.min(this.course_data_db.length, this.displayCourseList.length + this.scrollAddCourseLength))
                     );
-                    console.log('觸發更新', this.course_data.length, this.course_data_db.length);
+                    console.log('觸發更新', this.displayCourseList.length, this.course_data_db.length);
                 }
             }
         },
@@ -46,15 +51,12 @@ export class CourseSearchComponent implements OnInit {
     );
     private target: Element | null = null;
 
-    // listen scroll event
-    @HostListener('scroll', ['$event.target'])
-    handleScroll(): void {
-
-    }
-
     ngOnInit(): void {
+        // 取得 課程資料
         this.getCourseData();
+        // 取得 系所資料
         this.getDeptData();
+        // 監聽 IntersectionObserver 事件
         setTimeout(() => {
             this.target = document.querySelector('.course_data_end');
             if (this.target) {
@@ -68,9 +70,8 @@ export class CourseSearchComponent implements OnInit {
         this.courseService.getCourseData().subscribe(
             (courseData) => {
                 this.course_data_db = courseData;
-                this.course_data = this.course_data_db.slice(0, 200);
+                this.displayCourseList = this.course_data_db.slice(0, this.maxCourseLength);
                 this.course_with_comment = this.course_data_db.filter((course) => course.comment_num > 0);
-                console.log('get course data', courseData.length);
             },
             (err: any) => {
                 if (err) {
@@ -118,19 +119,19 @@ export class CourseSearchComponent implements OnInit {
         return category;
     }
 
-    openCoursePage(courseId: string): void {}
+    openCoursePage(courseId: number): void {}
 
-    setCourse(courseId: string): void {}
+    setCourse(courseId: number): void {}
 
     deleteSearch(): void {
         this.keyword = '';
         this.filter_with_dpmt = false;
         if (this.comment_only === true) {
-            this.course_data = this.course_with_comment;
+            this.displayCourseList = this.course_with_comment;
         } else {
-            this.course_data = [];
+            this.displayCourseList = [];
             for (let i = 0; i < 200; ++i) {
-                this.course_data.push(this.course_data_db[i]);
+                this.displayCourseList.push(this.course_data_db[i]);
             }
         }
     }
@@ -142,17 +143,17 @@ export class CourseSearchComponent implements OnInit {
             this.comment_only = true;
 
             if (this.filter_with_dpmt === true) {
-                this.course_data = this.filter_by_dpmt.filter((course) => course.comment_num > 0);
+                this.displayCourseList = this.filter_by_dpmt.filter((course) => course.comment_num > 0);
             } else {
-                this.course_data = this.course_with_comment;
+                this.displayCourseList = this.course_with_comment;
             }
         } else {
             this.comment_only = false;
 
             if (this.filter_with_dpmt === true) {
-                this.course_data = this.filter_by_dpmt;
+                this.displayCourseList = this.filter_by_dpmt;
             } else {
-                this.course_data = this.course_data_db.slice(0, 200);
+                this.displayCourseList = this.course_data_db.slice(0, 200);
                 // for (let i = 0; i < 200; ++i) {
                 //     this.course_data.push(this.course_data_db[i]);
                 // }
@@ -182,9 +183,9 @@ export class CourseSearchComponent implements OnInit {
 
             if (this.comment_only === true) {
                 // 顯示上次搜尋結果
-                this.course_data = this.course_with_comment.filter((course) => course.系號 === this.keyPrefix);
+                this.displayCourseList = this.course_with_comment.filter((course) => course.系號 === this.keyPrefix);
             } else {
-                this.course_data = this.course_data_db.filter((course) => course.系號 === this.keyPrefix);
+                this.displayCourseList = this.course_data_db.filter((course) => course.系號 === this.keyPrefix);
             }
         }
     }
@@ -197,9 +198,9 @@ export class CourseSearchComponent implements OnInit {
         this.filter_by_dpmt = this.course_data_db.filter((courses) => courses.系號 === this.keyPrefix);
 
         if (this.comment_only === true) {
-            this.course_data = this.course_with_comment.filter((course) => course.系號 === this.keyPrefix);
+            this.displayCourseList = this.course_with_comment.filter((course) => course.系號 === this.keyPrefix);
         } else {
-            this.course_data = this.course_data_db.filter((course) => course.系號 === this.keyPrefix);
+            this.displayCourseList = this.course_data_db.filter((course) => course.系號 === this.keyPrefix);
         }
 
         // $(".quick_search_dropdown--course").css("display","none");

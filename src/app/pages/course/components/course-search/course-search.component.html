@@ -38,11 +38,11 @@
     <!-- <div class="flex-container dark_screen mobile_only" id="courseDarkScreen" v-if="mobile_status == 'drop'"></div> -->
     <div class="flex-container courseList__sideList">
         <div class="card courseList__sideList__itemBox" id="courseList">
-            <div id="course_item" (scroll)="handleScroll($event.target)">
+            <div id="course_item">
                 <div class="list_course_item blank_for_mobile mobile_only"></div>
-                <p class="list_course_item__no_result" *ngIf="!course_data.length">查無課程資訊。</p>
+                <p class="list_course_item__no_result" *ngIf="!displayCourseList.length">查無課程資訊。</p>
                 <div class="list_course_item" (click)="openCoursePage(course['id'])"
-                    *ngFor="let course of course_data">
+                    *ngFor="let course of displayCourseList">
                     <div class="list_course_item_left">
                         <p class="list_course_item_category text_white text_20" [ngClass]="course['系號']">
                             {{deptTransCat(course['系號'],course['系所名稱'])}}</p>
