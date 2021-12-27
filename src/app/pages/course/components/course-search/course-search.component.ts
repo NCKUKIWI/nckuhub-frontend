@@ -1,7 +1,7 @@
 import { Component, OnInit, AfterViewInit, HostListener } from '@angular/core';
 import { CourseService } from '../../services/course.service';
 import { CourseModel } from '../../models/Course.model';
-import {DepartmentModel} from '../../models/Department.model';
+import { DepartmentModel } from '../../models/Department.model';
 
 @Component({
     selector: 'app-course-search',
@@ -22,10 +22,10 @@ export class CourseSearchComponent implements OnInit {
     count_index = 0;
 
     keyword = '';
-    dept:DepartmentModel[] = [];
-    dept_dropdown:DepartmentModel[] =[];
-    filter_by_dpmt:CourseModel[]=[];
-    keyPrefix:string= '';
+    dept: DepartmentModel[] = [];
+    dept_dropdown: DepartmentModel[] = [];
+    filter_by_dpmt: CourseModel[] = [];
+    keyPrefix: string = '';
 
     mobile_status: 'default';
 
@@ -34,22 +34,43 @@ export class CourseSearchComponent implements OnInit {
     //listen scroll event
     @HostListener('scroll', ['$event.target'])
     handleScroll(list: HTMLElement): void {
-        let list_height = list.offsetHeight;    //Need to use jquery
-        let scroll_height = list.scrollTop;
+        // let list_height = list.getBoundingClientRect().height;
+        // let scroll_height = list.scrollTop;
+        // if (this.comment_only == false && this.filter_with_dpmt == false) {
+        //     if (scroll_height >= list_height * this.count_height) {
+        //         for (let i = 200 + this.count_index * 20; i < 200 + (this.count_index + 1) * 20; ++i) {
+        //             if(this.course_data.length<this.course_data_db.length)
+        //                 this.course_data.push(this.course_data_db[i]);
+        //         }
+        //         console.log("觸發更新",scroll_height,list_height * this.count_height,this.course_data.length,this.course_data_db.length)
+        //         if(this.course_data.length<this.course_data_db.length) {
+        //             this.count_index++;
+        //             this.count_height++;
+        //         }
+        //     }
+        // }
+    }
+
+    private observer = new IntersectionObserver((entries, observer) => {
         if (this.comment_only == false && this.filter_with_dpmt == false) {
-            if (scroll_height >= list_height * this.count_height) {
-                for (var i = 200 + this.count_index * 20; i < 200 + (this.count_index + 1) * 20; ++i) {
-                    this.course_data.push(this.course_data_db[i]);
-                }
-                this.count_index++;
-                this.count_height++;
+            if (this.course_data.length < this.course_data_db.length) {
+                this.course_data = this.course_data.concat( //(新的course_data=目前的course_data+20筆新資料)<=course_data_db
+                    this.course_data_db.slice(this.course_data.length,
+                    Math.min(this.course_data_db.length, this.course_data.length+20)));
+                console.log("觸發更新",this.course_data.length,this.course_data_db.length);
             }
         }
-    }
+    }, { threshold: 0 });
+    private target: Element | null = null;
 
     ngOnInit(): void {
         this.getCourseData();
         this.getDeptData();
+        setTimeout(()=>{
+            this.target=document.querySelector('.course_data_end');
+            if(this.target)
+              this.observer.observe(this.target);
+          },0);
     }
 
     //打API拿course_data
@@ -109,6 +130,16 @@ export class CourseSearchComponent implements OnInit {
 
     deleteSearch() {
         this.keyword = "";
+        this.filter_with_dpmt = false;
+        if (this.comment_only == true) {
+            this.course_data = this.course_with_comment;
+        }
+        else {
+            this.course_data = []
+            for (let i = 0; i < 200; ++i) {
+                this.course_data.push(this.course_data_db[i]);
+            }
+        }
     }
 
     comment_filter() {  //angular material
@@ -117,26 +148,26 @@ export class CourseSearchComponent implements OnInit {
             this.comment_only = true;
 
             if (this.filter_with_dpmt == true) {
-                this.course_data = [];
-                for (let i in this.filter_by_dpmt) {
-                    if (this.filter_by_dpmt[i].comment_num > 0) {
-                        this.course_data.push(this.filter_by_dpmt[i]);
-                    }
-                }
-            } else {
-                this.course_data = [];
+                this.course_data = this.filter_by_dpmt.filter(course => course.comment_num > 0);
+            }
+            else {
                 this.course_data = this.course_with_comment;
             }
-            this.course_data = [];
-            this.course_data = this.course_with_comment;
-        } else {
-            this.course_data = [];
+        }
+        else {
             this.comment_only = false;
-            for (let i = 0; i < 100; ++i) {
-                this.course_data.push(this.course_data_db[i]);
+
+            if (this.filter_with_dpmt == true) {
+                this.course_data = this.filter_by_dpmt;
             }
-            this.count_height = 1;
-            this.count_index = 0;
+            else {
+                this.course_data = this.course_data_db.slice(0, 200);
+                // for (let i = 0; i < 200; ++i) {
+                //     this.course_data.push(this.course_data_db[i]);
+                // }
+                // this.count_height = 1;
+                // this.count_index = 0;
+            }
             // console.log(this.course_data.length);
         }
     }
@@ -145,59 +176,43 @@ export class CourseSearchComponent implements OnInit {
         this.keyword = keyword.trim();
         // console.log("keyword:"+this.keyword);
         this.dept_dropdown = [];
-        this.course_data = [];
         if (this.keyword.length < 1) {
             console.log("keyword < 1");
         }
         if (this.keyword != '') {
             // 自動完成、偵測空值變回全部
-            this.filter_with_dpmt = true;
             this.keyword = this.keyword.toUpperCase();
             for (let i in this.dept) {
                 if (this.dept[i].DepPrefix.match(this.keyword) || this.dept[i].DepName.match(this.keyword)) {
-                    let result_candidate= Object.assign({}, this.dept[i]);
+                    let result_candidate = Object.assign({}, this.dept[i]);
                     this.dept_dropdown.push(result_candidate);
                 }
             }
-            if (this.comment_only == true) {
-                for (let i in this.course_with_comment) {
-                    if (this.course_with_comment[i].系號 == this.keyPrefix) {
-                        this.course_data.push(this.course_with_comment[i]);
-                    }
-                }
-            } else {
-                for (let i in this.course_data_db) {
-                    if (this.course_data_db[i].系號 == this.keyPrefix) {
-                        this.course_data.push(this.course_data_db[i]);
-                    }
-                }
+
+            if (this.comment_only == true) {    //顯示上次搜尋結果
+                this.course_data = this.course_with_comment.filter(course => course.系號 === this.keyPrefix)
+            }
+            else {
+                this.course_data = this.course_data_db.filter(course => course.系號 === this.keyPrefix)
             }
         }
     }
 
-    result_click(resultPrefix:string,resultName:string) {
+    result_click(resultPrefix: string, resultName: string) {
         this.keyword = resultName;
         this.keyPrefix = resultPrefix;
-        this.filter_by_dpmt = [];
-        if(this.keyword) {
-          this.course_data = [];
-          if(this.comment_only==true){
-            for(let i in this.course_with_comment){
-              if(this.course_with_comment[i].系號 == this.keyPrefix){
-                this.course_data.push(this.course_with_comment[i]);
-              }
-            }
 
-          } else {
-            for(let i in this.course_data_db) {
-              if(this.course_data_db[i].系號 == this.keyPrefix){
-                this.course_data.push(this.course_data_db[i]);
-              }
-            }
-          }
-        //   this.filter_by_dpmt.from()
+        this.filter_with_dpmt = true;
+        this.filter_by_dpmt = this.course_data_db.filter(courses => courses.系號 === this.keyPrefix);
+
+        if (this.comment_only == true) {
+            this.course_data = this.course_with_comment.filter(course => course.系號 === this.keyPrefix);
         }
+        else {
+            this.course_data = this.course_data_db.filter(course => course.系號 === this.keyPrefix);
+        }
+
         // $(".quick_search_dropdown--course").css("display","none");
-        (<HTMLElement>(document.getElementsByClassName("quick_search_dropdown--course")[0])).style.display="none";
-      }
+        (<HTMLElement>(document.getElementsByClassName("quick_search_dropdown--course")[0])).style.display = "none";
+    }
 }
