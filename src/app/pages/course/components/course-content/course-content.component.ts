@@ -99,7 +99,6 @@ export class CourseContentComponent implements OnInit {
      * @param rawCourse: CourseRawModel
      * @private
      */
-    // 將CourseRawModel 轉成 CourseModel
     private convertToCourseModel(rawCourse): CourseModel {
         const courseModelData = {
             courseId: rawCourse.課程碼,
