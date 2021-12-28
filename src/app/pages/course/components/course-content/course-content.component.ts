@@ -4,7 +4,13 @@ import { CourseService } from '../../services/course.service';
 import { CourseWithCommentModel } from '../../models/CourseComment.model';
 import { CourseComment } from '../../models/CourseComment.model';
 import { CourseModel } from '../../models/Course.model';
+import { AppUrl } from '../../../../core/http/app.setting';
 
+/**
+ * 課程內頁
+ * @author Yu_Tai
+ * @date 2021/12/28
+ */
 @Component({
     selector: 'app-course-content',
     templateUrl: './course-content.component.html',
@@ -56,34 +62,35 @@ export class CourseContentComponent implements OnInit {
 
     /**
      * 開啟 該課程的大綱
+     * @param deptCode
+     * @param courseCode
      * @private
      */
     private openOutline(deptCode, courseCode): void {
-        let url = 'http://course-query.acad.ncku.edu.tw/crm/course_map/course.php?dept=' + deptCode + '&cono=' + courseCode;
-        window.open(url, '_blank');
+        window.open(AppUrl.GET_COURSE_OUTLINE(deptCode, courseCode), '_blank');
     }
 
     /**
      * 新增&刪除 願望清單
+     * @param courseId
      */
-    setWishlist(id: number): void {
-        const chooseCourseId = id;
-        if (this.wishList.includes(id)) {
+    setWishlist(courseId: number): void {
+        if (this.wishList.includes(courseId)) {
             // 刪除 該課程
-            const index = this.wishList.findIndex((x) => x == id);
+            const index = this.wishList.findIndex((x) => x == courseId);
             this.wishList.splice(index, 1);
             localStorage.setItem('wishList', JSON.stringify(this.wishList));
         } else {
             //新增 該課程
-            this.wishList.push(id);
+            this.wishList.push(courseId);
             localStorage.setItem('wishList', JSON.stringify(this.wishList));
         }
 
-        // if (userData.now_wishlist.includes(chooseCourseId)){
-        //   wishlistRemove(chooseCourseId);
+        // if (userData.now_wishlist.includes(courseId)){
+        //   wishlistRemove(courseId);
         // }
         // else{
-        //   wishlistAdd(chooseCourseId);
+        //   wishlistAdd(courseId);
         // }
     }
 }
