@@ -62,35 +62,35 @@ export class CourseContentComponent implements OnInit {
 
     /**
      * 開啟 該課程的大綱
-     * @param deptCode
-     * @param courseCode
+     * @param deptId
+     * @param courseId
      * @private
      */
-    private openOutline(deptCode, courseCode): void {
-        window.open(AppUrl.GET_COURSE_OUTLINE(deptCode, courseCode), '_blank');
+    private openOutline(deptId, courseId): void {
+        window.open(AppUrl.GET_COURSE_OUTLINE(deptId, courseId), '_blank');
     }
 
     /**
      * 新增&刪除 願望清單
-     * @param courseId
+     * @param id
      */
-    setWishlist(courseId: number): void {
-        if (this.wishList.includes(courseId)) {
+    setWishlist(id: number): void {
+        if (this.wishList.includes(id)) {
             // 刪除 該課程
-            const index = this.wishList.findIndex((x) => x == courseId);
+            const index = this.wishList.findIndex((x) => x == id);
             this.wishList.splice(index, 1);
             localStorage.setItem('wishList', JSON.stringify(this.wishList));
         } else {
             //新增 該課程
-            this.wishList.push(courseId);
+            this.wishList.push(id);
             localStorage.setItem('wishList', JSON.stringify(this.wishList));
         }
 
-        // if (userData.now_wishlist.includes(courseId)){
-        //   wishlistRemove(courseId);
+        // if (userData.now_wishlist.includes(id)){
+        //   wishlistRemove(id);
         // }
         // else{
-        //   wishlistAdd(courseId);
+        //   wishlistAdd(id);
         // }
     }
 }
