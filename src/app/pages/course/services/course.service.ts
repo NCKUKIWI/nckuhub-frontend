@@ -2,7 +2,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import {map, take, tap} from 'rxjs/operators';
 import { AppService } from '../../../core/http/app.service';
 import { AppUrl } from '../../../core/http/app.setting';
-import { CourseModel } from '../models/Course.model';
+import {CourseModel, CourseRawModel} from '../models/Course.model';
 import { Injectable } from '@angular/core';
 import { CourseWithCommentModel } from '../models/CourseComment.model';
 import {UserService} from '../../../core/service/user.service';
@@ -31,8 +31,22 @@ export class CourseService {
      */
     private initCurrentSemesterCourses(): void {
         this.appService.get({ url: AppUrl.GET_CURRENT_SEMESTER_COURSE() }).subscribe((res) => {
-            const courses = res.model.courses as CourseModel[];
-            courses.sort((a, b) => (a.comment_num > b.comment_num ? -1 : 1));
+            const courses = (res.model.courses as CourseRawModel[]).map(rawCourse  => {
+                return {
+                    courseId: rawCourse.課程碼,
+                    commentNum: rawCourse.comment_num,
+                    courseCredit: rawCourse.學分,
+                    courseIndex: rawCourse.選課序號,
+                    courseName: rawCourse.系所名稱,
+                    courseType: rawCourse.選必修,
+                    teacher: rawCourse.老師,
+                    deptId: rawCourse.系號,
+                    deptName: rawCourse.系所名稱,
+                    time: rawCourse.時間,
+                    id: rawCourse.id
+                };
+            });
+            courses.sort((a, b) => (a.commentNum > b.commentNum ? -1 : 1));
             this.courses$.next(courses);
         });
     }
