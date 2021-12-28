@@ -1,5 +1,5 @@
-import { BehaviorSubject, Observable } from 'rxjs';
-import {map, take, tap} from 'rxjs/operators';
+import {BehaviorSubject, Observable, Subject} from 'rxjs';
+import {filter, map, share, take, tap} from 'rxjs/operators';
 import { AppService } from '../../../core/http/app.service';
 import { AppUrl } from '../../../core/http/app.setting';
 import {CourseModel, CourseRawModel} from '../models/Course.model';
@@ -17,7 +17,7 @@ import {UserService} from '../../../core/service/user.service';
     providedIn: 'root',
 })
 export class CourseService {
-    private courses$ = new BehaviorSubject<CourseModel[]>([]);
+    private courses$ = new Subject<CourseModel[]>();
 
     constructor(
       private appService: AppService,
@@ -55,7 +55,7 @@ export class CourseService {
      * 取得 當學期 所有課程
      */
     getCourseData(): Observable<CourseModel[]> {
-        return this.courses$.asObservable().pipe(take(1));
+        return this.courses$.pipe(take(1), share());
     }
 
     /**
@@ -80,7 +80,9 @@ export class CourseService {
      * @param courseId
      * @returns `Course`
      */
-    getCourseById(courseId: number): CourseModel {
-        return this.courses$.getValue().find((course) => course.id === courseId)!;
+    getCourseById(courseId: number): Observable<CourseModel> {
+        return this.courses$.pipe(
+          map(courseList => courseList.find((course) => course.id === courseId))
+        );
     }
 }
