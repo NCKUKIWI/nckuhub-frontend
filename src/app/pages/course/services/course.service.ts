@@ -35,7 +35,7 @@ export class CourseService {
                     commentNum: rawCourse.comment_num,
                     courseCredit: rawCourse.學分,
                     courseIndex: rawCourse.選課序號,
-                    courseName: rawCourse.系所名稱,
+                    courseName: rawCourse.課程名稱,
                     courseType: rawCourse.選必修,
                     teacher: rawCourse.老師,
                     deptId: rawCourse.系號,

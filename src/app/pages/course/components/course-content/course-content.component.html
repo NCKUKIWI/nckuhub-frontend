@@ -1,4 +1,3 @@
-<!-- 多補一個 [routerLink]="['/course']"-->
 <ng-container *ngIf="scoreData">
     <div id="courseContent">
         <div class="content_nextpage" style="display: none">
@@ -9,14 +8,14 @@
         <div class="courseContentBody">
             <!-- 頁面左半邊 -->
             <div class="courseContentBody__left">
-                <span class="courseSerial" *ngIf="courseData['選課序號']; else undefinedSerial" [ngClass]="courseData['系號']">{{ courseData['選課序號'] }}</span>
-                <ng-template #undefinedSerial>
+                <span class="courseSerial" *ngIf="courseData.courseIndex" [ngClass]="courseData.deptId">{{ courseData.courseIndex }}</span>
+                <!-- <ng-template #undefinedSerial>
                     <span class="courseSerial">未定</span>
-                </ng-template>
+                </ng-template> -->
 
-                <h2>{{ courseData['課程名稱'] }}</h2>
+                <h2>{{ courseData.courseName }}</h2>
 
-                <div class="flex-container icon-span" (click)="openOutline(courseData['系號'], courseData['課程碼'])"><span class="content-icon see_clip"></span><span>檢視課程大綱</span></div>
+                <div class="flex-container icon-span" (click)="openOutline(courseData.deptId, courseData.courseId)"><span class="content-icon see_clip"></span><span>檢視課程大綱</span></div>
 
                 <!-- 應改成能判斷加入或移除 -->
                 <div class="flex-container icon-span desktop_only" (click)="setWishlist(courseData.id)">
@@ -32,21 +31,21 @@
                     <div class="block_title">
                         <p class="text_14">開課單位</p>
                     </div>
-                    <p class="text_16">{{ courseData['系所名稱'] }}</p>
+                    <p class="text_16">{{ courseData.deptName }}</p>
                 </div>
 
                 <div class="courseUnit">
                     <div class="block_title">
                         <p class="text_14">開課老師</p>
                     </div>
-                    <p class="text_16">{{ courseData['老師'] }}</p>
+                    <p class="text_16">{{ courseData.teacher }}</p>
                 </div>
 
                 <div class="courseUnit">
                     <div class="block_title">
                         <p class="text_14">開課時段</p>
                     </div>
-                    <p class="text_16">{{ courseData['時間'] }}</p>
+                    <p class="text_16">{{ courseData.time }}</p>
                 </div>
                 <br />
             </div>

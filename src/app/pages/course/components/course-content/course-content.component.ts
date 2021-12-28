@@ -34,7 +34,7 @@ export class CourseContentComponent implements OnInit {
             // 將抓到資料分成scoreData, courseData, commentData
             this.courseService.fetchCourseWithComments(courseId).subscribe((courseCommentData) => {
                 this.scoreData = courseCommentData;
-                this.courseData = courseCommentData.courseInfo;
+                this.courseData = this.convertToCourseModel(courseCommentData.courseInfo);
                 this.commentData = courseCommentData.comment;
 
                 // 課程評分四捨五入到整數
@@ -51,16 +51,6 @@ export class CourseContentComponent implements OnInit {
     }
 
     /**
-     * 取得 願望清單
-     */
-    getUserWishList(): void {
-        this.wishList = JSON.parse(localStorage.getItem('wishList'));
-        if (this.wishList == null) {
-            this.wishList = [];
-        }
-    }
-
-    /**
      * 開啟 該課程的大綱
      * @param deptId
      * @param courseId
@@ -71,13 +61,23 @@ export class CourseContentComponent implements OnInit {
     }
 
     /**
+     * 取得 願望清單
+     */
+    getUserWishList(): void {
+        this.wishList = JSON.parse(localStorage.getItem('wishList'));
+        if (this.wishList === null) {
+            this.wishList = [];
+        }
+    }
+
+    /**
      * 新增&刪除 願望清單
      * @param id
      */
     setWishlist(id: number): void {
         if (this.wishList.includes(id)) {
             // 刪除 該課程
-            const index = this.wishList.findIndex((x) => x == id);
+            const index = this.wishList.findIndex((x) => x === id);
             this.wishList.splice(index, 1);
             localStorage.setItem('wishList', JSON.stringify(this.wishList));
         } else {
@@ -92,5 +92,28 @@ export class CourseContentComponent implements OnInit {
         // else{
         //   wishlistAdd(id);
         // }
+    }
+
+    /**
+     * 資料轉型態 CourseRawModel => CourseModel
+     * @param rawCourse: CourseRawModel
+     * @private
+     */
+    // 將CourseRawModel 轉成 CourseModel
+    private convertToCourseModel(rawCourse): CourseModel {
+        const courseModelData = {
+            courseId: rawCourse.課程碼,
+            commentNum: rawCourse.comment_num,
+            courseCredit: rawCourse.學分,
+            courseIndex: rawCourse.選課序號,
+            courseName: rawCourse.課程名稱,
+            courseType: rawCourse.選必修,
+            teacher: rawCourse.老師,
+            deptId: rawCourse.系號,
+            deptName: rawCourse.系所名稱,
+            time: rawCourse.時間,
+            id: rawCourse.id,
+        };
+        return courseModelData;
     }
 }
