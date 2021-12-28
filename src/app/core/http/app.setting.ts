@@ -32,6 +32,8 @@ export class AppUrl {
     public static GET_HISTORY_COURSE = (): string => '/course/allCoursePrev';
     /** 取得 課程 心得 */
     public static GET_ONE_COURSE = (courseId: number): string => `/course/${courseId}`;
+    /** 取得 課程 大綱 */
+    public static GET_COURSE_OUTLINE = (deptCode: string, courseCode: string): string => `http://course-query.acad.ncku.edu.tw/crm/course_map/course.php?dept=${deptCode}&cono=${courseCode}`;
 
     /** User 使用者 */
     /** 取得 使用者 課表、願望清單資訊 */
