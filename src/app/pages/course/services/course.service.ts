@@ -1,10 +1,10 @@
-import {BehaviorSubject, Observable, Subject} from 'rxjs';
-import {filter, map, share, take, tap} from 'rxjs/operators';
-import { AppService } from '../../../core/http/app.service';
-import { AppUrl } from '../../../core/http/app.setting';
+import {Observable, Subject} from 'rxjs';
+import {map, share, take} from 'rxjs/operators';
+import {AppService} from '../../../core/http/app.service';
+import {AppUrl} from '../../../core/http/app.setting';
 import {CourseModel, CourseRawModel} from '../models/Course.model';
-import { Injectable } from '@angular/core';
-import { CourseWithCommentModel } from '../models/CourseComment.model';
+import {Injectable} from '@angular/core';
+import {CourseWithCommentModel} from '../models/CourseComment.model';
 import {UserService} from '../../../core/service/user.service';
 
 /**
@@ -82,7 +82,8 @@ export class CourseService {
      */
     getCourseById(courseId: number): Observable<CourseModel> {
         return this.courses$.pipe(
-          map(courseList => courseList.find((course) => course.id === courseId))
+          map(courseList => courseList.find((course) => course.id === courseId)),
+          take(1)
         );
     }
 }
