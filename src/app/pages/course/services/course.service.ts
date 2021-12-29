@@ -1,11 +1,12 @@
-import {Observable, Subject} from 'rxjs';
-import {map, share, take} from 'rxjs/operators';
-import {AppService} from '../../../core/http/app.service';
-import {AppUrl} from '../../../core/http/app.setting';
-import {CourseModel, CourseRawModel} from '../models/Course.model';
-import {Injectable} from '@angular/core';
-import {CourseWithCommentModel} from '../models/CourseComment.model';
+import { Observable, Subject } from 'rxjs';
+import { map, take, share } from 'rxjs/operators';
+import { AppService } from '../../../core/http/app.service';
+import { AppUrl } from '../../../core/http/app.setting';
+import { CourseModel, CourseRawModel } from '../models/Course.model';
+import { Injectable } from '@angular/core';
+import { CourseWithCommentModel } from '../models/CourseComment.model';
 import {UserService} from '../../../core/service/user.service';
+import { DepartmentModel } from '../models/Department.model';
 
 /**
  * 課程資訊 service <br/>
@@ -97,5 +98,19 @@ export class CourseService {
             id: rawCourse.id,
         };
         return courseModelData;
+    }
+
+    /**
+     * 抓取所有系所資料
+     */
+     fetchDepartments(): Observable<DepartmentModel[]> {
+        return this.appService
+            .get({
+                url: AppUrl.GET_COURSE_DEPT_INFO(),
+            })
+            .pipe(
+                map((res) => res.model as DepartmentModel[]),
+                take(1)
+            );
     }
 }
