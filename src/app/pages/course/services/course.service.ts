@@ -1,11 +1,11 @@
-import { Observable, Subject } from 'rxjs';
-import { map, share, take } from 'rxjs/operators';
-import { AppService } from '../../../core/http/app.service';
-import { AppUrl } from '../../../core/http/app.setting';
-import { CourseModel, CourseRawModel } from '../models/Course.model';
-import { Injectable } from '@angular/core';
-import { CourseWithCommentModel } from '../models/CourseComment.model';
-import { UserService } from '../../../core/service/user.service';
+import {Observable, Subject} from 'rxjs';
+import {map, share, take} from 'rxjs/operators';
+import {AppService} from '../../../core/http/app.service';
+import {AppUrl} from '../../../core/http/app.setting';
+import {CourseModel, CourseRawModel} from '../models/Course.model';
+import {Injectable} from '@angular/core';
+import {CourseWithCommentModel} from '../models/CourseComment.model';
+import {UserService} from '../../../core/service/user.service';
 
 /**
  * 課程資訊 service <br/>
@@ -21,7 +21,6 @@ export class CourseService {
 
     constructor(private appService: AppService, private userService: UserService) {
         this.initCurrentSemesterCourses();
-        console.log('course service');
     }
 
     /**
@@ -29,7 +28,9 @@ export class CourseService {
      */
     private initCurrentSemesterCourses(): void {
         this.appService.get({ url: AppUrl.GET_CURRENT_SEMESTER_COURSE() }).subscribe((res) => {
+            // 除去 中文屬性
             const courses = (res.model.courses as CourseRawModel[]).map(this.convertToCourseModel);
+            // 排序: 心得數 大 -> 小
             courses.sort((a, b) => (a.commentNum > b.commentNum ? -1 : 1));
             this.courses$.next(courses);
         });
@@ -69,6 +70,7 @@ export class CourseService {
      * @returns `Course`
      */
     getCourseById(courseId: number): Observable<CourseModel> {
+        // TODO: cache search result by map
         return this.courses$.pipe(
             map((courseList) => courseList.find((course) => course.id === courseId)),
             take(1)
