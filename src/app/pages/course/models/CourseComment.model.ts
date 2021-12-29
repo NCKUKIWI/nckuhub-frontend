@@ -1,10 +1,10 @@
-import { CourseModel } from './Course.model';
+import { CourseModel, CourseRawModel } from './Course.model';
 import { CourseRateModel } from './CourseRate.model';
 
 export class CourseWithCommentModel {
     cold: string;
     comment: CourseComment[];
-    courseInfo: CourseModel;
+    courseInfo: CourseRawModel;
     courserate_id: number;
     got: string;
     rate_count: number;

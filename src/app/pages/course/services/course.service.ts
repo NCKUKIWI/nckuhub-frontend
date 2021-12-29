@@ -1,11 +1,11 @@
-import {Observable, Subject} from 'rxjs';
-import {map, share, take} from 'rxjs/operators';
-import {AppService} from '../../../core/http/app.service';
-import {AppUrl} from '../../../core/http/app.setting';
-import {CourseModel, CourseRawModel} from '../models/Course.model';
-import {Injectable} from '@angular/core';
-import {CourseWithCommentModel} from '../models/CourseComment.model';
-import {UserService} from '../../../core/service/user.service';
+import { Observable, Subject } from 'rxjs';
+import { map, share, take } from 'rxjs/operators';
+import { AppService } from '../../../core/http/app.service';
+import { AppUrl } from '../../../core/http/app.setting';
+import { CourseModel, CourseRawModel } from '../models/Course.model';
+import { Injectable } from '@angular/core';
+import { CourseWithCommentModel } from '../models/CourseComment.model';
+import { UserService } from '../../../core/service/user.service';
 
 /**
  * 課程資訊 service <br/>
@@ -19,11 +19,9 @@ import {UserService} from '../../../core/service/user.service';
 export class CourseService {
     private courses$ = new Subject<CourseModel[]>();
 
-    constructor(
-      private appService: AppService,
-      private userService: UserService) {
+    constructor(private appService: AppService, private userService: UserService) {
         this.initCurrentSemesterCourses();
-        console.log("course service");
+        console.log('course service');
     }
 
     /**
@@ -31,19 +29,19 @@ export class CourseService {
      */
     private initCurrentSemesterCourses(): void {
         this.appService.get({ url: AppUrl.GET_CURRENT_SEMESTER_COURSE() }).subscribe((res) => {
-            const courses = (res.model.courses as CourseRawModel[]).map(rawCourse  => {
+            const courses = (res.model.courses as CourseRawModel[]).map((rawCourse) => {
                 return {
                     courseId: rawCourse.課程碼,
                     commentNum: rawCourse.comment_num,
                     courseCredit: rawCourse.學分,
                     courseIndex: rawCourse.選課序號,
-                    courseName: rawCourse.系所名稱,
+                    courseName: rawCourse.課程名稱,
                     courseType: rawCourse.選必修,
                     teacher: rawCourse.老師,
                     deptId: rawCourse.系號,
                     deptName: rawCourse.系所名稱,
                     time: rawCourse.時間,
-                    id: rawCourse.id
+                    id: rawCourse.id,
                 };
             });
             courses.sort((a, b) => (a.commentNum > b.commentNum ? -1 : 1));
@@ -82,8 +80,8 @@ export class CourseService {
      */
     getCourseById(courseId: number): Observable<CourseModel> {
         return this.courses$.pipe(
-          map(courseList => courseList.find((course) => course.id === courseId)),
-          take(1)
+            map((courseList) => courseList.find((course) => course.id === courseId)),
+            take(1)
         );
     }
 }

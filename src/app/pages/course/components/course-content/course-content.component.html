@@ -1,1 +1,148 @@
-<p>course works!</p>
+<ng-container *ngIf="scoreData">
+    <div id="courseContent">
+        <div class="content_nextpage" style="display: none">
+            <img style="cursor: pointer" src="../../../../../assets/images/course/left-btn.svg" />
+            <img style="cursor: pointer" src="../../../../../assets/images/course/right-btn.svg" />
+        </div>
+
+        <div class="courseContentBody">
+            <!-- 頁面左半邊 -->
+            <div class="courseContentBody__left">
+                <span class="courseSerial" *ngIf="courseData.courseIndex" [ngClass]="courseData.deptId">{{ courseData.courseIndex }}</span>
+                <!-- <ng-template #undefinedSerial>
+                    <span class="courseSerial">未定</span>
+                </ng-template> -->
+
+                <h2>{{ courseData.courseName }}</h2>
+
+                <div class="flex-container icon-span" (click)="openOutline(courseData.deptId, courseData.courseId)"><span class="content-icon see_clip"></span><span>檢視課程大綱</span></div>
+
+                <!-- 應改成能判斷加入或移除 -->
+                <div class="flex-container icon-span desktop_only" (click)="setWishlist(courseData.id)">
+                    <div *ngIf="!wishList.includes(courseData.id)"><span class="content-icon add_wishlist"></span><span>加入願望清單</span></div>
+                    <div *ngIf="wishList.includes(courseData.id)"><span class="content-icon already_add_wishlist"></span><span style="color: #f35a5a">移除願望清單</span></div>
+                </div>
+
+                <!-- <div class="flex-container icon-span">
+                    <span class="content-icon see_clip"></span><span>新增課程評分</span>
+                </div> -->
+
+                <div class="courseUnit">
+                    <div class="block_title">
+                        <p class="text_14">開課單位</p>
+                    </div>
+                    <p class="text_16">{{ courseData.deptName }}</p>
+                </div>
+
+                <div class="courseUnit">
+                    <div class="block_title">
+                        <p class="text_14">開課老師</p>
+                    </div>
+                    <p class="text_16">{{ courseData.teacher }}</p>
+                </div>
+
+                <div class="courseUnit">
+                    <div class="block_title">
+                        <p class="text_14">開課時段</p>
+                    </div>
+                    <p class="text_16">{{ courseData.time }}</p>
+                </div>
+                <br />
+            </div>
+
+            <!-- 頁面右半邊 -->
+            <div class="courseContentBody__right">
+                <div class="courseContentBody__right__score">
+                    <div class="block_title" *ngIf="scoreData.rate_count; else undefinedRateCount">
+                        <p>課程評分 ({{ scoreData.rate_count }})</p>
+                    </div>
+                    <div class="flex-container score-btn--all" *ngIf="scoreData.rate_count">
+                        <div class="score-btn">
+                            <span>收穫 </span>
+                            <span class="score_span">{{ scoreData.got }}</span>
+                            <!-- <div class="arrow-left" @click="minusRate('recom_rate')"></div>
+                            <input class="score_input" id="recom_rate" type="number" value="5" min="1" max="10" />
+                            <div class="arrow-right" @click="addRate('recom_rate')"></div> -->
+                        </div>
+
+                        <div class="score-btn">
+                            <span>甜度 </span>
+                            <span class="score_span">{{ scoreData.sweet }}</span>
+                            <!-- <div class="arrow-left" @click="minusRate('sweet_rate')"></div>
+                            <input class="score_input" id="sweet_rate" type="number" value="5" min="1" max="10" />
+                            <div class="arrow-right" @click="addRate('sweet_rate')"></div> -->
+                        </div>
+
+                        <div class="score-btn">
+                            <span>涼度 </span>
+                            <span class="score_span">{{ scoreData.cold }}</span>
+                            <!-- <div class="arrow-left" @click="minusRate('hard_rate')"></div>
+                            <input class="score_input" id="hard_rate" type="number" value="5" min="1" max="10" />
+                            <div class="arrow-right" @click="addRate('hard_rate')"></div> -->
+                        </div>
+                        <!-- <button type="submit" class="score-btn__submit desktop_only" id="score_input" @click="submit_score()">評分</button>-->
+                    </div>
+
+                    <ng-template #undefinedRateCount>
+                        <div class="block_title">
+                            <p>課程評分 (0)</p>
+                        </div>
+
+                        <div class="score-btn--all score-btn--all--default">
+                            <div class="container-rectangle--md">
+                                <p>成為第一個評分者，幫大家找到想上的課！</p>
+                            </div>
+                            <!-- 下方評分span補一個 @click="openReviewWindow()" -->
+                            <div class="btn-rectangle--sm"><span>評分</span></div>
+                        </div>
+                    </ng-template>
+                </div>
+
+                <div class="courseContentBody__right__comment">
+                    <div class="block_title">
+                        <p>課程心得 ({{ commentData.length }})</p>
+                    </div>
+
+                    <div class="courseFeedback">
+                        <div id="commentBody" *ngIf="commentData.length > 0; else undefinedComment">
+                            <div class="courseFeedback__single" *ngFor="let comment of commentData">
+                                <div class="courseFeedback__icons">
+                                    <div class="rec_semester">
+                                        <span>{{ comment.semester }} 學期</span>
+                                    </div>
+                                    <!-- <div class="courseFeedback__icons__icongroup">
+                                    <span @click="thumbs_up(index)"><img src="./dist/images/course/thumbs_up.png"/></span><span>{{thumbs.up}}</span>
+                                    <span @click="thumbs_down(index)"><img src="./dist/images/course/thumbs_down.png"/></span><span>{{thumbs.down}}</span>
+                                    <a @click.stop="report_list(index)"><span><img src="./dist/images/course/more.png" style="width:12px;height:3px"/></span></a>
+                                    <div v-show="open_reportList && (index == nowIndex)" class="droplist_report">
+                                    <div @click="openReportWindow()" style="color:#F35A5A">檢舉</div>
+                                    div @click="open_reportList = false">返回</div>
+                                    </div>
+                                    </div> -->
+                                </div>
+
+                                <div class="courseFeedback__msg">
+                                    <p>{{ comment.comment }}</p>
+                                </div>
+                            </div>
+
+                            <!--  div.flex-container.courseFeedback__func
+                            div.arrow-up
+                            input(type="number" min="0" value="0").score_input
+                            div.arrow-down
+                            -->
+                        </div>
+
+                        <ng-template #undefinedComment>
+                            <div class="courseFeedback__single courseFeedback__single--default">
+                                <div class="courseFeedback__msg">
+                                    <p>本課程暫時沒有心得，歡迎你成為第一個提供者：）</p>
+                                </div>
+                            </div>
+                        </ng-template>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-container>
