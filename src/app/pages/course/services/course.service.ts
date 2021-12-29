@@ -17,7 +17,8 @@ import {UserService} from '../../../core/service/user.service';
     providedIn: 'root',
 })
 export class CourseService {
-    private courses$ = new Subject<CourseModel[]>();
+    // 當學期課程
+    private newSemesterCourseList$ = new Subject<CourseModel[]>();
 
     constructor(private appService: AppService, private userService: UserService) {
         this.initCurrentSemesterCourses();
@@ -25,6 +26,7 @@ export class CourseService {
 
     /**
      * 抓取 當學期 所有課程資料
+     * @private
      */
     private initCurrentSemesterCourses(): void {
         this.appService.get({ url: AppUrl.GET_CURRENT_SEMESTER_COURSE() }).subscribe((res) => {
@@ -32,7 +34,7 @@ export class CourseService {
             const courses = (res.model.courses as CourseRawModel[]).map(this.convertToCourseModel);
             // 排序: 心得數 大 -> 小
             courses.sort((a, b) => (a.commentNum > b.commentNum ? -1 : 1));
-            this.courses$.next(courses);
+            this.newSemesterCourseList$.next(courses);
         });
     }
 
@@ -40,7 +42,7 @@ export class CourseService {
      * 取得 當學期 所有課程
      */
     getCourseData(): Observable<CourseModel[]> {
-        return this.courses$.pipe(take(1), share());
+        return this.newSemesterCourseList$.pipe(take(1), share());
     }
 
     /**
@@ -71,7 +73,7 @@ export class CourseService {
      */
     getCourseById(courseId: number): Observable<CourseModel> {
         // TODO: cache search result by map
-        return this.courses$.pipe(
+        return this.newSemesterCourseList$.pipe(
             map((courseList) => courseList.find((course) => course.id === courseId)),
             take(1)
         );
