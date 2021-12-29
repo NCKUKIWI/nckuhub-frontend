@@ -4,7 +4,7 @@ import { CourseRateModel } from './CourseRate.model';
 export class CourseWithCommentModel {
     cold: string;
     comment: CourseComment[];
-    courseInfo: CourseRawModel;
+    courseInfo: CourseModel;
     courserate_id: number;
     got: string;
     rate_count: number;

@@ -29,21 +29,7 @@ export class CourseService {
      */
     private initCurrentSemesterCourses(): void {
         this.appService.get({ url: AppUrl.GET_CURRENT_SEMESTER_COURSE() }).subscribe((res) => {
-            const courses = (res.model.courses as CourseRawModel[]).map((rawCourse) => {
-                return {
-                    courseId: rawCourse.課程碼,
-                    commentNum: rawCourse.comment_num,
-                    courseCredit: rawCourse.學分,
-                    courseIndex: rawCourse.選課序號,
-                    courseName: rawCourse.課程名稱,
-                    courseType: rawCourse.選必修,
-                    teacher: rawCourse.老師,
-                    deptId: rawCourse.系號,
-                    deptName: rawCourse.系所名稱,
-                    time: rawCourse.時間,
-                    id: rawCourse.id,
-                };
-            });
+            const courses = (res.model.courses as CourseRawModel[]).map(this.convertToCourseModel);
             courses.sort((a, b) => (a.commentNum > b.commentNum ? -1 : 1));
             this.courses$.next(courses);
         });
@@ -68,7 +54,11 @@ export class CourseService {
                 url: AppUrl.GET_ONE_COURSE(courseId),
             })
             .pipe(
-                map((res) => res.model as CourseWithCommentModel),
+                map((res) => {
+                    const mappingModel = res.model as CourseWithCommentModel;
+                    mappingModel.courseInfo = this.convertToCourseModel(res.model.courseInfo);
+                    return mappingModel;
+                }),
                 take(1)
             );
     }
@@ -83,5 +73,27 @@ export class CourseService {
             map((courseList) => courseList.find((course) => course.id === courseId)),
             take(1)
         );
+    }
+
+    /**
+     * 資料轉型態 CourseRawModel => CourseModel
+     * @param rawCourse: CourseRawModel
+     * @private
+     */
+    private convertToCourseModel = (rawCourse: CourseRawModel): CourseModel => {
+        const courseModelData = {
+            courseId: rawCourse.課程碼,
+            commentNum: rawCourse.comment_num,
+            courseCredit: rawCourse.學分,
+            courseIndex: rawCourse.選課序號,
+            courseName: rawCourse.課程名稱,
+            courseType: rawCourse.選必修,
+            teacher: rawCourse.老師,
+            deptId: rawCourse.系號,
+            deptName: rawCourse.系所名稱,
+            time: rawCourse.時間,
+            id: rawCourse.id,
+        };
+        return courseModelData;
     }
 }

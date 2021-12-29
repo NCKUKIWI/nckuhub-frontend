@@ -34,7 +34,7 @@ export class CourseContentComponent implements OnInit {
             // 將抓到資料分成scoreData, courseData, commentData
             this.courseService.fetchCourseWithComments(courseId).subscribe((courseCommentData) => {
                 this.scoreData = courseCommentData;
-                this.courseData = this.convertToCourseModel(courseCommentData.courseInfo);
+                this.courseData = courseCommentData.courseInfo;
                 this.commentData = courseCommentData.comment;
 
                 // 課程評分四捨五入到整數
@@ -81,7 +81,7 @@ export class CourseContentComponent implements OnInit {
             this.wishList.splice(index, 1);
             localStorage.setItem('wishList', JSON.stringify(this.wishList));
         } else {
-            //新增 該課程
+            // 新增 該課程
             this.wishList.push(id);
             localStorage.setItem('wishList', JSON.stringify(this.wishList));
         }
@@ -92,27 +92,5 @@ export class CourseContentComponent implements OnInit {
         // else{
         //   wishlistAdd(id);
         // }
-    }
-
-    /**
-     * 資料轉型態 CourseRawModel => CourseModel
-     * @param rawCourse: CourseRawModel
-     * @private
-     */
-    private convertToCourseModel(rawCourse): CourseModel {
-        const courseModelData = {
-            courseId: rawCourse.課程碼,
-            commentNum: rawCourse.comment_num,
-            courseCredit: rawCourse.學分,
-            courseIndex: rawCourse.選課序號,
-            courseName: rawCourse.課程名稱,
-            courseType: rawCourse.選必修,
-            teacher: rawCourse.老師,
-            deptId: rawCourse.系號,
-            deptName: rawCourse.系所名稱,
-            time: rawCourse.時間,
-            id: rawCourse.id,
-        };
-        return courseModelData;
     }
 }
