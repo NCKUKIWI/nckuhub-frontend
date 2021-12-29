@@ -18,13 +18,13 @@ import { AppUrl } from '../../../../core/http/app.setting';
 })
 export class CourseContentComponent implements OnInit {
     // 該課程的留言資料(包含評分、課程資料、留言)
-    private scoreData: CourseWithCommentModel;
+    scoreData: CourseWithCommentModel;
     // score_data中的courseInfo(課程資料)
-    private courseData: CourseModel;
+    courseData: CourseModel;
     // score_data中的comment(留言)
-    private commentData: CourseComment[];
+    commentData: CourseComment[];
     // 使用者的wishlist
-    private wishList: number[] = [];
+    wishList: number[] = [];
 
     constructor(private router: ActivatedRoute, private courseService: CourseService) {
         // 抓取該課程的資料
@@ -56,7 +56,7 @@ export class CourseContentComponent implements OnInit {
      * @param courseId
      * @private
      */
-    private openOutline(deptId, courseId): void {
+    openOutline(deptId, courseId): void {
         window.open(AppUrl.GET_COURSE_OUTLINE(deptId, courseId), '_blank');
     }
 
