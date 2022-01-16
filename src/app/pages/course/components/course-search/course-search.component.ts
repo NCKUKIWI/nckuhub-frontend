@@ -3,6 +3,7 @@ import { CourseService } from '../../services/course.service';
 import { CourseModel } from '../../models/Course.model';
 import { DepartmentModel } from '../../models/Department.model';
 import { take, filter } from 'rxjs/operators';
+import { WishListService } from '../../services/wish-list.service';
 
 @Component({
     selector: 'app-course-search',
@@ -10,7 +11,7 @@ import { take, filter } from 'rxjs/operators';
     styleUrls: ['./course-search.component.scss'],
 })
 export class CourseSearchComponent implements OnInit, AfterViewInit {
-    constructor(private courseService: CourseService) { }
+    constructor(private courseService: CourseService, private wishListService: WishListService) { }
     // 完整的本學期課程
     allCourseInNewSemester: CourseModel[] = [];
     // 部分的本學期課程，用於展示在課程列表
@@ -203,10 +204,10 @@ export class CourseSearchComponent implements OnInit, AfterViewInit {
         }
         else {
             // 顯現 所有可能搜尋結果
-            const dropdownElement=document.getElementsByClassName('quick_search_dropdown--course')
+            const dropdownElement = document.getElementsByClassName('quick_search_dropdown--course')
             // 這個判斷式是因為不知為啥會出現 找不到的情況
-            if(dropdownElement.length>0){
-                (dropdownElement[0] as HTMLElement).style.visibility="visible";
+            if (dropdownElement.length > 0) {
+                (dropdownElement[0] as HTMLElement).style.visibility = "visible";
             }
             // console.log("keyword:" + keyword, keyword.length)
             // 關鍵字可能是系號
@@ -299,5 +300,26 @@ export class CourseSearchComponent implements OnInit, AfterViewInit {
             },
             { threshold: 0 }
         );
+    }
+
+    private setWish(courseId: Number): void {
+        if (!this.isInWishList(courseId)) {
+            this.addWish(courseId);
+        }
+        else {
+            this.removeWish(courseId);
+        }
+    }
+
+    private addWish(courseId: Number): void {
+        this.wishListService.addWish(courseId);
+    }
+
+    private removeWish(courseId: Number): void {
+        this.wishListService.removeWish(courseId);
+    }
+
+    private isInWishList(courseId: Number): boolean {
+        return this.wishListService.isInWishList(courseId);
     }
 }

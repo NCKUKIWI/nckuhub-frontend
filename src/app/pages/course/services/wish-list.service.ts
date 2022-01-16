@@ -1,6 +1,9 @@
-import {Injectable} from '@angular/core';
-import {UserService} from '../../../core/service/user.service';
-import {BehaviorSubject} from 'rxjs';
+import { Injectable } from '@angular/core';
+import { UserService } from '../../../core/service/user.service';
+import { Observable, BehaviorSubject } from 'rxjs';
+import { CourseModel } from '../models/Course.model';
+import { CourseService } from './course.service';
+import { take, filter, share } from 'rxjs/operators';
 
 /**
  * 課程資訊 service <br/>
@@ -12,16 +15,74 @@ import {BehaviorSubject} from 'rxjs';
     providedIn: 'root',
 })
 export class WishListService {
-    private wishList$ = new BehaviorSubject<[]>([]);
 
-    constructor(private userService: UserService) {
+    // 用於 發送 當前最新的願望清單
+    private wishList$ = new BehaviorSubject<CourseModel[]>([]);
+    // 當前最新的願望清單
+    private wishList: CourseModel[] = [];
+    // 完整的本學期課程，為了把 傳入 的課程id 轉成 課程
+    private allCourseInNewSemester: CourseModel[] = [];
+
+    constructor(private userService: UserService, private courseService: CourseService) {
+        // 取得 完整的本學期課程資料
+        this.getCourseData();
     }
 
-    //wishList：感興趣的課程，用於加入課表，查看心得
-    //TODO：建立Subject用來發送每次更動後的wishlist，addWish，removeWish
-    //用法：componemt訂閱Subject，只使用addWish，removeWish
-    //checkVali：檢查wishList長度，是否有對應到課程，清除重複元素
-    //addWish：增加wish在wishList，再讓subject next wishList
-    //removeWish：減少wish在wishList，再讓subject next wishList
+    /**
+     *  打API拿 完整課程資料
+     */
+    private getCourseData(): void {
+        // 加filter是因為可能會收到空陣列
+        this.courseService.getCourseData().pipe(filter(data => data.length != 0), take(1)).subscribe(
+            (courseData) => {
+                this.allCourseInNewSemester = courseData;
+                console.log("願望清單獲取總課程成功", this.allCourseInNewSemester.length);
+            },
+            (err: any) => {
+                if (err) {
+                    console.error(err);
+                }
+            }
+        );
+    }
+
+    /**
+     * 回傳 當前使用者 願望清單的Observable
+     */
+    getWishList(): Observable<CourseModel[]> {
+        return this.wishList$.pipe(share());
+    }
+
+    /**
+     * 新增 願望 至願望清單，並 發送 最新的願望清單
+     * @param courseId 願望(課程)的id
+     */
+    addWish(courseId: Number): void {
+        const wish: CourseModel | undefined = this.allCourseInNewSemester.find(function (course) { return course.id === courseId });
+        if (typeof wish !== 'undefined') {
+            this.wishList.push(wish);
+            this.wishList$.next(this.wishList);
+        }
+    }
+
+    /**
+     * 移除 願望 從願望清單，並 發送 最新的願望清單
+     * @param courseId 願望(課程)的id
+     */
+    removeWish(courseId: Number): void {
+        this.wishList = this.wishList.filter(wish => wish.id !== courseId);
+        this.wishList$.next(this.wishList);
+    }
+
+    /**
+     * 檢查 願望 是否在 願望清單
+     * @param courseId 願望(課程)的id
+     * @returns false：不在願望清單，true：在願望清單
+     */
+    public isInWishList(courseId: Number): boolean {
+        return this.wishList.findIndex((course) => course.id === courseId) !== -1;
+    }
+
+    //checkVali：檢查wishList長度，是否有對應到課程，清除重複元素，從DB獲取願望清單時呼叫
     //uploadWis：回傳wishList到DB，定量回傳？定時回傳？
 }

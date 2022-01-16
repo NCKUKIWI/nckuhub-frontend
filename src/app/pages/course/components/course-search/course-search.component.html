@@ -60,13 +60,13 @@
                                 src="../../../../../assets/images/course/comment_num.svg" />
                             <p class="text_14 text_dark" style="margin-right:15px">{{course['commentNum']}}</p>
                         </div>
-                        <div class="large_right--circle" (click)="$event.stopPropagation(); setCourse(course.id)">
-                            <div class="circle--img">
+                        <div class="large_right--circle" (click)="$event.stopPropagation(); setWish(course.id)">
+                            <div class="circle--img" [hidden]="this.isInWishList(course.id)">
                                 <img src="../../../../../assets/images/course/heart.svg" />
                             </div>
-                            <!-- <div class="circle--img" ng-show="userData.now_wishlist.includes(course.id)">
+                            <div class="circle--img" [hidden]="!this.isInWishList(course.id)">
                                 <img src="../../../../../assets/images/course/heart_red.svg" />
-                            </div> -->
+                            </div>
                         </div>
                     </div>
                 </div>

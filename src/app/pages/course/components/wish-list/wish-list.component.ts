@@ -1,19 +1,47 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CourseModel } from '../../models/Course.model';
+import { Subscription } from 'rxjs';
+import { WishListService } from '../../services/wish-list.service';
 
 @Component({
     selector: 'app-wish-list',
     templateUrl: './wish-list.component.html',
     styleUrls: ['./wish-list.component.scss'],
 })
-export class WishListComponent implements OnInit {
+export class WishListComponent implements OnInit, OnDestroy {
+
+    // 使用者的願望清單
     wishList: CourseModel[] = [];
-    constructor() { }
+    // 用於 取消訂閱 發送願望清單的Observable
+    wishListSubscription: Subscription;
 
-    ngOnInit(): void { }
+    constructor(private wishListService: WishListService) {
+    }
 
-    deleteWish(wishId:Number):void {
-        this.wishList=this.wishList.filter((course) => course.id !== wishId);
+    ngOnInit(): void {
+        // 訂閱 使用者的願望清單
+        this.getWishList();
+    }
+
+    ngOnDestroy(): void {
+        // 取消訂閱 使用者的願望清單
+        this.wishListSubscription.unsubscribe();
+    }
+
+    /**
+     *  訂閱 以隨時獲取 最新的願望清單
+     */
+    private getWishList(): void {
+        this.wishListSubscription = this.wishListService.getWishList().subscribe(
+            (wishList) => {
+                this.wishList = wishList;
+            },
+            (err: any) => {
+                if (err) {
+                    console.error(err);
+                }
+            }
+        );
     }
 
     /**
@@ -22,7 +50,7 @@ export class WishListComponent implements OnInit {
      * @param deptName 傳入課程的系所名稱
      * @returns 傳入課程的所屬系所簡稱
      */
-     deptTransCat(deptID: string, deptName: string): string {
+    deptTransCat(deptID: string, deptName: string): string {
         let category: string;
         switch (deptID) {
             case 'A9':
@@ -45,4 +73,17 @@ export class WishListComponent implements OnInit {
         }
         return category;
     }
+
+    /**
+     * 使用者 點擊 願望清單上的願望後，從願望清單 移除 願望
+     * @param courseId 願望(課程)的Id
+     */
+    removeWish(courseId: Number): void {
+        this.wishListService.removeWish(courseId);
+    }
+
+    /**
+     * 從願望清單 轉移至 課表
+     */
+    private opentabletab(): void { }
 }

@@ -6,8 +6,8 @@
         <p class="wishlist_cont__no_result text_dark" *ngIf="!wishList.length">尚未新增任何課程進入願望清單。</p>
         <div class="list_course_item" *ngFor="let wish of wishList" style="justify-content:none">
             <div class="list_course_item_left">
-                <p class="list_course_item_category text_20 text_white clickable" :class="item.dept_id"
-                (click)="deleteWish(wish.id)">{{ deptTransCat(wish.deptId,wish.deptName) }}</p>
+                <p class="list_course_item_category text_20 text_white clickable" [ngClass]="wish.deptId"
+                (click)="removeWish(wish.id)">{{ deptTransCat(wish.deptId,wish.deptName) }}</p>
             </div>
             <div class="list_course_item_mid">
                 <p class="list_course_item_title text_16">{{ wish.deptId }}-{{ wish.courseId }} {{ wish.courseName }}</p>
@@ -16,8 +16,8 @@
             <div class="list_course_item_right"> </div>
         </div>
     </div>
-    <!-- <div class="quick_search_custom quick_search_custom--btn" @click="opentabletab()"><img
-            src="./dist/images/course/arrange.svg" />
+    <div class="quick_search_custom quick_search_custom--btn" (click)="opentabletab()"><img
+            src="../../../../../assets/images/course/arrange.svg" />
         <p>加入完成，開始安排課表！</p>
-    </div> -->
+    </div>
 </div>
