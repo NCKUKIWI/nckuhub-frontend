@@ -1,10 +1,12 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component, OnInit, Optional } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CourseService } from '../../services/course.service';
 import { CourseWithCommentModel } from '../../models/CourseComment.model';
 import { CourseComment } from '../../models/CourseComment.model';
 import { CourseModel } from '../../models/Course.model';
 import { AppUrl } from '../../../../core/http/app.setting';
+import { DynamicDialogRef } from 'primeng/dynamicdialog';
+import { DynamicDialogConfig } from 'primeng/dynamicdialog';
 
 /**
  * 課程內頁
@@ -25,29 +27,58 @@ export class CourseContentComponent implements OnInit {
     commentData: CourseComment[];
     // 使用者的wishlist
     wishList: number[] = [];
+    // // 課程內頁是否展示
+    // display: boolean = true;
 
-    constructor(private router: ActivatedRoute, private courseService: CourseService) {
+    constructor(
+        private route: ActivatedRoute,
+        private courseService: CourseService,
+        @Optional()
+        public ref: DynamicDialogRef,
+        @Optional()
+        public config: DynamicDialogConfig
+    ) {
         // 抓取該課程的資料
-        this.router.params.subscribe((param) => {
-            const courseId: number = param.course_id;
-
-            // 將抓到資料分成scoreData, courseData, commentData
-            this.courseService.fetchCourseWithComments(courseId).subscribe((courseCommentData) => {
-                this.scoreData = courseCommentData;
-                this.courseData = courseCommentData.courseInfo;
-                this.commentData = courseCommentData.comment;
-
-                // 課程評分四捨五入到整數
-                this.scoreData.got = Math.round(parseFloat(this.scoreData.got)).toString();
-                this.scoreData.sweet = Math.round(parseFloat(this.scoreData.sweet)).toString();
-                this.scoreData.cold = Math.round(parseFloat(this.scoreData.cold)).toString();
-            });
+        this.route.params.subscribe((param) => {
+            if (param.courseId) {
+                this.fetchCoursebyCourseId(param.courseId);
+            }
         });
     }
 
     ngOnInit(): void {
+        // 抓取該課程的資料
+        if (this.config !== null) {
+            this.fetchCoursebyCourseId(this.config.data.courseId);
+        }
         // 取得 願望清單
         this.getUserWishList();
+    }
+
+    /**
+     * 抓取課程資料
+     * @param courseId
+     */
+    fetchCoursebyCourseId(courseId: number): void {
+        this.courseService.fetchCourseWithComments(courseId).subscribe((courseCommentData) => {
+            this.scoreData = courseCommentData;
+            this.courseData = courseCommentData.courseInfo;
+            this.commentData = courseCommentData.comment;
+
+            // 課程評分四捨五入到整數
+            this.scoreData.got = Math.round(parseFloat(this.scoreData.got)).toString();
+            this.scoreData.sweet = Math.round(parseFloat(this.scoreData.sweet)).toString();
+            this.scoreData.cold = Math.round(parseFloat(this.scoreData.cold)).toString();
+        });
+    }
+
+    /**
+     * 關閉課程內頁
+     */
+    closeCourseContent(): void {
+        if (this.ref) {
+            this.ref.close();
+        }
     }
 
     /**

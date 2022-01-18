@@ -5,16 +5,22 @@
             <div class="block_title">
                 <p class="text_18">開課單位</p>
             </div>
-            <div class="quick_search_area" style="z-index:300">
-                <input class="quick_search_input" id="dpmtFilter" type="text" (compositionend)="searchDept($event.target.value)" (keydown)="keyEventHandler($event)"
-                    placeholder="選擇「開課單位」" autocomplete="off" />
+            <div class="quick_search_area" style="z-index: 300">
+                <input
+                    class="quick_search_input"
+                    id="dpmtFilter"
+                    type="text"
+                    (compositionend)="searchDept($event.target.value)"
+                    (keydown)="keyEventHandler($event)"
+                    placeholder="選擇「開課單位」"
+                    autocomplete="off"
+                />
                 <button class="quick_search_delete" (click)="deleteSearch()"></button>
-                <div class="quick_search_dropdown--course" *ngIf="keyword.replace(' ','') !== ''">
-                    <p class="quick_search_dropdown--course__no_result text_dark" *ngIf="!deptSearchResult.length">查無此關鍵字結果。
-                    </p>
+                <div class="quick_search_dropdown--course" *ngIf="keyword.replace(' ', '') !== ''">
+                    <p class="quick_search_dropdown--course__no_result text_dark" *ngIf="!deptSearchResult.length">查無此關鍵字結果。</p>
                     <div class="search_result--course" *ngFor="let candidate of deptSearchResult">
-                        <div (click)="clickSearchResult(candidate.DepPrefix,candidate.DepName)">
-                            <p>{{candidate.DepPrefix}} {{candidate.DepName}}</p>
+                        <div (click)="clickSearchResult(candidate.DepPrefix, candidate.DepName)">
+                            <p>{{ candidate.DepPrefix }} {{ candidate.DepName }}</p>
                         </div>
                     </div>
                 </div>
@@ -27,13 +33,9 @@
                 <p class="text_16 mobile_only">檢視</p>
             </div>
             <div class="quick_search_area">
-                <label class="quick_search_custom">
-                    <input id="commentCheck" type="checkbox" (click)="commentFilter()" /><span
-                        class="checkmark"></span><span>僅顯示有心得之課程</span>
-                </label>
+                <label class="quick_search_custom"> <input id="commentCheck" type="checkbox" (click)="commentFilter()" /><span class="checkmark"></span><span>僅顯示有心得之課程</span> </label>
             </div>
         </div>
-
     </div>
     <!-- <div class="flex-container dark_screen mobile_only" id="courseDarkScreen" v-if="mobile_status == 'drop'"></div> -->
     <div class="flex-container courseList__sideList">
@@ -41,23 +43,24 @@
             <div id="course_item">
                 <div class="list_course_item blank_for_mobile mobile_only"></div>
                 <p class="list_course_item__no_result" *ngIf="!displayCourseList.length">查無課程資訊。</p>
-                <div class="list_course_item" (click)="openCoursePage(course['id'])"
-                    *ngFor="let course of displayCourseList">
+                <div class="list_course_item" *ngFor="let course of displayCourseList" (click)="openCoursePage(course.id)">
                     <div class="list_course_item_left">
                         <p class="list_course_item_category text_white text_20" [ngClass]="course.deptId">
-                            {{deptTransCat(course.deptId,course.deptName)}}</p>
+                            {{ deptTransCat(course.deptId, course.deptName) }}
+                        </p>
                     </div>
                     <div class="list_course_item_mid">
-                        <p class="list_course_item_title text_16">{{course.deptId}}-{{course.courseIndex}} {{course.courseName}}
-                        </p>
-                        <p class="list_course_item_description text_14 text_dark">{{course.deptId}} — {{course.teacher}}
+                        <p class="list_course_item_title text_16">{{ course.deptId }}-{{ course.courseIndex }} {{ course.courseName }}</p>
+                        <p class="list_course_item_description text_14 text_dark">
+                            {{ course.deptId }} — {{ course.teacher }}
                             —
-                            {{course.time}}</p>
+                            {{ course.time }}
+                        </p>
                     </div>
                     <div class="list_course_item_right large_right">
-                        <div class="list_course_item_right--courseList"><img
-                                src="../../../../../assets/images/course/comment_num.svg" />
-                            <p class="text_14 text_dark" style="margin-right:15px">{{course['commentNum']}}</p>
+                        <div class="list_course_item_right--courseList">
+                            <img src="../../../../../assets/images/course/comment_num.svg" />
+                            <p class="text_14 text_dark" style="margin-right: 15px">{{ course['commentNum'] }}</p>
                         </div>
                         <div class="large_right--circle" (click)="$event.stopPropagation(); setCourse(course.id)">
                             <div class="circle--img">
@@ -69,7 +72,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="course_data_end" style="height:1px"></div>
+                <div class="course_data_end" style="height: 1px"></div>
             </div>
         </div>
     </div>

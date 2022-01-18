@@ -1,8 +1,8 @@
 <ng-container *ngIf="scoreData">
     <div id="courseContent">
-        <div class="content_nextpage" style="display: none">
-            <img style="cursor: pointer" src="../../../../../assets/images/course/left-btn.svg" />
-            <img style="cursor: pointer" src="../../../../../assets/images/course/right-btn.svg" />
+        <div class="content_nextpage" (click)="closeCourseContent()">
+            <!-- <img style="cursor: pointer" src="../../../../../assets/images/course/left-btn.svg" /> -->
+            <!-- <img style="cursor: pointer" src="../../../../../assets/images/course/right-btn.svg" /> -->
         </div>
 
         <div class="courseContentBody">
