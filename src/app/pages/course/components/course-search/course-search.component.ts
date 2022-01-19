@@ -70,8 +70,8 @@ export class CourseSearchComponent implements OnInit, AfterViewInit, OnDestroy{
         this.courseService
             .getCourseData()
             .pipe(
-                filter((data) => data.length != 0),
-                take(1)
+              filter((data) => data.length !== 0),
+              take(1)
             )
             .subscribe(
                 (courseData) => {
@@ -148,11 +148,11 @@ export class CourseSearchComponent implements OnInit, AfterViewInit, OnDestroy{
             height: '100%',
             baseZIndex: 10000,
             transitionOptions: null,
-            style: { marginTop: '-75px' },
-            data: { courseId: courseId },
+            style: {marginTop: '-75px'},
+            data: {courseId},
         });
 
-        this.ref.onClose.subscribe((result) => {
+        this.ref.onClose.subscribe(() => {
             console.log('The dialog was closed');
             this.router.navigateByUrl('/');
         });
@@ -173,7 +173,7 @@ export class CourseSearchComponent implements OnInit, AfterViewInit, OnDestroy{
     /**
      * 解除 課程篩選狀態，依據評論篩選狀態 初始化 當前要展示的課程列表
      */
-    private deleteSearch(): void {
+    deleteSearch(): void {
         this.keyword = '';
         this.isDeptOnly = false;
         // 如果 有開啟 評論篩選功能
@@ -187,7 +187,7 @@ export class CourseSearchComponent implements OnInit, AfterViewInit, OnDestroy{
     /**
      * 處理 每次開關評論篩選，選擇 所需展示的課程資料
      */
-    private commentFilter(): void {
+    commentFilter(): void {
         const cCheck = document.getElementById('commentCheck') as HTMLInputElement;
         // 如果 有開啟 評論篩選功能
         if (cCheck.checked === true) {
@@ -217,10 +217,10 @@ export class CourseSearchComponent implements OnInit, AfterViewInit, OnDestroy{
      * @param e 篩選系別的搜尋欄event
      */
     @HostListener('keydown', ['$event'])
-    private keyEventHandler(e: KeyboardEvent): void {
+    keyEventHandler(e: KeyboardEvent): void {
         // 純綁compositionend 會吃不到 Backaspace
         if (e.key === 'Backspace') {
-            let keyword = (e.target as HTMLInputElement).value;
+            const keyword = (e.target as HTMLInputElement).value;
             this.searchDept(keyword.slice(0, keyword.length - 1));
             // console.log("split", keyword);
         }
@@ -230,7 +230,7 @@ export class CourseSearchComponent implements OnInit, AfterViewInit, OnDestroy{
      * 依據關鍵字 列出可能的系所 或 關閉並清除 篩選系所狀態
      */
     @HostListener('compositionend', ['$event.target.value'])
-    private searchDept(keyword: string): void {
+    searchDept(keyword: string): void {
         // this.keyword = this.keyword.trim();
         this.keyword = keyword.trim();
         this.deptSearchResult = [];
@@ -272,7 +272,7 @@ export class CourseSearchComponent implements OnInit, AfterViewInit, OnDestroy{
      * @param resultPrefix 目標系所的系號
      * @param resultName 目標系所的名稱
      */
-    private clickSearchResult(resultPrefix: string, resultName: string): void {
+    clickSearchResult(resultPrefix: string, resultName: string): void {
         this.keyword = resultName;
         this.keyPrefix = resultPrefix;
 

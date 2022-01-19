@@ -1,12 +1,10 @@
-import { Component, OnInit, Optional } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { CourseService } from '../../services/course.service';
-import { CourseWithCommentModel } from '../../models/CourseComment.model';
-import { CourseComment } from '../../models/CourseComment.model';
-import { CourseModel } from '../../models/Course.model';
-import { AppUrl } from '../../../../core/http/app.setting';
-import { DynamicDialogRef } from 'primeng/dynamicdialog';
-import { DynamicDialogConfig } from 'primeng/dynamicdialog';
+import {Component, OnInit, Optional} from '@angular/core';
+import {ActivatedRoute} from '@angular/router';
+import {CourseService} from '../../services/course.service';
+import {CourseComment, CourseWithCommentModel} from '../../models/CourseComment.model';
+import {CourseModel} from '../../models/Course.model';
+import {AppUrl} from '../../../../core/http/app.setting';
+import {DynamicDialogConfig, DynamicDialogRef} from 'primeng/dynamicdialog';
 
 /**
  * 課程內頁
@@ -41,7 +39,7 @@ export class CourseContentComponent implements OnInit {
         // 抓取該課程的資料
         this.route.params.subscribe((param) => {
             if (param.courseId) {
-                this.fetchCoursebyCourseId(param.courseId);
+                this.fetchCourseByCourseId(param.courseId);
             }
         });
     }
@@ -49,7 +47,7 @@ export class CourseContentComponent implements OnInit {
     ngOnInit(): void {
         // 抓取該課程的資料
         if (this.config !== null) {
-            this.fetchCoursebyCourseId(this.config.data.courseId);
+            this.fetchCourseByCourseId(this.config.data.courseId);
         }
         // 取得 願望清單
         this.getUserWishList();
@@ -59,7 +57,7 @@ export class CourseContentComponent implements OnInit {
      * 抓取課程資料
      * @param courseId
      */
-    fetchCoursebyCourseId(courseId: number): void {
+    fetchCourseByCourseId(courseId: number): void {
         this.courseService.fetchCourseWithComments(courseId).subscribe((courseCommentData) => {
             this.scoreData = courseCommentData;
             this.courseData = courseCommentData.courseInfo;
@@ -116,12 +114,5 @@ export class CourseContentComponent implements OnInit {
             this.wishList.push(id);
             localStorage.setItem('wishList', JSON.stringify(this.wishList));
         }
-
-        // if (userData.now_wishlist.includes(id)){
-        //   wishlistRemove(id);
-        // }
-        // else{
-        //   wishlistAdd(id);
-        // }
     }
 }
