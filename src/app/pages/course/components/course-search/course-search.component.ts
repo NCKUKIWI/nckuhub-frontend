@@ -61,17 +61,17 @@ export class CourseSearchComponent implements OnInit, AfterViewInit {
      */
     private getCourseData(): void {
         // 加filter是因為可能會收到空陣列
-        this.courseService.getCourseData().pipe(filter(data => data.length != 0), take(1)).subscribe(
-            (courseData) => {
-                this.allCourseInNewSemester = courseData;
-                this.displayCourseList = this.allCourseInNewSemester.slice(0, this.MAX_COURSE_DISPLAY_NUM);
-                this.allCourseListWithComment = this.allCourseInNewSemester.filter((course) => course.commentNum > 0);
-                // console.log('get course data', courseData.length);
-            },
-            (err: any) => {
-                if (err) {
-                    console.error(err);
-                }
+        this.courseService.getCourseData().pipe(filter(data => data.length !== 0), take(1)).subscribe(
+          (courseData) => {
+              this.allCourseInNewSemester = courseData;
+              this.displayCourseList = this.allCourseInNewSemester.slice(0, this.MAX_COURSE_DISPLAY_NUM);
+              this.allCourseListWithComment = this.allCourseInNewSemester.filter((course) => course.commentNum > 0);
+              // console.log('get course data', courseData.length);
+          },
+          (err: any) => {
+              if (err) {
+                  console.error(err);
+              }
             }
         );
     }
@@ -185,7 +185,7 @@ export class CourseSearchComponent implements OnInit, AfterViewInit {
     private keyEventHandler(e: KeyboardEvent): void {
         // 純綁compositionend 會吃不到 Backaspace
         if (e.key === "Backspace") {
-            let keyword = (e.target as HTMLInputElement).value;
+            const keyword = (e.target as HTMLInputElement).value;
             this.searchDept(keyword.slice(0, keyword.length - 1));
             // console.log("split", keyword);
         }
@@ -204,7 +204,7 @@ export class CourseSearchComponent implements OnInit, AfterViewInit {
         }
         else {
             // 顯現 所有可能搜尋結果
-            const dropdownElement = document.getElementsByClassName('quick_search_dropdown--course')
+            const dropdownElement = document.getElementsByClassName('quick_search_dropdown--course');
             // 這個判斷式是因為不知為啥會出現 找不到的情況
             if (dropdownElement.length > 0) {
                 (dropdownElement[0] as HTMLElement).style.visibility = "visible";
@@ -302,24 +302,23 @@ export class CourseSearchComponent implements OnInit, AfterViewInit {
         );
     }
 
-    private setWish(courseId: Number): void {
+    private setWish(courseId: number): void {
         if (!this.isInWishList(courseId)) {
             this.addWish(courseId);
-        }
-        else {
+        } else {
             this.removeWish(courseId);
         }
     }
 
-    private addWish(courseId: Number): void {
+    private addWish(courseId: number): void {
         this.wishListService.addWish(courseId);
     }
 
-    private removeWish(courseId: Number): void {
+    private removeWish(courseId: number): void {
         this.wishListService.removeWish(courseId);
     }
 
-    private isInWishList(courseId: Number): boolean {
+    private isInWishList(courseId: number): boolean {
         return this.wishListService.isInWishList(courseId);
     }
 }
