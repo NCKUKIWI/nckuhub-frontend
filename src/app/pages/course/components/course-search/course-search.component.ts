@@ -4,9 +4,9 @@ import {CourseModel} from '../../models/Course.model';
 import {DepartmentModel} from '../../models/Department.model';
 import {filter, take} from 'rxjs/operators';
 import {WishListService} from '../../services/wish-list.service';
-import {DialogService} from 'primeng/dynamicdialog';
+import {DialogService, DynamicDialogRef} from 'primeng/dynamicdialog';
 import {Router} from '@angular/router';
-import { CourseContentComponent } from '../course-content/course-content.component';
+import {CourseContentComponent} from '../course-content/course-content.component';
 
 @Component({
     selector: 'app-course-search',
@@ -16,8 +16,8 @@ import { CourseContentComponent } from '../course-content/course-content.compone
 export class CourseSearchComponent implements OnInit, AfterViewInit, OnDestroy{
     constructor(private courseService: CourseService,
                 private dialogService: DialogService,
-                private wishListService: WishListService
-                private router: Router
+                private wishListService: WishListService,
+                private router: Router,
     ) {}
 
     // 完整的本學期課程
@@ -49,6 +49,8 @@ export class CourseSearchComponent implements OnInit, AfterViewInit, OnDestroy{
     allCourseListWithDept: CourseModel[] = [];
     // 最近一次 經過系所篩選 的系所代號
     keyPrefix = '';
+    // DynamicDialog的參數
+    ref: DynamicDialogRef;
 
     mobile_status: 'default';
 
@@ -69,17 +71,17 @@ export class CourseSearchComponent implements OnInit, AfterViewInit, OnDestroy{
      */
     private getCourseData(): void {
         // 加filter是因為可能會收到空陣列
-        this.courseService.getCourseData().pipe(filter(data => data.length != 0), take(1)).subscribe(
-            (courseData) => {
-                this.allCourseInNewSemester = courseData;
-                this.displayCourseList = this.allCourseInNewSemester.slice(0, this.MAX_COURSE_DISPLAY_NUM);
-                this.allCourseListWithComment = this.allCourseInNewSemester.filter((course) => course.commentNum > 0);
-                // console.log('get course data', courseData.length);
-            },
-            (err: any) => {
-                if (err) {
-                    console.error(err);
-                }
+        this.courseService.getCourseData().pipe(filter(data => data.length !== 0), take(1)).subscribe(
+          (courseData) => {
+              this.allCourseInNewSemester = courseData;
+              this.displayCourseList = this.allCourseInNewSemester.slice(0, this.MAX_COURSE_DISPLAY_NUM);
+              this.allCourseListWithComment = this.allCourseInNewSemester.filter((course) => course.commentNum > 0);
+              // console.log('get course data', courseData.length);
+          },
+          (err: any) => {
+              if (err) {
+                  console.error(err);
+              }
             }
         );
     }
@@ -235,10 +237,10 @@ export class CourseSearchComponent implements OnInit, AfterViewInit, OnDestroy{
         }
         else {
             // 顯現 所有可能搜尋結果
-            const dropdownElement=document.getElementsByClassName('quick_search_dropdown--course')
+            const dropdownElement = document.getElementsByClassName('quick_search_dropdown--course');
             // 這個判斷式是因為不知為啥會出現 找不到的情況
-            if(dropdownElement.length>0){
-                (dropdownElement[0] as HTMLElement).style.visibility="visible";
+            if (dropdownElement.length > 0) {
+                (dropdownElement[0] as HTMLElement).style.visibility = 'visible';
             }
             // console.log("keyword:" + keyword, keyword.length)
             // 關鍵字可能是系號
