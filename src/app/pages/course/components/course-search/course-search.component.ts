@@ -1,4 +1,4 @@
-import { HostListener, AfterViewInit, Component, OnInit } from '@angular/core';
+import {HostListener, AfterViewInit, Component, OnInit, OnDestroy} from '@angular/core';
 import { CourseService } from '../../services/course.service';
 import { CourseModel } from '../../models/Course.model';
 import { DepartmentModel } from '../../models/Department.model';
@@ -13,7 +13,7 @@ import { Router } from '@angular/router';
     templateUrl: './course-search.component.html',
     styleUrls: ['./course-search.component.scss'],
 })
-export class CourseSearchComponent implements OnInit, AfterViewInit {
+export class CourseSearchComponent implements OnInit, AfterViewInit, OnDestroy{
     constructor(private courseService: CourseService, public dialogService: DialogService, private router: Router) {}
 
     // 完整的本學期課程
@@ -158,7 +158,7 @@ export class CourseSearchComponent implements OnInit, AfterViewInit {
         });
     }
 
-    ngOnDestroy() {
+    ngOnDestroy(): void{
         if (this.ref) {
             this.ref.close();
         }
