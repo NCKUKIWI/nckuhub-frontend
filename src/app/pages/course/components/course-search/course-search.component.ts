@@ -1,17 +1,25 @@
-import { HostListener, AfterViewInit, Component, OnInit } from '@angular/core';
-import { CourseService } from '../../services/course.service';
-import { CourseModel } from '../../models/Course.model';
-import { DepartmentModel } from '../../models/Department.model';
-import { take, filter } from 'rxjs/operators';
-import { WishListService } from '../../services/wish-list.service';
+import {AfterViewInit, Component, HostListener, OnDestroy, OnInit} from '@angular/core';
+import {CourseService} from '../../services/course.service';
+import {CourseModel} from '../../models/Course.model';
+import {DepartmentModel} from '../../models/Department.model';
+import {filter, take} from 'rxjs/operators';
+import {WishListService} from '../../services/wish-list.service';
+import {DialogService} from 'primeng/dynamicdialog';
+import {Router} from '@angular/router';
+import { CourseContentComponent } from '../course-content/course-content.component';
 
 @Component({
     selector: 'app-course-search',
     templateUrl: './course-search.component.html',
     styleUrls: ['./course-search.component.scss'],
 })
-export class CourseSearchComponent implements OnInit, AfterViewInit {
-    constructor(private courseService: CourseService, private wishListService: WishListService) { }
+export class CourseSearchComponent implements OnInit, AfterViewInit, OnDestroy{
+    constructor(private courseService: CourseService,
+                private dialogService: DialogService,
+                private wishListService: WishListService
+                private router: Router
+    ) {}
+
     // 完整的本學期課程
     allCourseInNewSemester: CourseModel[] = [];
     // 部分的本學期課程，用於展示在課程列表
@@ -61,17 +69,17 @@ export class CourseSearchComponent implements OnInit, AfterViewInit {
      */
     private getCourseData(): void {
         // 加filter是因為可能會收到空陣列
-        this.courseService.getCourseData().pipe(filter(data => data.length !== 0), take(1)).subscribe(
-          (courseData) => {
-              this.allCourseInNewSemester = courseData;
-              this.displayCourseList = this.allCourseInNewSemester.slice(0, this.MAX_COURSE_DISPLAY_NUM);
-              this.allCourseListWithComment = this.allCourseInNewSemester.filter((course) => course.commentNum > 0);
-              // console.log('get course data', courseData.length);
-          },
-          (err: any) => {
-              if (err) {
-                  console.error(err);
-              }
+        this.courseService.getCourseData().pipe(filter(data => data.length != 0), take(1)).subscribe(
+            (courseData) => {
+                this.allCourseInNewSemester = courseData;
+                this.displayCourseList = this.allCourseInNewSemester.slice(0, this.MAX_COURSE_DISPLAY_NUM);
+                this.allCourseListWithComment = this.allCourseInNewSemester.filter((course) => course.commentNum > 0);
+                // console.log('get course data', courseData.length);
+            },
+            (err: any) => {
+                if (err) {
+                    console.error(err);
+                }
             }
         );
     }
@@ -80,17 +88,20 @@ export class CourseSearchComponent implements OnInit, AfterViewInit {
      * 打API拿 所有系所資料
      */
     private getDeptData(): void {
-        this.courseService.fetchDepartments().pipe(take(1)).subscribe(
-            (Departments) => {
-                this.dept = Departments;
-                console.log('get dept data', Departments.length);
-            },
-            (err: any) => {
-                if (err) {
-                    console.error(err);
+        this.courseService
+            .fetchDepartments()
+            .pipe(take(1))
+            .subscribe(
+                (Departments) => {
+                    this.dept = Departments;
+                    console.log('get dept data', Departments.length);
+                },
+                (err: any) => {
+                    if (err) {
+                        console.error(err);
+                    }
                 }
-            }
-        );
+            );
     }
 
     /**
@@ -127,7 +138,27 @@ export class CourseSearchComponent implements OnInit, AfterViewInit {
      * 為課程 打開課程內頁
      * @param courseId 要打開課程內頁的課程的id
      */
-    openCoursePage(courseId: number): void { }
+    openCoursePage(courseId: number): void {
+        this.ref = this.dialogService.open(CourseContentComponent, {
+            width: '100%',
+            height: '100%',
+            baseZIndex: 10000,
+            transitionOptions: null,
+            style: {marginTop: '-75px'},
+            data: {courseId},
+        });
+
+        this.ref.onClose.subscribe(() => {
+            console.log('The dialog was closed');
+            this.router.navigateByUrl('/');
+        });
+    }
+
+    ngOnDestroy(): void{
+        if (this.ref) {
+            this.ref.close();
+        }
+    }
 
     /**
      * 把課程 加入願望清單
@@ -138,7 +169,7 @@ export class CourseSearchComponent implements OnInit, AfterViewInit {
     /**
      * 解除 課程篩選狀態，依據評論篩選狀態 初始化 當前要展示的課程列表
      */
-    private deleteSearch(): void {
+    deleteSearch(): void {
         this.keyword = '';
         this.isDeptOnly = false;
         // 如果 有開啟 評論篩選功能
@@ -152,7 +183,7 @@ export class CourseSearchComponent implements OnInit, AfterViewInit {
     /**
      * 處理 每次開關評論篩選，選擇 所需展示的課程資料
      */
-    private commentFilter(): void {
+    commentFilter(): void {
         const cCheck = document.getElementById('commentCheck') as HTMLInputElement;
         // 如果 有開啟 評論篩選功能
         if (cCheck.checked === true) {
@@ -181,10 +212,10 @@ export class CourseSearchComponent implements OnInit, AfterViewInit {
      * 處理 keyup event，目前用於處理 compositionend event 吃不到 Backspace鍵的情況
      * @param e 篩選系別的搜尋欄event
      */
-    @HostListener('keydown', ["$event"])
-    private keyEventHandler(e: KeyboardEvent): void {
+    @HostListener('keydown', ['$event'])
+    keyEventHandler(e: KeyboardEvent): void {
         // 純綁compositionend 會吃不到 Backaspace
-        if (e.key === "Backspace") {
+        if (e.key === 'Backspace') {
             const keyword = (e.target as HTMLInputElement).value;
             this.searchDept(keyword.slice(0, keyword.length - 1));
             // console.log("split", keyword);
@@ -194,8 +225,8 @@ export class CourseSearchComponent implements OnInit, AfterViewInit {
     /**
      * 依據關鍵字 列出可能的系所 或 關閉並清除 篩選系所狀態
      */
-    @HostListener('compositionend', ["$event.target.value"])
-    private searchDept(keyword: string): void {
+    @HostListener('compositionend', ['$event.target.value'])
+    searchDept(keyword: string): void {
         // this.keyword = this.keyword.trim();
         this.keyword = keyword.trim();
         this.deptSearchResult = [];
@@ -204,10 +235,10 @@ export class CourseSearchComponent implements OnInit, AfterViewInit {
         }
         else {
             // 顯現 所有可能搜尋結果
-            const dropdownElement = document.getElementsByClassName('quick_search_dropdown--course');
+            const dropdownElement=document.getElementsByClassName('quick_search_dropdown--course')
             // 這個判斷式是因為不知為啥會出現 找不到的情況
-            if (dropdownElement.length > 0) {
-                (dropdownElement[0] as HTMLElement).style.visibility = "visible";
+            if(dropdownElement.length>0){
+                (dropdownElement[0] as HTMLElement).style.visibility="visible";
             }
             // console.log("keyword:" + keyword, keyword.length)
             // 關鍵字可能是系號
@@ -238,7 +269,7 @@ export class CourseSearchComponent implements OnInit, AfterViewInit {
      * @param resultPrefix 目標系所的系號
      * @param resultName 目標系所的名稱
      */
-    private clickSearchResult(resultPrefix: string, resultName: string): void {
+    clickSearchResult(resultPrefix: string, resultName: string): void {
         this.keyword = resultName;
         this.keyPrefix = resultPrefix;
 
@@ -300,25 +331,5 @@ export class CourseSearchComponent implements OnInit, AfterViewInit {
             },
             { threshold: 0 }
         );
-    }
-
-    private setWish(courseId: number): void {
-        if (!this.isInWishList(courseId)) {
-            this.addWish(courseId);
-        } else {
-            this.removeWish(courseId);
-        }
-    }
-
-    private addWish(courseId: number): void {
-        this.wishListService.addWish(courseId);
-    }
-
-    private removeWish(courseId: number): void {
-        this.wishListService.removeWish(courseId);
-    }
-
-    private isInWishList(courseId: number): boolean {
-        return this.wishListService.isInWishList(courseId);
     }
 }
