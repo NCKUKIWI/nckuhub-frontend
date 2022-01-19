@@ -57,9 +57,9 @@ export class WishListService {
      * 新增 願望 至願望清單，並 發送 最新的願望清單
      * @param courseId 願望(課程)的id
      */
-    addWish(courseId: Number): void {
-        const wish: CourseModel | undefined = this.allCourseInNewSemester.find(function (course) { return course.id === courseId });
-        if (typeof wish !== 'undefined') {
+    addWish(courseId: number): void {
+        const wish: CourseModel | undefined = this.allCourseInNewSemester.find(course => course.id === courseId);
+        if (wish) {
             this.wishList.push(wish);
             this.wishList$.next(this.wishList);
         }
@@ -69,7 +69,7 @@ export class WishListService {
      * 移除 願望 從願望清單，並 發送 最新的願望清單
      * @param courseId 願望(課程)的id
      */
-    removeWish(courseId: Number): void {
+    removeWish(courseId: number): void {
         this.wishList = this.wishList.filter(wish => wish.id !== courseId);
         this.wishList$.next(this.wishList);
     }
@@ -79,10 +79,10 @@ export class WishListService {
      * @param courseId 願望(課程)的id
      * @returns false：不在願望清單，true：在願望清單
      */
-    public isInWishList(courseId: Number): boolean {
+    public isInWishList(courseId: number): boolean {
         return this.wishList.findIndex((course) => course.id === courseId) !== -1;
     }
 
-    //checkVali：檢查wishList長度，是否有對應到課程，清除重複元素，從DB獲取願望清單時呼叫
-    //uploadWis：回傳wishList到DB，定量回傳？定時回傳？
+    // TODO: ecfack checkVali：檢查wishList長度，是否有對應到課程，清除重複元素，從DB獲取願望清單時呼叫
+    // TODO: ecfack uploadWis：回傳wishList到DB，定量回傳？定時回傳？
 }

@@ -78,12 +78,13 @@ export class WishListComponent implements OnInit, OnDestroy {
      * 使用者 點擊 願望清單上的願望後，從願望清單 移除 願望
      * @param courseId 願望(課程)的Id
      */
-    removeWish(courseId: Number): void {
+    removeWish(courseId: number): void {
         this.wishListService.removeWish(courseId);
     }
 
     /**
      * 從願望清單 轉移至 課表
      */
-    private opentabletab(): void { }
+    openTableTab(): void {
+    }
 }
