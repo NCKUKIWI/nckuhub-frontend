@@ -13,13 +13,8 @@ import { CourseContentComponent } from '../course-content/course-content.compone
     templateUrl: './course-search.component.html',
     styleUrls: ['./course-search.component.scss'],
 })
-
 export class CourseSearchComponent implements OnInit, AfterViewInit {
-    constructor(private courseService: CourseService,
-        private dialogService: DialogService,
-        private wishListService: WishListService,
-        private router: Router,
-    ) { }
+    constructor(private courseService: CourseService, private dialogService: DialogService, private wishListService: WishListService, private router: Router) {}
 
     // 完整的本學期課程
     allCourseInNewSemester: CourseModel[] = [];
@@ -72,19 +67,25 @@ export class CourseSearchComponent implements OnInit, AfterViewInit {
      */
     private getCourseData(): void {
         // 加filter是因為可能會收到空陣列
-        this.courseService.getCourseData().pipe(filter(data => data.length !== 0), take(1)).subscribe(
-            (courseData) => {
-                this.allCourseInNewSemester = courseData;
-                this.displayCourseList = this.allCourseInNewSemester.slice(0, this.MAX_COURSE_DISPLAY_NUM);
-                this.allCourseListWithComment = this.allCourseInNewSemester.filter((course) => course.commentNum > 0);
-                // console.log('get course data', courseData.length);
-            },
-            (err: any) => {
-                if (err) {
-                    console.error(err);
+        this.courseService
+            .getCourseData()
+            .pipe(
+                filter((data) => data.length !== 0),
+                take(1)
+            )
+            .subscribe(
+                (courseData) => {
+                    this.allCourseInNewSemester = courseData;
+                    this.displayCourseList = this.allCourseInNewSemester.slice(0, this.MAX_COURSE_DISPLAY_NUM);
+                    this.allCourseListWithComment = this.allCourseInNewSemester.filter((course) => course.commentNum > 0);
+                    // console.log('get course data', courseData.length);
+                },
+                (err: any) => {
+                    if (err) {
+                        console.error(err);
+                    }
                 }
-            }
-        );
+            );
     }
 
     /**
@@ -143,11 +144,11 @@ export class CourseSearchComponent implements OnInit, AfterViewInit {
      */
     openCoursePage(courseId: number): void {
         this.ref = this.dialogService.open(CourseContentComponent, {
-            width: '100%',
-            height: '100%',
+            width: '100vw',
+            height: '100vh',
             baseZIndex: 10000,
             transitionOptions: null,
-            style: { marginTop: '-75px' },
+            style: { marginTop: '-10vh' },
             data: { courseId },
         });
 
@@ -229,8 +230,7 @@ export class CourseSearchComponent implements OnInit, AfterViewInit {
         this.deptSearchResult = [];
         if (this.keyword === '') {
             this.deleteSearch();
-        }
-        else {
+        } else {
             // 顯現 所有可能搜尋結果
             const dropdownElement = document.getElementsByClassName('quick_search_dropdown--course');
             // 這個判斷式是因為不知為啥會出現 找不到的情況
@@ -249,7 +249,7 @@ export class CourseSearchComponent implements OnInit, AfterViewInit {
 
             // 此時課程列表 顯示 上次搜尋結果，如果未曾執行過搜尋，無限下拉會幫忙塞課程
             // 如果 曾搜尋系所
-            if (this.keyPrefix !== "") {
+            if (this.keyPrefix !== '') {
                 // 如果 有開啟評論篩選功能
                 if (this.isCommentOnly === true) {
                     this.displayCourseList = this.allCourseListWithComment.filter((course) => course.deptId === this.keyPrefix);
@@ -308,9 +308,11 @@ export class CourseSearchComponent implements OnInit, AfterViewInit {
             (entries, observer) => {
                 let needAddCourse = true;
                 // 是否要 插入課程
-                needAddCourse = needAddCourse &&
+                needAddCourse =
+                    needAddCourse &&
                     // 無 篩選條件
-                    (this.isCommentOnly === false && this.isDeptOnly === false) &&
+                    this.isCommentOnly === false &&
+                    this.isDeptOnly === false &&
                     // 未 塞完所有課程
                     this.displayCourseList.length < this.allCourseInNewSemester.length;
 
