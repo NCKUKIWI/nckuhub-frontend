@@ -1,12 +1,11 @@
 import { Component, OnInit, Optional } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CourseService } from '../../services/course.service';
-import { CourseWithCommentModel } from '../../models/CourseComment.model';
-import { CourseComment } from '../../models/CourseComment.model';
+import { WishListService } from '../../services/wish-list.service';
+import { CourseComment, CourseWithCommentModel } from '../../models/CourseComment.model';
 import { CourseModel } from '../../models/Course.model';
 import { AppUrl } from '../../../../core/http/app.setting';
-import { DynamicDialogRef } from 'primeng/dynamicdialog';
-import { DynamicDialogConfig } from 'primeng/dynamicdialog';
+import { DynamicDialogRef, DynamicDialogConfig } from 'primeng/dynamicdialog';
 
 /**
  * 課程內頁
@@ -27,12 +26,14 @@ export class CourseContentComponent implements OnInit {
     commentData: CourseComment[];
     // 使用者的wishlist
     wishList: number[] = [];
-    // // 課程內頁是否展示
-    // display: boolean = true;
+    // 課程內頁是否已經顯示
+    display: boolean = false;
 
     constructor(
         private route: ActivatedRoute,
+        private router: Router,
         private courseService: CourseService,
+        private wishListService: WishListService,
         @Optional()
         public ref: DynamicDialogRef,
         @Optional()
@@ -40,8 +41,8 @@ export class CourseContentComponent implements OnInit {
     ) {
         // 抓取該課程的資料
         this.route.params.subscribe((param) => {
-            if (param.courseId) {
-                this.fetchCoursebyCourseId(param.courseId);
+            if (param.courseId && this.display === false) {
+                this.fetchCourseByCourseId(param.courseId);
             }
         });
     }
@@ -49,17 +50,19 @@ export class CourseContentComponent implements OnInit {
     ngOnInit(): void {
         // 抓取該課程的資料
         if (this.config !== null) {
-            this.fetchCoursebyCourseId(this.config.data.courseId);
+            this.display = true;
+            this.fetchCourseByCourseId(this.config.data.courseId);
         }
+
         // 取得 願望清單
-        this.getUserWishList();
+        this.wishListService.getUserWishList();
     }
 
     /**
      * 抓取課程資料
      * @param courseId
      */
-    fetchCoursebyCourseId(courseId: number): void {
+    fetchCourseByCourseId(courseId: number): void {
         this.courseService.fetchCourseWithComments(courseId).subscribe((courseCommentData) => {
             this.scoreData = courseCommentData;
             this.courseData = courseCommentData.courseInfo;
@@ -69,14 +72,19 @@ export class CourseContentComponent implements OnInit {
             this.scoreData.got = Math.round(parseFloat(this.scoreData.got)).toString();
             this.scoreData.sweet = Math.round(parseFloat(this.scoreData.sweet)).toString();
             this.scoreData.cold = Math.round(parseFloat(this.scoreData.cold)).toString();
+
+            if (this.display === true) {
+                this.router.navigateByUrl('/course/' + this.config.data.courseId);
+            }
         });
     }
 
     /**
-     * 關閉課程內頁
+     * 關閉課程Dialog
      */
-    closeCourseContent(): void {
+    closeCourseDialog(): void {
         if (this.ref) {
+            this.display = false;
             this.ref.close();
         }
     }
@@ -116,12 +124,5 @@ export class CourseContentComponent implements OnInit {
             this.wishList.push(id);
             localStorage.setItem('wishList', JSON.stringify(this.wishList));
         }
-
-        // if (userData.now_wishlist.includes(id)){
-        //   wishlistRemove(id);
-        // }
-        // else{
-        //   wishlistAdd(id);
-        // }
     }
 }

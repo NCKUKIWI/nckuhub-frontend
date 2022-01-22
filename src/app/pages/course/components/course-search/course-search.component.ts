@@ -1,4 +1,4 @@
-import { HostListener, AfterViewInit, Component, OnInit } from '@angular/core';
+import { HostListener, AfterViewInit, Component, OnInit, OnDestroy } from '@angular/core';
 import { CourseService } from '../../services/course.service';
 import { CourseModel } from '../../models/Course.model';
 import { DepartmentModel } from '../../models/Department.model';
@@ -6,7 +6,8 @@ import { take, filter } from 'rxjs/operators';
 import { CourseContentComponent } from '../course-content/course-content.component';
 import { DialogService } from 'primeng/dynamicdialog';
 import { DynamicDialogRef } from 'primeng/dynamicdialog';
-import { Router } from '@angular/router';
+import { WishListService } from '../../services/wish-list.service';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
     selector: 'app-course-search',
@@ -14,7 +15,7 @@ import { Router } from '@angular/router';
     styleUrls: ['./course-search.component.scss'],
 })
 export class CourseSearchComponent implements OnInit, AfterViewInit {
-    constructor(private courseService: CourseService, public dialogService: DialogService, private router: Router) {}
+    constructor(private courseService: CourseService, private wishListService: WishListService, public dialogService: DialogService, private router: Router, private route: ActivatedRoute) {}
 
     // 完整的本學期課程
     allCourseInNewSemester: CourseModel[] = [];
@@ -78,7 +79,7 @@ export class CourseSearchComponent implements OnInit, AfterViewInit {
                     this.allCourseInNewSemester = courseData;
                     this.displayCourseList = this.allCourseInNewSemester.slice(0, this.MAX_COURSE_DISPLAY_NUM);
                     this.allCourseListWithComment = this.allCourseInNewSemester.filter((course) => course.commentNum > 0);
-                    // console.log('get course data', courseData.length);
+                    console.log('get course data', courseData.length);
                 },
                 (err: any) => {
                     if (err) {
@@ -144,24 +145,18 @@ export class CourseSearchComponent implements OnInit, AfterViewInit {
      */
     openCoursePage(courseId: number): void {
         this.ref = this.dialogService.open(CourseContentComponent, {
-            width: '100%',
-            height: '100%',
+            width: '100vw',
+            height: '100vh',
             baseZIndex: 10000,
             transitionOptions: null,
-            style: { marginTop: '-75px' },
-            data: { courseId: courseId },
+            style: { marginTop: '-10vh' },
+            data: { courseId },
         });
 
-        this.ref.onClose.subscribe((result) => {
+        this.ref.onClose.subscribe(() => {
             console.log('The dialog was closed');
             this.router.navigateByUrl('/');
         });
-    }
-
-    ngOnDestroy() {
-        if (this.ref) {
-            this.ref.close();
-        }
     }
 
     /**
@@ -336,5 +331,25 @@ export class CourseSearchComponent implements OnInit, AfterViewInit {
             },
             { threshold: 0 }
         );
+    }
+
+    private setWish(courseId: number): void {
+        if (!this.isInWishList(courseId)) {
+            this.addWish(courseId);
+        } else {
+            this.removeWish(courseId);
+        }
+    }
+
+    private addWish(courseId: number): void {
+        this.wishListService.addWish(courseId);
+    }
+
+    private removeWish(courseId: number): void {
+        this.wishListService.removeWish(courseId);
+    }
+
+    private isInWishList(courseId: number): boolean {
+        return this.wishListService.isInWishList(courseId);
     }
 }

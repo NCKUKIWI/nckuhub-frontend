@@ -36,6 +36,8 @@
                 <label class="quick_search_custom"> <input id="commentCheck" type="checkbox" (click)="commentFilter()" /><span class="checkmark"></span><span>僅顯示有心得之課程</span> </label>
             </div>
         </div>
+
+        <app-wish-list></app-wish-list>
     </div>
     <!-- <div class="flex-container dark_screen mobile_only" id="courseDarkScreen" v-if="mobile_status == 'drop'"></div> -->
     <div class="flex-container courseList__sideList">
@@ -43,7 +45,7 @@
             <div id="course_item">
                 <div class="list_course_item blank_for_mobile mobile_only"></div>
                 <p class="list_course_item__no_result" *ngIf="!displayCourseList.length">查無課程資訊。</p>
-                <div class="list_course_item" *ngFor="let course of displayCourseList" (click)="openCoursePage(course.id)">
+                <div class="list_course_item" (click)="openCoursePage(course['id'])" *ngFor="let course of displayCourseList">
                     <div class="list_course_item_left">
                         <p class="list_course_item_category text_white text_20" [ngClass]="course.deptId">
                             {{ deptTransCat(course.deptId, course.deptName) }}
@@ -62,13 +64,13 @@
                             <img src="../../../../../assets/images/course/comment_num.svg" />
                             <p class="text_14 text_dark" style="margin-right: 15px">{{ course['commentNum'] }}</p>
                         </div>
-                        <div class="large_right--circle" (click)="$event.stopPropagation(); setCourse(course.id)">
-                            <div class="circle--img">
+                        <div class="large_right--circle" (click)="$event.stopPropagation(); setWish(course.id)">
+                            <div class="circle--img" [hidden]="this.isInWishList(course.id)">
                                 <img src="../../../../../assets/images/course/heart.svg" />
                             </div>
-                            <!-- <div class="circle--img" ng-show="userData.now_wishlist.includes(course.id)">
+                            <div class="circle--img" [hidden]="!this.isInWishList(course.id)">
                                 <img src="../../../../../assets/images/course/heart_red.svg" />
-                            </div> -->
+                            </div>
                         </div>
                     </div>
                 </div>
