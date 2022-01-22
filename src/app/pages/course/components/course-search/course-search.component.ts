@@ -13,7 +13,8 @@ import { CourseContentComponent } from '../course-content/course-content.compone
     templateUrl: './course-search.component.html',
     styleUrls: ['./course-search.component.scss'],
 })
-export class CourseSearchComponent implements OnInit, AfterViewInit, OnDestroy {
+
+export class CourseSearchComponent implements OnInit, AfterViewInit {
     constructor(private courseService: CourseService,
         private dialogService: DialogService,
         private wishListService: WishListService,
@@ -156,11 +157,11 @@ export class CourseSearchComponent implements OnInit, AfterViewInit, OnDestroy {
         });
     }
 
-    ngOnDestroy(): void {
-        if (this.ref) {
-            this.ref.close();
-        }
-    }
+    // ngOnDestroy(): void {
+    //     if (this.ref) {
+    //         this.ref.close();
+    //     }
+    // }
 
     /**
      * 解除 課程篩選狀態，依據評論篩選狀態 初始化 當前要展示的課程列表
