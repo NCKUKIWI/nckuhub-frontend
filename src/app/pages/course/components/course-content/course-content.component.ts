@@ -24,8 +24,8 @@ export class CourseContentComponent implements OnInit {
     courseData: CourseModel;
     // score_data中的comment(留言)
     commentData: CourseComment[];
-    // 使用者的wishlist
-    wishList: number[] = [];
+    // 該課程是否已在wishList
+    inWishList: boolean;
     // 課程內頁是否已經顯示
     display: boolean = false;
 
@@ -38,24 +38,24 @@ export class CourseContentComponent implements OnInit {
         public ref: DynamicDialogRef,
         @Optional()
         public config: DynamicDialogConfig
-    ) {
-        // 抓取該課程的資料
-        this.route.params.subscribe((param) => {
-            if (param.courseId && this.display === false) {
-                this.fetchCourseByCourseId(param.courseId);
-            }
-        });
-    }
+    ) {}
 
     ngOnInit(): void {
-        // 抓取該課程的資料
+        // 抓取該課程的資料(For dialog)
         if (this.config !== null) {
+            const courseId = this.config.data.courseId;
             this.display = true;
-            this.fetchCourseByCourseId(this.config.data.courseId);
+            this.fetchCourseByCourseId(courseId);
+            this.wishListCheck(courseId);
         }
 
-        // 取得 願望清單
-        this.wishListService.getUserWishList();
+        // 抓取該課程的資料(For website url)
+        if (!this.display) {
+            this.route.params.subscribe((param) => {
+                this.fetchCourseByCourseId(param.courseId);
+                this.wishListCheck(param.courseId);
+            });
+        }
     }
 
     /**
@@ -73,6 +73,7 @@ export class CourseContentComponent implements OnInit {
             this.scoreData.sweet = Math.round(parseFloat(this.scoreData.sweet)).toString();
             this.scoreData.cold = Math.round(parseFloat(this.scoreData.cold)).toString();
 
+            // route是否為該課程的網址
             if (this.display === true) {
                 this.router.navigateByUrl('/course/' + this.config.data.courseId);
             }
@@ -100,29 +101,24 @@ export class CourseContentComponent implements OnInit {
     }
 
     /**
-     * 取得 願望清單
+     * 該課程是否已存在願望清單
+     * @param courseId
      */
-    getUserWishList(): void {
-        this.wishList = JSON.parse(localStorage.getItem('wishList'));
-        if (this.wishList === null) {
-            this.wishList = [];
-        }
+    wishListCheck(courseId: number): boolean {
+        return this.wishListService.isInWishList(courseId);
     }
 
     /**
      * 新增&刪除 願望清單
-     * @param id
+     * @param courseId
      */
-    setWishlist(id: number): void {
-        if (this.wishList.includes(id)) {
+    setWishlist(courseId: number): void {
+        if (this.inWishList) {
             // 刪除 該課程
-            const index = this.wishList.findIndex((x) => x === id);
-            this.wishList.splice(index, 1);
-            localStorage.setItem('wishList', JSON.stringify(this.wishList));
+            this.wishListService.removeWish(courseId);
         } else {
             // 新增 該課程
-            this.wishList.push(id);
-            localStorage.setItem('wishList', JSON.stringify(this.wishList));
+            this.wishListService.addWish(courseId);
         }
     }
 }
