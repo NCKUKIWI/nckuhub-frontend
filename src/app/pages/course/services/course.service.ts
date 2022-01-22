@@ -43,7 +43,7 @@ export class CourseService {
      * 取得 當學期 所有課程
      */
     getCourseData(): Observable<CourseModel[]> {
-        // this.initCurrentSemesterCourses();
+        this.initCurrentSemesterCourses();
         return this.newSemesterCourseList$.pipe(take(1), share());
     }
 

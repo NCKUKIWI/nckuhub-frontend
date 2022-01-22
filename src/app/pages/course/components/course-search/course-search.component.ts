@@ -1,13 +1,12 @@
-import { HostListener, AfterViewInit, Component, OnInit, OnDestroy } from '@angular/core';
+import { HostListener, AfterViewInit, Component, OnInit } from '@angular/core';
 import { CourseService } from '../../services/course.service';
 import { CourseModel } from '../../models/Course.model';
 import { DepartmentModel } from '../../models/Department.model';
 import { take, filter } from 'rxjs/operators';
 import { CourseContentComponent } from '../course-content/course-content.component';
-import { DialogService } from 'primeng/dynamicdialog';
-import { DynamicDialogRef } from 'primeng/dynamicdialog';
+import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { WishListService } from '../../services/wish-list.service';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-course-search',
@@ -15,7 +14,7 @@ import { Router, ActivatedRoute } from '@angular/router';
     styleUrls: ['./course-search.component.scss'],
 })
 export class CourseSearchComponent implements OnInit, AfterViewInit {
-    constructor(private courseService: CourseService, private wishListService: WishListService, public dialogService: DialogService, private router: Router, private route: ActivatedRoute) {}
+    constructor(private courseService: CourseService, private wishListService: WishListService, public dialogService: DialogService, private router: Router) {}
 
     // 完整的本學期課程
     allCourseInNewSemester: CourseModel[] = [];
