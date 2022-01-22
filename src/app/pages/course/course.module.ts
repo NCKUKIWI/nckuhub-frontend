@@ -11,8 +11,7 @@ import { CourseUserComponent } from './components/user/course-user.component';
 import { CourseContentComponent } from './components/course-content/course-content.component';
 import { WriteCommentComponent } from './components/write-comment/write-comment.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { DynamicDialogModule } from 'primeng/dynamicdialog';
-import { DialogService } from 'primeng/dynamicdialog';
+import { DynamicDialogModule, DialogService } from 'primeng/dynamicdialog';
 
 @NgModule({
     declarations: [CourseContentComponent, CourseComponent, TimetableComponent, NavbarComponent, CourseSearchComponent, WishListComponent, CourseUserComponent, WriteCommentComponent],

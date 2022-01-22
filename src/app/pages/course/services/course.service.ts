@@ -5,7 +5,7 @@ import { AppUrl } from '../../../core/http/app.setting';
 import { CourseModel, CourseRawModel } from '../models/Course.model';
 import { Injectable } from '@angular/core';
 import { CourseWithCommentModel } from '../models/CourseComment.model';
-import {UserService} from '../../../core/service/user.service';
+import { UserService } from '../../../core/service/user.service';
 import { DepartmentModel } from '../models/Department.model';
 
 /**
@@ -101,12 +101,12 @@ export class CourseService {
             id: rawCourse.id,
         };
         return courseModelData;
-    }
+    };
 
     /**
      * 抓取所有系所資料
      */
-     fetchDepartments(): Observable<DepartmentModel[]> {
+    fetchDepartments(): Observable<DepartmentModel[]> {
         return this.appService
             .get({
                 url: AppUrl.GET_COURSE_DEPT_INFO(),

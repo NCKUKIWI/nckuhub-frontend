@@ -1,11 +1,11 @@
-import {Component, OnInit, Optional} from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
-import {CourseService} from '../../services/course.service';
+import { Component, OnInit, Optional } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { CourseService } from '../../services/course.service';
 import { WishListService } from '../../services/wish-list.service';
-import {CourseComment, CourseWithCommentModel} from '../../models/CourseComment.model';
-import {CourseModel} from '../../models/Course.model';
-import {AppUrl} from '../../../../core/http/app.setting';
-import {DynamicDialogConfig, DynamicDialogRef} from 'primeng/dynamicdialog';
+import { CourseComment, CourseWithCommentModel } from '../../models/CourseComment.model';
+import { CourseModel } from '../../models/Course.model';
+import { AppUrl } from '../../../../core/http/app.setting';
+import { DynamicDialogRef, DynamicDialogConfig } from 'primeng/dynamicdialog';
 
 /**
  * 課程內頁
@@ -81,10 +81,11 @@ export class CourseContentComponent implements OnInit {
     }
 
     /**
-     * 關閉課程內頁
+     * 關閉課程Dialog
      */
-    closeCourseContent(): void {
+    closeCourseDialog(): void {
         if (this.ref) {
+            this.display = false;
             this.ref.close();
         }
     }

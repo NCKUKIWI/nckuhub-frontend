@@ -78,7 +78,7 @@ export class CourseSearchComponent implements OnInit, AfterViewInit {
                     this.allCourseInNewSemester = courseData;
                     this.displayCourseList = this.allCourseInNewSemester.slice(0, this.MAX_COURSE_DISPLAY_NUM);
                     this.allCourseListWithComment = this.allCourseInNewSemester.filter((course) => course.commentNum > 0);
-                    // console.log('get course data', courseData.length);
+                    console.log('get course data', courseData.length);
                 },
                 (err: any) => {
                     if (err) {

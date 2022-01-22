@@ -9,14 +9,12 @@ import { WishListService } from '../../services/wish-list.service';
     styleUrls: ['./wish-list.component.scss'],
 })
 export class WishListComponent implements OnInit, OnDestroy {
-
     // 使用者的願望清單
     wishList: CourseModel[] = [];
     // 用於 取消訂閱 發送願望清單的Observable
     wishListSubscription: Subscription;
 
-    constructor(private wishListService: WishListService) {
-    }
+    constructor(private wishListService: WishListService) {}
 
     ngOnInit(): void {
         // 訂閱 使用者的願望清單
@@ -85,6 +83,5 @@ export class WishListComponent implements OnInit, OnDestroy {
     /**
      * 從願望清單 轉移至 課表
      */
-    openTableTab(): void {
-    }
+    openTableTab(): void {}
 }
