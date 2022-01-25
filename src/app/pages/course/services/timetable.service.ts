@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { CourseService } from './course.service';
 import { take, filter, share } from 'rxjs/operators';
 import { CourseModel } from '../models/Course.model';
+import { Observable, BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +14,7 @@ export class TimetableService {
   }
 
   // 完整的本學期課程，為了把 傳入的課程id 轉成 課程
-  private allCourseInNewSemester: CourseModel[] = [];
+  allCourseInNewSemester: CourseModel[] = [];
 
   // 展示版課表：紀錄 所有與展示相關的資料，詳見 TableCellData
   // 平日上課時間的展示資料，屬於 展示版課表
@@ -28,6 +29,7 @@ export class TimetableService {
 
   // 使用者的當前學分數
   credits: number = 0;
+  private credits$ = new BehaviorSubject<number>(this.credits);
 
   // TODO: ecfack 搬運舊版code
   // filtering_now: {
@@ -36,6 +38,13 @@ export class TimetableService {
   // };
   // page_status: pageStatus;
   // temp_wishlist: [];
+
+  /**
+     * 回傳 當前使用者 願望清單的Observable
+     */
+  getCredits(): Observable<number> {
+    return this.credits$.pipe(share());
+  }
 
   /**
    *  獲取 完整課程資料 和 使用者課表，根據前兩者資料 填充 展示版課表
@@ -48,7 +57,7 @@ export class TimetableService {
         // 獲取 使用者課表
         this.fetchTable();
         // 填充 展示版課表
-        this.refreshTable();
+        this.refreshTable(-1);
       },
       (err: any) => {
         if (err) {
@@ -92,17 +101,17 @@ export class TimetableService {
   /**
    * TODO: ecfack 初始化展示版課表，根據使用者課表 填入 展示版課表
    */
-  refreshTable(): void {
+  refreshTable(previewId:number): void {
     this.initTable();
     this.credits = 0;
     for (let i = 0; i < this.tempTable.length; ++i) {
       const targetId = this.tempTable[i];
       this.addToTable(targetId, false);
     }
-    // // 加入預覽中課程（wishlist）
-    // if (preview_id) {
-    //   this.toTable(preview_id, course_db, true);
-    // }
+    // 加入預覽中課程（wishlist）
+    if (previewId!==-1) {
+      this.addToTable(previewId, true);
+    }
     // // 加入篩選中時段
     // if (this.filtering_now.day && this.filtering_now.time) {
     //   this.markFilterCell(this.filtering_now.day, this.filtering_now.time);
@@ -112,10 +121,10 @@ export class TimetableService {
   /**
    * 把特定課程 加入 展示版課表
    * @param courseId 特定課程的Id
-   * @param isPreviewed false：以非預覽(正式)的狀態 加入 展示版課表，true：以預覽的狀態 加入 展示版課表
+   * @param isPreviewing false：以非預覽(正式)的狀態 加入 展示版課表，true：以預覽的狀態 加入 展示版課表
    * @returns 
    */
-  addToTable(courseId: number, isPreviewed: boolean): void {
+  addToTable(courseId: number, isPreviewing: boolean): void {
     // 取得 特定課程的完整資料
     const courseItem: CourseModel | undefined = this.allCourseInNewSemester.find(course => course.id === courseId);
     if (!courseItem) {
@@ -127,8 +136,9 @@ export class TimetableService {
     if (!this.isConflicted(courseItem, this.coursesOnWorkdays)) {
 
       // 計算 學分數
-      if (!isPreviewed) {
+      if (!isPreviewing) {
         this.credits += courseItem.courseCredit;
+        this.credits$.next(this.credits);
       }
 
       // 特定課程 加入 展示版課表
@@ -151,7 +161,7 @@ export class TimetableService {
           fillCell.courseItem = courseItem;
           fillCell.cellStatusTitle = fillCell.courseItem.deptId + '-' + fillCell.courseItem.courseIndex;
           fillCell.cellStatusText = fillCell.courseItem.courseName;
-          if (isPreviewed) {
+          if (isPreviewing) {
             fillCell.isPreviewing = true;
           }
           // 將後續被占用時段的 time.hrs 設定為 -1
@@ -236,7 +246,17 @@ export class TimetableService {
     // 因為只有時段為「其他」者會用到所以寫得很簡陋
     // setNotification ( '成功移出課表！' );
     // wishlistAdd( id );
-    // vue_classtable.tableTempRemove( id );
+    this.removeFromTempTable(courseId);
+  }
+
+  addToTempTable( targetId:number ):void {
+    this.tempTable.push( targetId );
+    this.refreshTable(-1);
+  }
+
+  removeFromTempTable( targetId:number ):void {
+    this.tempTable=this.tempTable.filter(courseId => courseId!==targetId)
+    this.refreshTable(-1);
   }
 }
 
@@ -307,7 +327,7 @@ export class TimeObject {
       // console.log('getTime: 無效的時間 ');
       return [];
     }
-    
+
     // 將上課時間分段存入陣列
     let timeSplit: string[] = [], result: RegExpMatchArray;
     while (text != '') {
@@ -338,7 +358,7 @@ export class TimeObject {
         start = time[0];
         end = time[2];
         hrs = textTransTime(end) - textTransTime(start) + 1;
-      } 
+      }
       else {
         start = time[0];
         hrs = 1;
@@ -353,7 +373,7 @@ export class TimeObject {
         });
       }
       else {
-        // return [];
+        return [];
       }
     }
     // console.log ( time_item );
@@ -392,7 +412,7 @@ function textTransTime(text: string): number {
         realTime = 13;
         break;
       default:
-        // realTime = 0;
+        realTime = 0;
         // realTime = 'other_time';
         break;
     }

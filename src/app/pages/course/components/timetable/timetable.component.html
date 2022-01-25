@@ -1,28 +1,28 @@
-<!-- <div class="left_area">
+<div class="left_area">
 	<div id="user_data" class="personal_data"> 
 		<div class="personal_data_image">
-			<img :src="user_data.user_photo" >
+			<img [src]="photoURL" >
 		</div>
 		<div class="personal_data_info">
-			<p class="text_24">{{ user_data.user_name }}的課表</p>
-			<p class="text_16 text_dark">目前已排課 {{ credit_count }} 學分</p>		
+			<p class="text_24">{{ userName }}的課表</p>
+			<p class="text_16 text_dark">目前已排課 {{ credits }} 學分</p>		
 		</div>
 	</div>
 	<div id="quick_search" class="quick_search"> 
 		<div class="block_title">
-			<p class="text_18 "> {{ title_text }} </p>
+			<p class="text_18 "> {{ searchBarTitle }} </p>
 		</div>
-		<div class="quick_search_area" :class="{ filter_mode: filter_status }"  @click="clearFilter">
-			<div *ngIf="filter_status" class="quick_search_clear_filter"></div>
-			<input class="quick_search_input" type="text" v-model.trim="keyword" :disabled="filter_status || page_status.table_locked" :class="{ locked: page_status.table_locked }" placeholder="輸入「課程名」或「教師名」" ><br>
+		<div class="quick_search_area" [ngClass]="{ filter_mode: isFiltering }"  (click)="clearFilter()">
+			<div *ngIf="isFiltering" class="quick_search_clear_filter"></div>
+			<input class="quick_search_input" type="text" [(ngModel)]="keyword" (compositionend)="searchCourse($event.target.value)" (keydown)="keyEventHandler($event)" [disabled]="isFiltering || isLocked" [ngClass]="{ locked: isLocked }" placeholder="輸入「課程名」或「教師名」" ><br>
 		</div>
-		<div *ngIf="keyword.replace(' ','') != '' && !filter_status && !page_status.table_locked" class="quick_search_dropdown">
-			<span> {{ result }} </span>
-			<p *ngIf="!result_cont.length && !filter_status && !page_status.table_locked" class="quick_search_dropdown__no_result text_dark">查無此關鍵字結果。</p>
-			<result-list-item *ngFor="item in result_cont" :class_item="item"></result-list-item>
+		<div *ngIf="keyword!= '' && !isFiltering && !isLocked" class="quick_search_dropdown">
+			<!-- <span> {{ courseSearchResult }} </span> -->
+			<p *ngIf="!courseSearchResult.length && !isFiltering && !isLocked" class="quick_search_dropdown__no_result text_dark">查無此關鍵字結果。</p>
+			<app-result-list-item *ngFor="let item of courseSearchResult" [courseData]="item" (refreshKeyword)="onRefreshKeyword($event)"></app-result-list-item>
 		</div>
 	</div>
-	<div id="wishlist_in_table" class="wishlist in_table">
+	<!-- <div id="wishlist_in_table" class="wishlist in_table">
 		<div class="block_title">
 			<p *ngIf="!filter_status" class="text_18">願望清單（{{ wishlist_cont.length }}） </p>
 			<p *ngIf=" filter_status" class="text_18">願望清單（符合所選時段） </p>
@@ -32,8 +32,8 @@
 			<p *ngIf="!filter_item_count && filter_status" class="wishlist_cont__no_result text_dark">願望清單內無符合本時段之項目。</p>
 			<wishlist-item *ngFor="item in wishlist_cont" :class_item="item"></wishlist-item>
 		</div>
-	</div>
-</div> -->
+	</div> -->
+</div>
 
 <div class="right_area">
 	<div id="class_table" class="class_table" [ngClass]="{ locked: isLocked }">

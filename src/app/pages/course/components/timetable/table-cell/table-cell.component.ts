@@ -60,11 +60,11 @@ export class TableCellComponent implements OnInit {
    * TODO: ecfack 從課表 移除 特定課程
    */
   deleteItem() {
-    // if (this.cell_data.status > 0) {
-    //   // setNotification ( '成功移出課表！' );
-    //   wishlistAdd(this.cell_data.class_item.id);
-    //   vue_classtable.tableTempRemove(this.cell_data.class_item.id);
-    // }
+    if (this.cellData.time.hrs > 0) {
+      // setNotification ( '成功移出課表！' );
+      // wishlistAdd(this.cell_data.class_item.id);
+      this.timetableService.removeFromTempTable(this.cellData.courseItem.id);
+    }
   }
 
   /**
