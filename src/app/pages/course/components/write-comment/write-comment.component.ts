@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
+import { map, filter } from 'rxjs/operators';
 import { CourseModel } from '../../models/Course.model';
 import { CourseRateModel } from '../../models/CourseRate.model';
 import { CourseWithCommentModel, CourseComment } from '../../models/CourseComment.model';
@@ -18,9 +19,9 @@ export class WriteCommentComponent implements OnInit {
     courseTitle = new FormControl('');
     courseTitleFilled: string = '';
     courseTitleSuggestion: string[] = [];
-    courseDeptSuggestion: string[];
-    courseDept = '';
-    courseIdSuggestion: string[] = [];
+    // courseDeptSuggestion: string[];
+    // courseDept = '';
+    // courseIdSuggestion: string[] = [];
 
     courseSemester: string = '選擇學期';
     isChoosingSemester: boolean = false;
@@ -103,6 +104,24 @@ export class WriteCommentComponent implements OnInit {
         this.courseTitleSuggestion = [];
         this.courseTitle = new FormControl(title);
         this.searchCourseTitle();
+    }
+
+    /**
+     * 選擇學期這個欄位，並啟動相關function
+     */
+    private chooseSemester(): void {
+        this.isChoosingSemester = true;
+        this.getCourseSemester(this.courseTitleFilled);
+    }
+
+    /**
+     * 取得該課程有開課的學期
+     * @param courseTitleFilled
+     */
+    private getCourseSemester(courseTitle: string): void {
+        this.courseService.getCourseByCourseName(courseTitle).subscribe((courseData) => {
+            console.log(courseData.courseName);
+        });
     }
 
     /**
