@@ -7,7 +7,7 @@ import {CourseComment, CourseWithCommentModel} from '../../models/CourseComment.
 import {CourseModel} from '../../models/Course.model';
 import {AppUrl} from '../../../../core/http/app.setting';
 import {DynamicDialogConfig, DynamicDialogRef} from 'primeng/dynamicdialog';
-import {forkJoin, Observable, of} from 'rxjs';
+import {Observable, of} from 'rxjs';
 import {map, take} from 'rxjs/operators';
 
 /**
@@ -29,8 +29,6 @@ export class CourseContentComponent implements OnInit {
     commentData: CourseComment[];
     // 該課程是否已在wishList
     inWishList: boolean;
-    // 課程內頁是否已經顯示
-    display = false;
 
     constructor(
       private route: ActivatedRoute,
@@ -46,10 +44,12 @@ export class CourseContentComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        // 抓取該課程的資料(For dialog)
+        // 取得 courseId
         this.getCourseIdByDiffSource().pipe(take(1)).subscribe(courseId => {
+            // 取得課程內容
             this.fetchCourseByCourseId(courseId);
-            this.wishListCheck(courseId);
+            // 是否 在願望清單
+            this.inWishList = this.wishListService.isInWishList(courseId);
         });
     }
 
@@ -92,7 +92,6 @@ export class CourseContentComponent implements OnInit {
      */
     closeCourseDialog(): void {
         if (this.ref) {
-            this.display = false;
             this.ref.close();
         }
     }
@@ -108,14 +107,6 @@ export class CourseContentComponent implements OnInit {
     }
 
     /**
-     * 該課程是否已存在願望清單
-     * @param courseId
-     */
-    wishListCheck(courseId: number): boolean {
-        return this.wishListService.isInWishList(courseId);
-    }
-
-    /**
      * 新增&刪除 願望清單
      * @param courseId
      */
@@ -127,5 +118,6 @@ export class CourseContentComponent implements OnInit {
             // 新增 該課程
             this.wishListService.addWish(courseId);
         }
+        this.inWishList = !this.inWishList;
     }
 }

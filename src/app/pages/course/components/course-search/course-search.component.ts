@@ -159,9 +159,7 @@ export class CourseSearchComponent implements OnInit, AfterViewInit {
         });
 
         this.ref.onClose.subscribe(() => {
-            console.log('The dialog was closed');
             this.location.replaceState('/course/search');
-            // this.router.navigateByUrl('/');
         });
     }
 
