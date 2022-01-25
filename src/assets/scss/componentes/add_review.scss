@@ -96,13 +96,13 @@
                         color: $black;
                     }
                     &.title {
-                        flex: 6;
+                        width: 55%;
                     }
                     &.semester {
-                        flex: 2;
+                        width: 20%;
                     }
                     &.teacher {
-                        flex: 3;
+                        width: 25%;
                     }
                     &.semester,
                     &.teacher {
@@ -133,8 +133,8 @@
                     // border-bottom: $light_2 1px solid;
                     .add_review_dropdown {
                         position: relative;
-                        opacity: 0;
-                        height: 0px;
+                        // opacity: 0;
+                        height: auto;
                         width: 100%;
                         outline: none;
                         box-sizing: border-box;
@@ -169,13 +169,14 @@
                             max-height: 180px;
                         }
                         &.title {
-                            flex: 6;
+                            width: 55%;
+                            max-height: 180px;
                         }
                         &.semester {
-                            flex: 2;
+                            width: 20%;
                         }
                         &.teacher {
-                            flex: 3;
+                            width: 25%;
                         }
                     }
                 }
