@@ -1,11 +1,14 @@
-import { Component, OnInit, Optional } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { CourseService } from '../../services/course.service';
-import { WishListService } from '../../services/wish-list.service';
-import { CourseComment, CourseWithCommentModel } from '../../models/CourseComment.model';
-import { CourseModel } from '../../models/Course.model';
-import { AppUrl } from '../../../../core/http/app.setting';
-import { DynamicDialogRef, DynamicDialogConfig } from 'primeng/dynamicdialog';
+import {Component, OnInit, Optional} from '@angular/core';
+import {Location} from '@angular/common';
+import {ActivatedRoute, Router} from '@angular/router';
+import {CourseService} from '../../services/course.service';
+import {WishListService} from '../../services/wish-list.service';
+import {CourseComment, CourseWithCommentModel} from '../../models/CourseComment.model';
+import {CourseModel} from '../../models/Course.model';
+import {AppUrl} from '../../../../core/http/app.setting';
+import {DynamicDialogConfig, DynamicDialogRef} from 'primeng/dynamicdialog';
+import {forkJoin, Observable, of} from 'rxjs';
+import {map, take} from 'rxjs/operators';
 
 /**
  * 課程內頁
@@ -27,35 +30,41 @@ export class CourseContentComponent implements OnInit {
     // 該課程是否已在wishList
     inWishList: boolean;
     // 課程內頁是否已經顯示
-    display: boolean = false;
+    display = false;
 
     constructor(
-        private route: ActivatedRoute,
-        private router: Router,
-        private courseService: CourseService,
-        private wishListService: WishListService,
-        @Optional()
-        public ref: DynamicDialogRef,
-        @Optional()
-        public config: DynamicDialogConfig
-    ) {}
+      private route: ActivatedRoute,
+      private router: Router,
+      private courseService: CourseService,
+      private wishListService: WishListService,
+      @Optional()
+      public ref: DynamicDialogRef,
+      @Optional()
+      public config: DynamicDialogConfig,
+      private location: Location
+    ) {
+    }
 
     ngOnInit(): void {
         // 抓取該課程的資料(For dialog)
-        if (this.config !== null) {
-            const courseId = this.config.data.courseId;
-            this.display = true;
+        this.getCourseIdByDiffSource().pipe(take(1)).subscribe(courseId => {
             this.fetchCourseByCourseId(courseId);
             this.wishListCheck(courseId);
-        }
+        });
+    }
 
-        // 抓取該課程的資料(For website url)
-        if (!this.display) {
-            this.route.params.subscribe((param) => {
-                this.fetchCourseByCourseId(param.courseId);
-                this.wishListCheck(param.courseId);
-            });
+    /**
+     * 取得 courseId by 不同來源
+     * 來源ㄧ: 使用 DialogService 傳入 config
+     * 來源二: 使用 url 找param 的courseId
+     */
+    getCourseIdByDiffSource(): Observable<number> {
+        // 抓取該課程的資料(For dialog)
+        if (this.config !== null) {
+            return of(this.config.data.courseId);
         }
+        // 抓取該課程的資料(For website url)
+        return this.route.params.pipe(map(param => param.courseId));
     }
 
     /**
@@ -74,9 +83,7 @@ export class CourseContentComponent implements OnInit {
             this.scoreData.cold = Math.round(parseFloat(this.scoreData.cold)).toString();
 
             // route是否為該課程的網址
-            if (this.display === true) {
-                this.router.navigateByUrl('/course/' + this.config.data.courseId);
-            }
+            this.location.replaceState('/course/' + this.config.data.courseId);
         });
     }
 

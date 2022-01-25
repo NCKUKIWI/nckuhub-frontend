@@ -1,12 +1,12 @@
-import { AfterViewInit, Component, HostListener, OnDestroy, OnInit } from '@angular/core';
-import { CourseService } from '../../services/course.service';
-import { CourseModel } from '../../models/Course.model';
-import { DepartmentModel } from '../../models/Department.model';
-import { filter, take } from 'rxjs/operators';
-import { WishListService } from '../../services/wish-list.service';
-import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
-import { Router } from '@angular/router';
-import { CourseContentComponent } from '../course-content/course-content.component';
+import {AfterViewInit, Component, HostListener, OnInit} from '@angular/core';
+import {CourseService} from '../../services/course.service';
+import {CourseModel} from '../../models/Course.model';
+import {DepartmentModel} from '../../models/Department.model';
+import {filter, take} from 'rxjs/operators';
+import {WishListService} from '../../services/wish-list.service';
+import {DialogService, DynamicDialogRef} from 'primeng/dynamicdialog';
+import {CourseContentComponent} from '../course-content/course-content.component';
+import {Location} from '@angular/common';
 
 @Component({
     selector: 'app-course-search',
@@ -14,7 +14,13 @@ import { CourseContentComponent } from '../course-content/course-content.compone
     styleUrls: ['./course-search.component.scss'],
 })
 export class CourseSearchComponent implements OnInit, AfterViewInit {
-    constructor(private courseService: CourseService, private dialogService: DialogService, private wishListService: WishListService, private router: Router) {}
+    constructor(
+      private courseService: CourseService,
+      private dialogService: DialogService,
+      private wishListService: WishListService,
+      private location: Location
+    ) {
+    }
 
     // 完整的本學期課程
     allCourseInNewSemester: CourseModel[] = [];
@@ -154,7 +160,8 @@ export class CourseSearchComponent implements OnInit, AfterViewInit {
 
         this.ref.onClose.subscribe(() => {
             console.log('The dialog was closed');
-            this.router.navigateByUrl('/');
+            this.location.replaceState('/course/search');
+            // this.router.navigateByUrl('/');
         });
     }
 
