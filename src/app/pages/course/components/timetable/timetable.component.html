@@ -88,7 +88,7 @@
 				</div>
 				<div class="class_table_cont_row right_full">
 					<div *ngFor="let item of coursesOnOtherDays" class="class_table_cont_cell other class_cell occupied" [ngClass]="item.deptId">
-						<div class="class_table_cont_cell_button other"  (click)="deleteItem( item.id )"></div>
+						<div class="class_table_cont_cell_button other"  (click)="deleteItem( item )"></div>
 						<p class="class_table_cont_cell_id other text_12"> {{ item.time }}</p>
 						<p class="class_table_cont_cell_title other text_16 text_bold"> {{ item.courseName }} </p>
 					</div>

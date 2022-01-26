@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { TimetableService,TableCellData } from '../../../services/timetable.service';
+import { TimetableService } from '../../../services/timetable.service';
+import {TableCellData} from '../../../models/Timetable.model';
 
 @Component({
   selector: 'app-table-cell',
@@ -8,7 +9,7 @@ import { TimetableService,TableCellData } from '../../../services/timetable.serv
 })
 export class TableCellComponent implements OnInit {
 
-  // 此格的資料
+  // 展示版課表中的 此格資料
   @Input()
   cellData: TableCellData;
 
@@ -36,7 +37,7 @@ export class TableCellComponent implements OnInit {
 
   /**
    * 跟據 此格的flags，取得 對應的CSS class
-   * @returns 對應的CSS class
+   * @returns 對應的CSS class名稱
    */
   getClass():string {
     let classContext = '';
@@ -57,13 +58,11 @@ export class TableCellComponent implements OnInit {
   }
 
   /**
-   * TODO: ecfack 從課表 移除 特定課程
+   * 從使用者課表 移除 此格的課程
    */
   deleteItem() {
     if (this.cellData.time.hrs > 0) {
-      // setNotification ( '成功移出課表！' );
-      // wishlistAdd(this.cell_data.class_item.id);
-      this.timetableService.removeFromTempTable(this.cellData.courseItem.id);
+      this.timetableService.removeFromTempUserTable(this.cellData.courseItem);
     }
   }
 
