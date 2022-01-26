@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
 import { TimetableService } from '../../services/timetable.service';
 import { CourseService } from '../../services/course.service';
+import { WishListService } from '../../services/wish-list.service';
 import { TableCellData } from '../../models/Timetable.model';
 import { CourseModel } from '../../models/Course.model';
 import { Subscription } from 'rxjs';
@@ -23,31 +24,48 @@ export class TimetableComponent implements OnInit, OnDestroy {
     coursesOnWorkdays: TableCellData[][];
     // 非平日時段的 展示版課表
     coursesOnOtherDays: CourseModel[];
-
-    credits: number = 0;
+    // 用於 取消訂閱 發送最新課表資訊的Observable
     timetableInfoSubscription: Subscription;
+
+    // 使用者的學分數
+    credits: number = 0;
+    // 使用者的照片路徑
     photoURL: string = "../../../../../assets/images/course/sad_hugecat.png";
+    // 使用者的名稱
     userName: string = "Hello World";
+    // 使用者的願望清單
+    userWishList: CourseModel[] = [];
+    // 用於 取消訂閱 發送使用者願望清單的 Observable
+    userWishListSubscription: Subscription;
 
     // 完整的本學期課程
     allCourseInNewSemester: CourseModel[] = [];
 
+    // 搜尋欄的標題
     searchBarTitle: string = "快速添加";
+    // 搜尋欄的關鍵字
     keyword = "";
+    // 搜尋結果
     courseSearchResult: CourseModel[] = [];
 
-    constructor(private timetableService: TimetableService, private courseService: CourseService) { }
+    constructor(private timetableService: TimetableService, 
+                private courseService: CourseService,
+                private wishListService: WishListService) { }
 
     ngOnInit(): void {
         // 從courseService 獲取 本學期的 所有課程
         this.getCourseData();
         // 從timetableServicec 獲取 展示版課表 和使用者課表
         this.getTimetableData();
+        // 從wishListService 獲取 使用者的願望清單
+        this.getWishList();
     }
 
     ngOnDestroy(): void {
         // 取消訂閱 最新的課表相關資訊
         this.timetableInfoSubscription.unsubscribe();
+        // 取消訂閱 使用者願望清單
+        this.userWishListSubscription.unsubscribe();
     }
 
     /**
@@ -87,6 +105,22 @@ export class TimetableComponent implements OnInit, OnDestroy {
     }
 
     /**
+     *  訂閱 以隨時獲取 最新的願望清單
+     */
+    private getWishList(): void {
+        this.userWishListSubscription = this.wishListService.getWishList().subscribe(
+            (wishList) => {
+                this.userWishList = wishList;
+            },
+            (err: any) => {
+                if (err) {
+                    console.error(err);
+                }
+            }
+        );
+    }
+
+    /**
      * TODO: ecfack 切換 課表的鎖定狀態
      */
     switchToEdit(): void {
@@ -99,9 +133,10 @@ export class TimetableComponent implements OnInit, OnDestroy {
      * @param courseId 特定課程的Id
      */
     deleteItem(course: CourseModel): void {
+        this.wishListService.addWish(course.id);
         this.timetableService.removeFromTempUserTable(course);
     }
-    
+
     /**
      * TODO: ecfack 取消時間篩選
      */

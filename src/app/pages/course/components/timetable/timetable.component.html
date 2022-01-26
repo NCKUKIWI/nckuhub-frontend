@@ -22,17 +22,17 @@
 			<app-result-list-item *ngFor="let item of courseSearchResult" [courseData]="item" (refreshKeyword)="onRefreshKeyword($event)"></app-result-list-item>
 		</div>
 	</div>
-	<!-- <div id="wishlist_in_table" class="wishlist in_table">
+	<div id="wishlist_in_table" class="wishlist in_table">
 		<div class="block_title">
-			<p *ngIf="!filter_status" class="text_18">願望清單（{{ wishlist_cont.length }}） </p>
-			<p *ngIf=" filter_status" class="text_18">願望清單（符合所選時段） </p>
+			<p *ngIf="!isFiltering" class="text_18">願望清單（{{ userWishList.length }}） </p>
+			<p *ngIf=" isFiltering" class="text_18">願望清單（符合所選時段） </p>
 		</div>
-		<div class="wishlist_cont" :class="{ locked: page_status.table_locked }" >
-			<p *ngIf="!wishlist_cont.length && !filter_status" class="wishlist_cont__no_result text_dark">尚未新增任何課程進入願望清單。</p>
-			<p *ngIf="!filter_item_count && filter_status" class="wishlist_cont__no_result text_dark">願望清單內無符合本時段之項目。</p>
-			<wishlist-item *ngFor="item in wishlist_cont" :class_item="item"></wishlist-item>
+		<div class="wishlist_cont" [ngClass]="{ locked: isLocked }" >
+			<p *ngIf="!userWishList.length && !isFiltering" class="wishlist_cont__no_result text_dark">尚未新增任何課程進入願望清單。</p>
+			<!-- <p *ngIf="!filter_item_count && filter_status" class="wishlist_cont__no_result text_dark">願望清單內無符合本時段之項目。</p> -->
+			<app-wishlist-item *ngFor="let item of userWishList" [courseItem]="item"></app-wishlist-item>
 		</div>
-	</div> -->
+	</div>
 </div>
 
 <div class="right_area">

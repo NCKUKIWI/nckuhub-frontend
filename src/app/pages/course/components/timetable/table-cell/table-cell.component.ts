@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { TimetableService } from '../../../services/timetable.service';
-import {TableCellData} from '../../../models/Timetable.model';
+import { WishListService } from '../../../services/wish-list.service';
+import { TableCellData } from '../../../models/Timetable.model';
 
 @Component({
   selector: 'app-table-cell',
@@ -13,7 +14,7 @@ export class TableCellComponent implements OnInit {
   @Input()
   cellData: TableCellData;
 
-  constructor(private timetableService: TimetableService) { }
+  constructor(private timetableService: TimetableService,private wishListService: WishListService) { }
 
   ngOnInit(): void {
   }
@@ -22,15 +23,17 @@ export class TableCellComponent implements OnInit {
    * 計算 占用此格的課程 要佔據幾格，並套用至 此格的CSS
    * @returns JSON資料，計算後的CSS style
    */
-  getHeight():any {
+  getHeight(): any {
     let style;
     // 如果 當格是 課程的起始時段
     if (this.cellData.time.hrs > 0) {
-      style ={ 'height': 'calc( ( (82vh - 44px) / 10 ) * ' + this.cellData.time.hrs + ' )',
-                'min-height': 'calc(50px * ' + this.cellData.time.hrs + ')'};
+      style = {
+        'height': 'calc( ( (82vh - 44px) / 10 ) * ' + this.cellData.time.hrs + ' )',
+        'min-height': 'calc(50px * ' + this.cellData.time.hrs + ')'
+      };
     }
     else if (this.cellData.time.hrs < 0) {
-      style ={'display': 'none'};
+      style = { 'display': 'none' };
     }
     return style;
   }
@@ -39,7 +42,7 @@ export class TableCellComponent implements OnInit {
    * 跟據 此格的flags，取得 對應的CSS class
    * @returns 對應的CSS class名稱
    */
-  getClass():string {
+  getClass(): string {
     let classContext = '';
     if (this.cellData.time.hrs > 0) {
       classContext += 'occupied ';
@@ -62,6 +65,7 @@ export class TableCellComponent implements OnInit {
    */
   deleteItem() {
     if (this.cellData.time.hrs > 0) {
+      this.wishListService.addWish(this.cellData.courseItem.id);
       this.timetableService.removeFromTempUserTable(this.cellData.courseItem);
     }
   }

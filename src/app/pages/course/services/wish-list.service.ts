@@ -58,10 +58,12 @@ export class WishListService {
      * @param courseId 願望(課程)的id
      */
     addWish(courseId: number): void {
-        const wish: CourseModel | undefined = this.allCourseInNewSemester.find(course => course.id === courseId);
-        if (wish) {
-            this.wishList.push(wish);
-            this.wishList$.next(this.wishList);
+        if (!this.isInWishList(courseId)) {
+            const wish: CourseModel | undefined = this.allCourseInNewSemester.find(course => course.id === courseId);
+            if (wish) {
+                this.wishList.push(wish);
+                this.wishList$.next(this.wishList);
+            }
         }
     }
 

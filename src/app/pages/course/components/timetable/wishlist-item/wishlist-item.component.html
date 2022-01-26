@@ -1,0 +1,13 @@
+<!-- <div *ngIf="courseItem.isSeen" class="list_course_item" (mouseover)="mouseoverItem()" (mouseout)="mouseoutItem()" > -->
+    <div class="list_course_item" (mouseover)="mouseoverItem()" (mouseout)="mouseoutItem()" >
+    <div class="list_course_item_left">
+        <p class="list_course_item_category text_20 text_white clickable" (click)="deleteItem()" [ngClass]="getClass()"> {{ deptTransCat(courseItem.deptId,courseItem.deptName) }} </p>
+    </div>
+    <div class="list_course_item_mid" (click)="addToTable()">
+        <p class="list_course_item_title text_16">{{ courseItem.deptId }}-{{ courseItem.courseIndex }} {{ courseItem.courseName }}</p>
+        <p class="list_course_item_description text_14 text_dark">{{ courseItem.teacher }} — {{ courseItem.time }}</p>
+    </div>
+    <div class="list_course_item_right" (click)="addToTable()">
+        <div class="list_course_item_button"></div>
+    </div>
+</div>
