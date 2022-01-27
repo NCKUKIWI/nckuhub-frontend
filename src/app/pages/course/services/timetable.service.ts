@@ -31,12 +31,16 @@ export class TimetableService {
   // 使用者的當前學分數
   private credits: number = 0;
 
+  // 當前時間篩選條件
+  private timeFilter: TimeObject | null = null;
+
   // 最新的課表相關資訊
   private timetableInfo$ = new BehaviorSubject<TimetableInfo>(
     new TimetableInfo(this.displayedTableWorkdays,
       this.displayedTableOtherDays,
       this.tempUserTable,
-      this.credits)
+      this.credits,
+      this.timeFilter)
   );
 
   /**
@@ -110,7 +114,8 @@ export class TimetableService {
               new TimetableInfo(this.displayedTableWorkdays,
                 this.displayedTableOtherDays,
                 this.tempUserTable,
-                this.credits)
+                this.credits,
+                this.timeFilter)
             );
             return true;
           }
@@ -134,16 +139,23 @@ export class TimetableService {
       this.addToDisplayedTable(targetId, false);
     }
 
-    // 加入預覽中課程
+    // 加入 預覽中課程
     if (previewId !== -1) {
       this.addToDisplayedTable(previewId, true);
+    }
+
+    // 加入 當前時間篩選
+    if(this.timeFilter) {
+      // this.setTimeFilter(this.timeFilter);
+      this.displayedTableWorkdays[this.timeFilter.day][this.timeFilter.start].isFilterTime=true;
     }
 
     this.timetableInfo$.next(
       new TimetableInfo(this.displayedTableWorkdays,
         this.displayedTableOtherDays,
         this.tempUserTable,
-        this.credits)
+        this.credits,
+        this.timeFilter)
     );
   }
 
@@ -165,6 +177,55 @@ export class TimetableService {
   removeFromTempUserTable(target: CourseModel): void {
     this.tempUserTable = this.tempUserTable.filter(courseId => courseId !== target.id)
     this.refreshDisplayedTable(-1);
+  }
+
+  /**
+   * 設置 當前時間篩選條件，並標註在 展示板課表上的 對應位置
+   * @param setedTime 要設置的 時間篩選條件，null：取消 當前設置的 時間篩選條件
+   */
+  setTimeFilter(setedTime: TimeObject | null): void {
+
+    if (setedTime) {
+      const day = setedTime.day;
+      const start = setedTime.start;
+      const hrs = setedTime.hrs;
+      if (!hrs) {
+        // 標註在展示板課表
+        for (let i = 0; i < 5; ++i) {
+          for (let j = 0; j < 14; ++j) {
+            // 如果 對應位置之前為篩選條件(true)，則代表 清空 時間篩選條件，因此 需標註為false
+            // 若非 則正常標註
+            if(i===day && j===start)
+              this.displayedTableWorkdays[i][j].isFilterTime =!this.displayedTableWorkdays[i][j].isFilterTime;
+            else
+              this.displayedTableWorkdays[i][j].isFilterTime = false;
+          }
+        }
+
+        // 根據 課表格的 標註狀態，設置 當前的時間篩選條件
+        if(this.displayedTableWorkdays[day][start].isFilterTime)
+          this.timeFilter = setedTime;
+        else
+          this.timeFilter=null;
+      }
+    }
+    else {
+      // 標註在展示板課表
+      for (let i = 0; i < 5; ++i) {
+        for (let j = 0; j < 14; ++j) {
+          this.displayedTableWorkdays[i][j].isFilterTime = false;
+        }
+      }
+      this.timeFilter = setedTime;
+    }
+
+    this.timetableInfo$.next(
+      new TimetableInfo(this.displayedTableWorkdays,
+        this.displayedTableOtherDays,
+        this.tempUserTable,
+        this.credits,
+        this.timeFilter)
+    );
   }
 
   /**
@@ -262,7 +323,7 @@ export class TimetableService {
           fillCell.cellStatusText = fillCell.courseItem.courseName;
 
           // 設定 當時段的 預覽狀態
-          fillCell.isPreviewing= isPreviewing;
+          fillCell.isPreviewing = isPreviewing;
 
           // 將後續被占用時段的 time.hrs 設定為 -1
           for (let j = 1; j < hrs; ++j) {

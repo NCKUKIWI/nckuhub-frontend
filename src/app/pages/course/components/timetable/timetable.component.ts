@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
 import { TimetableService } from '../../services/timetable.service';
 import { CourseService } from '../../services/course.service';
 import { WishListService } from '../../services/wish-list.service';
-import { TableCellData } from '../../models/Timetable.model';
+import { TableCellData, TimeObject } from '../../models/Timetable.model';
 import { CourseModel } from '../../models/Course.model';
 import { Subscription } from 'rxjs';
 import { filter, take } from 'rxjs/operators';
@@ -15,15 +15,15 @@ import { filter, take } from 'rxjs/operators';
 export class TimetableComponent implements OnInit, OnDestroy {
 
     // 當前課表 是否 鎖定
-    isLocked = false;
-    isFiltering = false;
+    isLocked: boolean = false;
+    isFiltering: TimeObject | null = null;
 
     // 暫時的使用者課表
-    tempTable: number[];
+    tempUserTable: number[];
     // 平日時段的 展示版課表
-    coursesOnWorkdays: TableCellData[][];
+    displayedTableWorkdays: TableCellData[][];
     // 非平日時段的 展示版課表
-    coursesOnOtherDays: CourseModel[];
+    displayedTableOtherDays: CourseModel[];
     // 用於 取消訂閱 發送最新課表資訊的Observable
     timetableInfoSubscription: Subscription;
 
@@ -35,6 +35,7 @@ export class TimetableComponent implements OnInit, OnDestroy {
     userName: string = "Hello World";
     // 使用者的願望清單
     userWishList: CourseModel[] = [];
+    displayedUserWishList: CourseModel[] = [];
     // 用於 取消訂閱 發送使用者願望清單的 Observable
     userWishListSubscription: Subscription;
 
@@ -48,9 +49,9 @@ export class TimetableComponent implements OnInit, OnDestroy {
     // 搜尋結果
     courseSearchResult: CourseModel[] = [];
 
-    constructor(private timetableService: TimetableService, 
-                private courseService: CourseService,
-                private wishListService: WishListService) { }
+    constructor(private timetableService: TimetableService,
+        private courseService: CourseService,
+        private wishListService: WishListService) { }
 
     ngOnInit(): void {
         // 從courseService 獲取 本學期的 所有課程
@@ -92,9 +93,11 @@ export class TimetableComponent implements OnInit, OnDestroy {
         this.timetableInfoSubscription = this.timetableService.getTimetableInfo().subscribe(
             (info) => {
                 this.credits = info.credits;
-                this.tempTable = info.tempUserTable;
-                this.coursesOnWorkdays = info.displayedTableWorkdays;
-                this.coursesOnOtherDays = info.displayedTableOtherDays;
+                this.tempUserTable = info.tempUserTable;
+                this.displayedTableWorkdays = info.displayedTableWorkdays;
+                this.displayedTableOtherDays = info.displayedTableOtherDays;
+                this.isFiltering = info.timeFilter;
+                this.setDishplayedWishList();
             },
             (err: any) => {
                 if (err) {
@@ -111,6 +114,7 @@ export class TimetableComponent implements OnInit, OnDestroy {
         this.userWishListSubscription = this.wishListService.getWishList().subscribe(
             (wishList) => {
                 this.userWishList = wishList;
+                this.setDishplayedWishList();
             },
             (err: any) => {
                 if (err) {
@@ -135,17 +139,6 @@ export class TimetableComponent implements OnInit, OnDestroy {
     deleteItem(course: CourseModel): void {
         this.wishListService.addWish(course.id);
         this.timetableService.removeFromTempUserTable(course);
-    }
-
-    /**
-     * TODO: ecfack 取消時間篩選
-     */
-    clearFilter(): void {
-        // if ( this.isFiltering ) {
-        //     this.filterMode( "off" );
-        //     vue_classtable.clearFilterCell();
-        //     vue_wishlist.clearFilter();
-        // }
     }
 
     /**
@@ -219,7 +212,59 @@ export class TimetableComponent implements OnInit, OnDestroy {
      * 接收 子元件 發出的 更動字串請求
      * @param refreshedKeyword 更動後的字串
      */
-    onRefreshKeyword(refreshedKeyword: string) {
+    onRefreshKeyword(refreshedKeyword: string):void {
         this.keyword = refreshedKeyword;
+    }
+
+    /**
+     * 取消時間篩選
+     */
+     clearFilter(): void {
+        if (!this.isLocked) {
+            this.timetableService.setTimeFilter(null);
+        }
+    }
+
+    /**
+     * 開啟時間篩選
+     * @param setedTime 
+     */
+    onSetFilter(setedTime: TimeObject): void{
+        // console.log("get event",setedTime);
+        if (!this.isLocked) {
+            this.timetableService.setTimeFilter(setedTime);
+        }
+    }
+
+    /**
+     * 根據 當前是否 開啟時間篩選，切換 要展示的願望清單
+     * @param filter 時間篩選條件
+     */
+    setDishplayedWishList(): void{
+        const filter = this.isFiltering;
+        // 如果 有開啟 時間篩選
+        if (filter) {
+            this.displayedUserWishList = [];
+
+            // 對每個願望 做時間篩選
+            let wishTime: TimeObject[], wishDay: number, wishStart: number, wishEnd: number;
+            for (let i in this.userWishList) {
+                wishTime = TimeObject.getTimeObject(this.userWishList[i].time);
+                for (let j in wishTime) {
+                    wishDay = wishTime[j].day;
+                    wishStart = wishTime[j].start;
+                    wishEnd = wishStart + wishTime[j].hrs - 1;
+
+                    // 如果課程時段 包含 當前篩選條件
+                    if (filter.day === wishDay && filter.start >= wishStart && filter.start <= wishEnd) {
+                        this.displayedUserWishList.push(this.userWishList[i]);
+                        break;
+                    }
+                }
+            }
+        }
+        else {
+            this.displayedUserWishList = this.userWishList;
+        }
     }
 }

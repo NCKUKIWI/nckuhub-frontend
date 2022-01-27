@@ -29,15 +29,15 @@
 		</div>
 		<div class="wishlist_cont" [ngClass]="{ locked: isLocked }" >
 			<p *ngIf="!userWishList.length && !isFiltering" class="wishlist_cont__no_result text_dark">尚未新增任何課程進入願望清單。</p>
-			<!-- <p *ngIf="!filter_item_count && filter_status" class="wishlist_cont__no_result text_dark">願望清單內無符合本時段之項目。</p> -->
-			<app-wishlist-item *ngFor="let item of userWishList" [courseItem]="item"></app-wishlist-item>
+			<p *ngIf="!displayedUserWishList.length && isFiltering" class="wishlist_cont__no_result text_dark">願望清單內無符合本時段之項目。</p>
+			<app-wishlist-item *ngFor="let item of displayedUserWishList" [courseItem]="item"></app-wishlist-item>
 		</div>
 	</div>
 </div>
 
 <div class="right_area">
 	<div id="class_table" class="class_table" [ngClass]="{ locked: isLocked }">
-		<div *ngIf="!tempTable.length && isLocked" (click)="switchToEdit()" class="class_table__empty_hint">
+		<div *ngIf="!tempUserTable.length && isLocked" (click)="switchToEdit()" class="class_table__empty_hint">
 			<p class="class_table__empty_hint__text text_bold">目前課表為空，來安排下學期的課程吧！</p>
 		</div>
 		<div class="class_table_title">
@@ -67,27 +67,27 @@
 					<div class="class_table_cont_cell"><p class="text_18 round">D</p></div>
 				</div>
 				<div class="class_table_cont_row">
-					<app-table-cell *ngFor="let item of coursesOnWorkdays[0]" [cellData]="item"></app-table-cell>
+					<app-table-cell *ngFor="let item of displayedTableWorkdays[0]" [cellData]="item" (setFilter)="onSetFilter($event)"></app-table-cell>
 				</div>
 				<div class="class_table_cont_row">
-					<app-table-cell *ngFor="let item of coursesOnWorkdays[1]" [cellData]="item"></app-table-cell>
+					<app-table-cell *ngFor="let item of displayedTableWorkdays[1]" [cellData]="item" (setFilter)="onSetFilter($event)"></app-table-cell>
 				</div>
 				<div class="class_table_cont_row">
-					<app-table-cell *ngFor="let item of coursesOnWorkdays[2]" [cellData]="item"></app-table-cell>
+					<app-table-cell *ngFor="let item of displayedTableWorkdays[2]" [cellData]="item" (setFilter)="onSetFilter($event)"></app-table-cell>
 				</div>
 				<div class="class_table_cont_row">
-					<app-table-cell *ngFor="let item of coursesOnWorkdays[3]" [cellData]="item"></app-table-cell>
+					<app-table-cell *ngFor="let item of displayedTableWorkdays[3]" [cellData]="item" (setFilter)="onSetFilter($event)"></app-table-cell>
 				</div>
 				<div class="class_table_cont_row">
-					<app-table-cell *ngFor="let item of coursesOnWorkdays[4]" [cellData]="item"></app-table-cell>
+					<app-table-cell *ngFor="let item of displayedTableWorkdays[4]" [cellData]="item" (setFilter)="onSetFilter($event)"></app-table-cell>
 				</div>
 			</div>
-			<div *ngIf="coursesOnOtherDays.length" class="class_table_cont__other">
+			<div *ngIf="displayedTableOtherDays.length" class="class_table_cont__other">
 				<div class="class_table_cont_row left">
 					<div class="class_table_cont_cell other"><p class="text_18">其他</p></div>
 				</div>
 				<div class="class_table_cont_row right_full">
-					<div *ngFor="let item of coursesOnOtherDays" class="class_table_cont_cell other class_cell occupied" [ngClass]="item.deptId">
+					<div *ngFor="let item of displayedTableOtherDays" class="class_table_cont_cell other class_cell occupied" [ngClass]="item.deptId">
 						<div class="class_table_cont_cell_button other"  (click)="deleteItem( item )"></div>
 						<p class="class_table_cont_cell_id other text_12"> {{ item.time }}</p>
 						<p class="class_table_cont_cell_title other text_16 text_bold"> {{ item.courseName }} </p>

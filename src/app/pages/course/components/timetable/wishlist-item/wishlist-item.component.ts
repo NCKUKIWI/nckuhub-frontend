@@ -32,6 +32,7 @@ export class WishlistItemComponent implements OnInit {
    */
   addToTable() {
     if (!this.timetableService.isConflicted(this.courseItem)) {
+      this.timetableService.setTimeFilter(null);
       this.wishListService.removeWish(this.courseItem.id);
       this.timetableService.addToTempUserTable(this.courseItem);
     }
@@ -41,6 +42,7 @@ export class WishlistItemComponent implements OnInit {
    * 將此願望 從願望清單 移除，並刷新 展示板課表
    */
   deleteItem() {
+    this.timetableService.setTimeFilter(null);
     this.wishListService.removeWish(this.courseItem.id);
     this.timetableService.refreshDisplayedTable(-1);
   }

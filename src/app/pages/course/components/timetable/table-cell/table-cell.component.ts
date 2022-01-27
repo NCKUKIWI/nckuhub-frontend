@@ -1,7 +1,7 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input,Output,EventEmitter } from '@angular/core';
 import { TimetableService } from '../../../services/timetable.service';
 import { WishListService } from '../../../services/wish-list.service';
-import { TableCellData } from '../../../models/Timetable.model';
+import { TableCellData,TimeObject } from '../../../models/Timetable.model';
 
 @Component({
   selector: 'app-table-cell',
@@ -13,6 +13,10 @@ export class TableCellComponent implements OnInit {
   // 展示版課表中的 此格資料
   @Input()
   cellData: TableCellData;
+
+  // 要求 父元件 動用 時間篩選功能
+  @Output()
+  setFilter = new EventEmitter<TimeObject>();
 
   constructor(private timetableService: TimetableService,private wishListService: WishListService) { }
 
@@ -47,7 +51,7 @@ export class TableCellComponent implements OnInit {
     if (this.cellData.time.hrs > 0) {
       classContext += 'occupied ';
     }
-    if (this.cellData.ifFilterTime) {
+    if (this.cellData.isFilterTime) {
       classContext += 'filtering ';
     }
     if (this.cellData.isPreviewing) {
@@ -61,28 +65,20 @@ export class TableCellComponent implements OnInit {
   }
 
   /**
-   * 從使用者課表 移除 此格的課程
+   * 從使用者課表 移除 此格的課程，並清除 時間篩選
    */
   deleteItem() {
     if (this.cellData.time.hrs > 0) {
+      this.timetableService.setTimeFilter(null);
       this.wishListService.addWish(this.cellData.courseItem.id);
       this.timetableService.removeFromTempUserTable(this.cellData.courseItem);
     }
   }
 
   /**
-   * TODO: ecfack 開關 時段篩選功能
+   * 對父元件 發出 時段篩選請求
    */
-  startFilterTIme() {
-    // if (this.cell_data.status == 0 && !pageStatus.table_locked) {
-    //   var filtering = vue_classtable.markFilterCell(this.day, this.cell_data.time);
-    //   if (filtering) {
-    //     vue_wishlist.clearFilter();
-    //     vue_wishlist.filterItemTIme(this.day, this.cell_data.time);
-    //   }
-    //   else {
-    //     vue_wishlist.clearFilter();
-    //   }
-    // }
+  setTimeFilter() {
+    this.setFilter.emit(this.cellData.time);
   }
 }

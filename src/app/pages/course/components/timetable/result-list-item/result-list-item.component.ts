@@ -35,6 +35,7 @@ export class ResultListItemComponent implements OnInit {
    */
   addToTable(): void {
     if (!this.timetableService.isConflicted(this.courseData)) {
+      this.timetableService.setTimeFilter(null);
       this.timetableService.addToTempUserTable(this.courseData);
       // 加入 使用者課表成功後，清空 搜尋欄
       this.refreshKeyword.emit("");

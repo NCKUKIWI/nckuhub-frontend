@@ -7,7 +7,8 @@ export class TimetableInfo {
     constructor(public displayedTableWorkdays: TableCellData[][],   // 平日時段的 展示版課表
                 public displayedTableOtherDays: CourseModel[],      // 非平日時段的 展示板課表
                 public tempUserTable: number[],                     // 使用者課表
-                public credits: number) { }                         // 當前學分數
+                public credits: number,                             // 當前學分數
+                public timeFilter:TimeObject|null) { }              // 當前時間篩選條件
 }
 
 /**
@@ -21,7 +22,7 @@ export class TableCellData {
     courseItem: CourseModel;
 
     // 此格 目前是否為 篩選條件
-    ifFilterTime: boolean = false;
+    isFilterTime: boolean = false;
     // 占用此格的課程 目前是否為 預覽中
     isPreviewing: boolean = false;
     // 此格 目前是否 已被衝堂

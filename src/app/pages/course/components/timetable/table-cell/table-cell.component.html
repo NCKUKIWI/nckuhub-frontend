@@ -1,4 +1,4 @@
-<div class="class_table_cont_cell class_cell" [ngStyle]="getHeight()" (click)="startFilterTIme()" [ngClass]="getClass()">
+<div class="class_table_cont_cell class_cell" [ngStyle]="getHeight()" (click)="setTimeFilter()" [ngClass]="getClass()">
     <div class="class_table_cont_cell_button" (click)="deleteItem()"></div>
     <p class="class_table_cont_cell_id text_12"
     [ngClass]="{ previewing: cellData.isPreviewing , rush: cellData.isConflicted }"> {{ cellData.cellStatusTitle }}
