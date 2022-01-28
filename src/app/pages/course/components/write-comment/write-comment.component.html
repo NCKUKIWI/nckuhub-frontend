@@ -25,7 +25,7 @@
                         <p *ngFor="let semester of courseSemesterSuggestion" (click)="fillSemester(semester)">{{ semester }}</p>
                     </div>
                     <div *ngIf="isChoosingTeacher" class="add_review_dropdown teacher text_16">
-                        <p *ngFor="let teacher; index: of; courseTeacherSuggestion" (click)="fillTeacher(teacher, index)">{{ teacher }}</p>
+                        <p *ngFor="let teacher of courseTeacherSuggestion" (click)="fillTeacher(teacher)">{{ teacher }}</p>
                     </div>
                 </div>
             </div>
@@ -33,14 +33,9 @@
             <textarea
                 class="add_review__window__mid_cont__mid_area add_review_paragraph text_16"
                 placeholder="上課形式、課堂要求、學習內容... 對這門課說些什麼吧！"
-                [ngClass]="{ active: courseTitleFilled != '' && courseSemester != '選擇學期' && courseTeacher != '選擇開課教師' }"
-                (click)="closeDropdowns()"
+                [ngClass]="{ disabled: !courseTitleFilled || courseSemester == '選擇學期' || courseTeacher == '選擇開課教師' }"
             ></textarea>
-            <div
-                [ngClass]="{ active: courseTitleFilled && courseSemester != '選擇學期' && courseTeacher != '選擇開課教師' }"
-                class="add_review__window__mid_cont__bottom_row"
-                (click)="closeDropdowns()"
-            >
+            <div [ngClass]="{ enabled: courseTitleFilled && courseSemester != '選擇學期' && courseTeacher != '選擇開課教師' }" class="add_review__window__mid_cont__bottom_row">
                 <div class="add_review_rate text_16 gain" (mouseover)="changeStatus('gain')" (mouseout)="changeStatus('default')">
                     <div class="add_review_rate__left_area">
                         <p class="add_review_rate__name gain">課堂收穫</p>
