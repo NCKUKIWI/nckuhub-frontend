@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { map, filter } from 'rxjs/operators';
 import { CourseModel } from '../../models/Course.model';
 import { CourseRateModel } from '../../models/CourseRate.model';
@@ -13,7 +13,7 @@ import { CourseService } from '../../services/course.service';
     styleUrls: ['./write-comment.component.scss'],
 })
 export class WriteCommentComponent implements OnInit {
-    constructor(private courseService: CourseService) {}
+    constructor(private courseService: CourseService, private fb: FormBuilder) {}
 
     courseData: string[] = [];
     courseTitle = new FormControl('');
@@ -62,6 +62,26 @@ export class WriteCommentComponent implements OnInit {
     }
 
     /**
+     * 取得該課程有開課的學期
+     * @param courseTitleFilled
+     */
+    private getCourseSemester(courseTitle: string): void {
+        this.courseService.getCourseByCourseName(courseTitle).subscribe((courseData) => {
+            // courseData.forEach((course) => {
+            //     if (this.courseSemesterSuggestion.indexOf(courseData.semester) === -1) {
+            //         this.courseData.push(courseData.semester);
+            //     }
+            //     if (this.courseSemesterSuggestion.indexOf(courseData.teacher) === -1) {
+            //         this.courseData.push(courseData.teacher);
+            //     }
+            // })
+            // 目前只有抓取到110-2這個學期的課程
+            this.courseSemesterSuggestion.push('110-2'); //目前courseModel資料內沒有學期的資料
+            this.courseTeacherSuggestion.push(courseData.teacher);
+        });
+    }
+
+    /**
      * 刪除不必要的字元，如果是英文統一轉換為大寫的格式
      * @param text
      */
@@ -81,8 +101,10 @@ export class WriteCommentComponent implements OnInit {
         this.courseTitle.valueChanges.subscribe((enterTitle: string) => {
             // 將input的資料整理
             enterTitle = this.getREValidText(enterTitle);
-            // 清空陣列
-            this.courseTitleSuggestion = [];
+
+            // 清空可能課程的陣列及取消學期及老師的dropdown
+            this.clearDropdowns();
+
             // 尋找可能的課程名單
             if (enterTitle !== '') {
                 this.courseData.forEach((Title) => {
@@ -96,6 +118,23 @@ export class WriteCommentComponent implements OnInit {
     }
 
     /**
+     * 清空資料
+     */
+    private clearDropdowns(): void {
+        // 清空可能課程的陣列
+        this.courseTitleSuggestion = [];
+        this.courseTitleFilled = '';
+        // 清空選擇學期的dropdown及欄位
+        this.isChoosingSemester = false;
+        this.courseSemester = '選擇學期';
+        this.courseSemesterSuggestion = [];
+        // 清空選擇教師的dropdown及欄位
+        this.isChoosingTeacher = false;
+        this.courseTeacher = '選擇開課教師';
+        this.courseTeacherSuggestion = [];
+    }
+
+    /**
      * 將點選的課程名稱填入，並清空courseTitleSuggestion
      * @param title  課程名稱
      */
@@ -104,33 +143,39 @@ export class WriteCommentComponent implements OnInit {
         this.courseTitleSuggestion = [];
         this.courseTitle = new FormControl(title);
         this.searchCourseTitle();
-    }
-
-    /**
-     * 選擇學期這個欄位，並啟動相關function
-     */
-    private chooseSemester(): void {
-        this.isChoosingSemester = true;
         this.getCourseSemester(this.courseTitleFilled);
     }
 
     /**
-     * 取得該課程有開課的學期
-     * @param courseTitleFilled
+     * 選擇開課學期這個欄位，並展開dropdown
      */
-    private getCourseSemester(courseTitle: string): void {
-        this.courseService.getCourseByCourseName(courseTitle).subscribe((courseData) => {
-            console.log(courseData.courseName);
-        });
+    private chooseSemester(): void {
+        this.isChoosingSemester = true;
     }
 
     /**
-     * 關閉提示的dropdowns
+     * 將點選的課程名稱填入，並清空courseTitleSuggestion
+     * @param semester 開課學期
      */
-    private closeDropdowns(): void {
-        this.courseTitleSuggestion = [];
-        this.courseTitle = new FormControl('');
-        this.searchCourseTitle();
+    private fillSemester(semester: string): void {
+        this.courseSemester = semester;
+        this.isChoosingSemester = false;
+    }
+
+    /**
+     * 選擇開課教師這個欄位，並展開dropdown
+     */
+    private chooseTeacher(): void {
+        this.isChoosingTeacher = true;
+    }
+
+    /**
+     * 將點選的課程名稱填入，並清空courseTitleSuggestion
+     * @param semester 開課學期
+     */
+    private fillTeacher(teacher: string): void {
+        this.courseTeacher = teacher;
+        this.isChoosingTeacher = false;
     }
 
     /**
