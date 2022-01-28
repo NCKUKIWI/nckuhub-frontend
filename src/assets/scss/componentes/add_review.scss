@@ -96,13 +96,16 @@
                         color: $black;
                     }
                     &.title {
-                        width: 55%;
+                        width: 50%;
+                        // flex: 6;
                     }
                     &.semester {
                         width: 20%;
+                        // flex: 2;
                     }
                     &.teacher {
-                        width: 25%;
+                        width: 30%;
+                        // flex: 3;
                     }
                     &.semester,
                     &.teacher {
@@ -138,20 +141,22 @@
                         width: 100%;
                         outline: none;
                         box-sizing: border-box;
-                        padding: 0 20px;
+                        padding-left: 20px;
                         border-right: $light_2 1px solid;
                         background-color: $white;
                         overflow-x: hidden;
                         overflow-y: scroll;
-                        -webkit-overflow-scrolling: touch;
                         @include box_shadow_1();
                         transition: height 5s $material_trans;
+                        &::-webkit-scrollbar {
+                            display: none;
+                        }
                         & p {
                             display: block;
                             height: 45px;
-                            width: 100%;
-                            margin: 0 -20px;
-                            padding: 0 20px;
+                            width: calc(100%+20px);
+                            margin-left: -20px;
+                            padding-left: 20px;
                             line-height: 45px;
                             @include ellipsis();
                             transition: 0.2s $material_trans;
@@ -169,14 +174,19 @@
                             max-height: 180px;
                         }
                         &.title {
-                            width: 55%;
                             max-height: 180px;
+                            // flex:6;
+                            width: 50%;
                         }
                         &.semester {
+                            // flex:2
                             width: 20%;
+                            margin-left: 50%;
                         }
                         &.teacher {
-                            width: 25%;
+                            // flex:3
+                            width: 30%;
+                            margin-left: 70%;
                         }
                     }
                 }
@@ -192,7 +202,7 @@
                 resize: none;
                 outline: none;
                 padding: 25px 20px;
-                &:disabled {
+                &.disabled {
                     opacity: 0.4;
                 }
                 &::placeholder {
