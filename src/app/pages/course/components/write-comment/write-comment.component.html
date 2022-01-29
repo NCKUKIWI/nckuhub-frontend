@@ -11,10 +11,10 @@
             </div>
         </div>
 
-        <div class="add_review__window__mid_cont">
+        <div class="add_review__window__mid_cont" [formGroup]="courseForm">
             <div class="add_review__window__mid_cont__top_row">
                 <!-- 利用formGroup顯示當前輸入值 course_title -->
-                <input class="add_review_info title text_16" type="text" [formControl]="courseTitle" placeholder="輸入課程名稱" />
+                <input class="add_review_info title text_16" type="text" formControlName="courseTitle" placeholder="輸入課程名稱" />
                 <div [ngClass]="{ enabled: courseTitleFilled }" class="add_review_info semester text_16" (click)="chooseSemester()">{{ courseSemester }}</div>
                 <div [ngClass]="{ enabled: courseTitleFilled && courseSemester != '選擇學期' }" class="add_review_info teacher text_16" (click)="chooseTeacher()">{{ courseTeacher }}</div>
                 <div class="add_review_dropdowns">
@@ -34,6 +34,7 @@
                 class="add_review__window__mid_cont__mid_area add_review_paragraph text_16"
                 placeholder="上課形式、課堂要求、學習內容... 對這門課說些什麼吧！"
                 [ngClass]="{ disabled: !courseTitleFilled || courseSemester == '選擇學期' || courseTeacher == '選擇開課教師' }"
+                formControlName="courseReview"
             ></textarea>
             <div [ngClass]="{ enabled: courseTitleFilled && courseSemester != '選擇學期' && courseTeacher != '選擇開課教師' }" class="add_review__window__mid_cont__bottom_row">
                 <div class="add_review_rate text_16 gain" (mouseover)="changeStatus('gain')" (mouseout)="changeStatus('default')">
@@ -42,7 +43,7 @@
                     </div>
                     <div class="add_review_rate__right_area">
                         <div (click)="giveRate('gain', -1)" class="add_review_rate__button go_down gain"></div>
-                        <!-- <p class="add_review_rate__score gain"> {{ courseRate.gain }} </p> -->
+                        <p class="add_review_rate__score gain">{{ courseRate.gain }}</p>
                         <div (click)="giveRate('gain', 1)" class="add_review_rate__button go_up gain"></div>
                     </div>
                 </div>
@@ -52,7 +53,7 @@
                     </div>
                     <div class="add_review_rate__right_area">
                         <div (click)="giveRate('sweet', -1)" class="add_review_rate__button go_down sweet"></div>
-                        <!-- <p class="add_review_rate__score sweet"> {{ courseRate.sweet }} </p> -->
+                        <p class="add_review_rate__score sweet">{{ courseRate.sweet }}</p>
                         <div (click)="giveRate('sweet', 1)" class="add_review_rate__button go_up sweet"></div>
                     </div>
                 </div>
@@ -62,7 +63,7 @@
                     </div>
                     <div class="add_review_rate__right_area">
                         <div (click)="giveRate('cold', -1)" class="add_review_rate__button go_down cold"></div>
-                        <!-- <p class="add_review_rate__score cold"> {{ courseRate.cold }}</p> -->
+                        <p class="add_review_rate__score cold">{{ courseRate.cold }}</p>
                         <div (click)="giveRate('cold', 1)" class="add_review_rate__button go_up cold"></div>
                     </div>
                 </div>
@@ -78,10 +79,9 @@
                 <!-- <div v-if="course_point == 0" :class="{ enabled: course_review.replace(/\s/g, '').length >= 50 }" 
                      class="add_review_button send_review text_16" @click="sendReview">送出心得</div> -->
                 <!-- 心得要多一個replace(/\s/g, '')來確保是否有50個字 -->
-                <!--courseReview.length>=50-->
-                <div [ngClass]="{ enabled: courseReview }" class="add_review_button send_review text_16" (click)="sendReview()">
-                    <img *ngIf="courseReview" src="./dist/images/add_review/icon_send.svg" />
-                    <img *ngIf="courseReview" src="./dist/images/add_review/icon_send_disabled.svg" />
+                <div [ngClass]="{ enabled: courseForm.get('courseReview').value.length >= 50 }" class="add_review_button send_review text_16" (click)="sendReview()">
+                    <img *ngIf="courseForm.get('courseReview').value.length >= 50" src="src/assets/images/add_review/icon_send.svg" />
+                    <img *ngIf="courseForm.get('courseReview').value.length < 50" src="src/assets/images/add_review/icon_send_disabled.svg" />
                     <p>
                         送出心得<span *ngIf="coursePoint > 0">，獲得積分 {{ coursePoint }} 點</span>
                     </p>

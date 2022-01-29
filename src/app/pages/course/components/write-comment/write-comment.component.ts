@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { map, filter } from 'rxjs/operators';
-import { CourseModel } from '../../models/Course.model';
 import { CourseRateModel } from '../../models/CourseRate.model';
 import { CourseWithCommentModel, CourseComment } from '../../models/CourseComment.model';
 import { CourseService } from '../../services/course.service';
@@ -15,30 +14,53 @@ import { CourseService } from '../../services/course.service';
 export class WriteCommentComponent implements OnInit {
     constructor(private courseService: CourseService, private fb: FormBuilder) {}
 
-    courseData: string[] = [];
-    courseTitle = new FormControl('');
-    courseTitleFilled: string = '';
-    courseTitleSuggestion: string[] = [];
+    courseForm = this.fb.group({
+        // 和輸入課程欄位互相響應
+        courseTitle: '',
+        // 和輸入心得欄位互相響應
+        courseReview: '',
+        // 和選擇課程評分互相響應
+        // courseRate: this.fb.group({
+        //     gain: '',
+        //     sweet:'',
+        //     cold: '',
+        // })
+    });
+
+    // 資料送出時打包會需要的(但目前沒用到)
     // courseDeptSuggestion: string[];
     // courseDept = '';
     // courseIdSuggestion: string[] = [];
+    // courseId = '';
 
+    // 存取所有課程以便searchCourseTitle搜尋可能的課程列表
+    courseData: string[] = [];
+    // 可能的課程列表
+    courseTitleSuggestion: string[] = [];
+    // 紀錄最終選擇的課程
+    courseTitleFilled: string;
+    // 紀錄最終選擇的開課學期
     courseSemester: string = '選擇學期';
+    // 是否選擇開課學期這個欄位
     isChoosingSemester: boolean = false;
+    // 該課程可能的開課學期
     courseSemesterSuggestion: string[] = [];
-
+    // 紀錄最終選擇的開課教師
     courseTeacher: string = '選擇開課教師';
+    // 是否選擇開課教師這個欄位
     isChoosingTeacher: boolean = false;
+    // 該課程可能的開課教師
     courseTeacherSuggestion: string[] = [];
-
-    courseReview: string;
-    courseRate: CourseRateModel;
+    // 紀錄課程評分
+    courseRate: CourseRateModel = {
+        gain: 5,
+        sweet: 5,
+        cold: 5,
+    };
+    // 填心得能獲得的點數(目前是設定給3點)
     coursePoint: number;
+    // 控制底下的div顯示的字
     writeCommentStatus: string = '心得最低需求 50 字，請填寫完畢後按下送出。';
-
-    // courseForm = new FormGroup ({
-    //   courseTitle: new FormControl()
-    // });
 
     ngOnInit(): void {
         // 取得所有課程名稱
@@ -62,7 +84,7 @@ export class WriteCommentComponent implements OnInit {
     }
 
     /**
-     * 取得該課程有開課的學期
+     * 取得該課程有開課的學期(需修改，目前只有抓取到110-2這個學期的課程)
      * @param courseTitleFilled
      */
     private getCourseSemester(courseTitle: string): void {
@@ -75,7 +97,7 @@ export class WriteCommentComponent implements OnInit {
             //         this.courseData.push(courseData.teacher);
             //     }
             // })
-            // 目前只有抓取到110-2這個學期的課程
+
             this.courseSemesterSuggestion.push('110-2'); //目前courseModel資料內沒有學期的資料
             this.courseTeacherSuggestion.push(courseData.teacher);
         });
@@ -98,12 +120,12 @@ export class WriteCommentComponent implements OnInit {
      * 尋找可能的課程清單
      */
     private searchCourseTitle(): void {
-        this.courseTitle.valueChanges.subscribe((enterTitle: string) => {
+        this.courseForm.get('courseTitle').valueChanges.subscribe((enterTitle: string) => {
             // 將input的資料整理
             enterTitle = this.getREValidText(enterTitle);
 
             // 清空可能課程的陣列及取消學期及老師的dropdown
-            this.clearDropdowns();
+            this.clearComment();
 
             // 尋找可能的課程名單
             if (enterTitle !== '') {
@@ -118,9 +140,9 @@ export class WriteCommentComponent implements OnInit {
     }
 
     /**
-     * 清空資料
+     * 清空所有留言資料
      */
-    private clearDropdowns(): void {
+    private clearComment(): void {
         // 清空可能課程的陣列
         this.courseTitleSuggestion = [];
         this.courseTitleFilled = '';
@@ -132,6 +154,12 @@ export class WriteCommentComponent implements OnInit {
         this.isChoosingTeacher = false;
         this.courseTeacher = '選擇開課教師';
         this.courseTeacherSuggestion = [];
+        // 清空留言
+        this.courseForm.get('courseReview').setValue('');
+        // 清空評分紀錄
+        this.courseRateInit();
+        // 清空給予的點數
+        this.coursePoint = 0;
     }
 
     /**
@@ -139,11 +167,16 @@ export class WriteCommentComponent implements OnInit {
      * @param title  課程名稱
      */
     private fillTitle(title: string): void {
-        this.courseTitleFilled = title;
-        this.courseTitleSuggestion = [];
-        this.courseTitle = new FormControl(title);
+        // 重新監聽CourseTitle這欄
+        this.courseForm.get('courseTitle').setValue(title);
         this.searchCourseTitle();
-        this.getCourseSemester(this.courseTitleFilled);
+        // 將選擇的課程放入courseTitleFilled
+        this.courseTitleFilled = title;
+        // 清空可能的課程列表
+        this.courseTitleSuggestion = [];
+        // 利用課程名稱搜尋其可能的開課學期及教師
+        console.log(this.courseTitleFilled);
+        this.getCourseSemester(title);
     }
 
     /**
@@ -176,6 +209,7 @@ export class WriteCommentComponent implements OnInit {
     private fillTeacher(teacher: string): void {
         this.courseTeacher = teacher;
         this.isChoosingTeacher = false;
+        this.coursePoint = 3;
     }
 
     /**
@@ -195,6 +229,51 @@ export class WriteCommentComponent implements OnInit {
         if (command == 'default') {
             this.writeCommentStatus = '心得最低需求 50 字，請填寫完畢後按下送出。';
         }
+    }
+
+    /**
+     * 初始化courseRate的值
+     */
+    private courseRateInit(): void {
+        this.courseRate.gain = 5;
+        this.courseRate.sweet = 5;
+        this.courseRate.cold = 5;
+        // this.courseForm.get('courseRate').get('gain').setValue(5);
+        // this.courseForm.get('courseRate').get('sweet').setValue(5);
+        // this.courseForm.get('courseRate').get('cold').setValue(5);
+    }
+
+    /**
+     * 更改課程評分(需精簡整個code)
+     * @param index:string 評分項目/ num:number 分數加或減(1 or -1)
+     */
+    private giveRate(index: string, num: number): void {
+        if (index === 'gain') {
+            this.courseRate.gain = this.courseRateCalc(this.courseRate.gain + num);
+            // this.courseForm.get('courseRate').get('gain').setValue(this.courseRateCalc(this.courseForm.get('courseRate').get('gain').value + num))
+        }
+        if (index === 'sweet') {
+            this.courseRate.sweet = this.courseRateCalc(this.courseRate.sweet + num);
+            // this.courseForm.get('courseRate').get('sweet').setValue(this.courseRateCalc(this.courseForm.get('courseRate').get('sweet').value + num))
+        }
+        if (index === 'cold') {
+            this.courseRate.cold = this.courseRateCalc(this.courseRate.cold + num);
+            // this.courseForm.get('courseRate').get('cold').setValue(this.courseRateCalc(this.courseForm.get('courseRate').get('cold').value+ num))
+        }
+    }
+
+    /**
+     * 課程評分控制在1~10
+     * @param rate:number 計算後的分數
+     */
+    private courseRateCalc(rate: number): number {
+        if (rate > 10) {
+            return 10;
+        }
+        if (rate < 1) {
+            return 1;
+        }
+        return rate;
     }
 
     /**
