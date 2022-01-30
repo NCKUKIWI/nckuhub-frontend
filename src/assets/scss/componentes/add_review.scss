@@ -330,19 +330,26 @@
                             color: $dark;
                         }
                     }
+                    &.enabled {
+                        opacity: 1;
+                        p,
+                        span {
+                            color: red;
+                        }
+                    }
                     &.send_review {
                         img {
                             margin-right: 5px;
                         }
                         color: $gray;
                         opacity: 0.7;
-                        &.enabled {
-                            opacity: 1;
-                            p,
-                            span {
-                                color: red;
-                            }
-                        }
+                        // &.enabled {
+                        //     opacity: 1;
+                        //     p,
+                        //     span {
+                        //         color: red;
+                        //     }
+                        // }
                     }
                 }
             }

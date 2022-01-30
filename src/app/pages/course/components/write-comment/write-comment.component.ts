@@ -172,10 +172,10 @@ export class WriteCommentComponent implements OnInit {
         this.searchCourseTitle();
         // 將選擇的課程放入courseTitleFilled
         this.courseTitleFilled = title;
+        // console.log(this.courseTitleFilled);
         // 清空可能的課程列表
         this.courseTitleSuggestion = [];
         // 利用課程名稱搜尋其可能的開課學期及教師
-        console.log(this.courseTitleFilled);
         this.getCourseSemester(title);
     }
 
@@ -274,6 +274,15 @@ export class WriteCommentComponent implements OnInit {
             return 1;
         }
         return rate;
+    }
+
+    /**
+     * 打包留言並送出
+     */
+    private sendComment(): void {
+        if (this.courseForm.get('courseReview').value.length >= 50) {
+            console.log(true);
+        }
     }
 
     /**
