@@ -79,9 +79,9 @@
                 <!-- <div v-if="course_point == 0" :class="{ enabled: course_review.replace(/\s/g, '').length >= 50 }" 
                      class="add_review_button send_review text_16" @click="sendReview">送出心得</div> -->
                 <!-- 心得要多一個replace(/\s/g, '')來確保是否有50個字 -->
-                <div [ngClass]="{ enabled: courseForm.get('courseReview').value.length >= 50 }" class="add_review_button send_review text_16" (click)="sendReview()">
-                    <img *ngIf="courseForm.get('courseReview').value.length >= 50" src="src/assets/images/add_review/icon_send.svg" />
-                    <img *ngIf="courseForm.get('courseReview').value.length < 50" src="src/assets/images/add_review/icon_send_disabled.svg" />
+                <div [ngClass]="{ enabled: courseForm.get('courseReview').value.length >= 50 }" class="add_review_button send_review text_16" (click)="sendComment()">
+                    <img *ngIf="courseForm.get('courseReview').value.length >= 50" src="../../../../../assets/images/add_review/icon_send.svg" />
+                    <img *ngIf="courseForm.get('courseReview').value.length < 50" src="../../../../../assets/images/add_review/icon_send_disabled.svg" />
                     <p>
                         送出心得<span *ngIf="coursePoint > 0">，獲得積分 {{ coursePoint }} 點</span>
                     </p>
