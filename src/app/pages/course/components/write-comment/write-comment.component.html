@@ -7,7 +7,7 @@
             <div class="add_review__window__top_bar__icons">
                 <div class="add_review_icon minimize"></div>
                 <div class="add_review_icon strech"></div>
-                <div class="add_review_icon close" (click)="closeWriteComment()"></div>
+                <div class="add_review_icon close" (click)="giveUpComment()"></div>
             </div>
         </div>
 
@@ -75,7 +75,7 @@
                 <p class="add_review_status text_14">{{ writeCommentStatus }}</p>
             </div>
             <div class="add_review__window__bottom_bar__buttons">
-                <div class="add_review_button give_up text_16 enabled" (click)="giveUpReview()">放棄</div>
+                <div class="add_review_button give_up text_16 enabled" (click)="giveUpComment()">放棄</div>
                 <!-- <div v-if="course_point == 0" :class="{ enabled: course_review.replace(/\s/g, '').length >= 50 }" 
                      class="add_review_button send_review text_16" @click="sendReview">送出心得</div> -->
                 <!-- 心得要多一個replace(/\s/g, '')來確保是否有50個字 -->
@@ -90,4 +90,18 @@
         </div>
     </div>
     <div class="add_review__background"></div>
+
+    <!-- 放棄心得提醒 -->
+    <div class="window add_review_give_up" *ngIf="commentGiveUp">
+        <div class="window__background">
+            <div class="window__self">
+                <div class="window__self__title text_bold text_26">離開頁面？</div>
+                <div class="window__self__detail">心得尚未儲存。您要放棄目前內容並且離開此頁嗎？</div>
+                <div class="window__self__button_area">
+                    <a class="window__self__button_area__button text_dark" (click)="closeWindow()">返回填寫</a>
+                    <a class="window__self__button_area__button text_red" (click)="giveUpComment()">放棄內容</a>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
