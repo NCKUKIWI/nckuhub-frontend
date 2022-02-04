@@ -1,10 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Optional } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { map, filter } from 'rxjs/operators';
 import { CourseRateModel } from '../../models/CourseRate.model';
 import { CourseWithCommentModel, CourseComment } from '../../models/CourseComment.model';
 import { CourseService } from '../../services/course.service';
-// import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 
 @Component({
     selector: 'app-write-comment',
@@ -12,7 +12,14 @@ import { CourseService } from '../../services/course.service';
     styleUrls: ['./write-comment.component.scss'],
 })
 export class WriteCommentComponent implements OnInit {
-    constructor(private courseService: CourseService, private fb: FormBuilder) {}
+    constructor(
+        private courseService: CourseService,
+        private fb: FormBuilder,
+        @Optional()
+        public ref: DynamicDialogRef,
+        @Optional()
+        public config: DynamicDialogConfig
+    ) {}
 
     courseForm = this.fb.group({
         // 和輸入課程欄位互相響應
@@ -61,6 +68,8 @@ export class WriteCommentComponent implements OnInit {
     coursePoint: number;
     // 控制底下的div顯示的字
     writeCommentStatus: string = '心得最低需求 50 字，請填寫完畢後按下送出。';
+    // 控制是否放棄留言的div
+    commentGiveUp: boolean = false;
 
     ngOnInit(): void {
         // 取得所有課程名稱
@@ -217,16 +226,16 @@ export class WriteCommentComponent implements OnInit {
      * @param command
      */
     private changeStatus(command: string): void {
-        if (command == 'gain') {
+        if (command === 'gain') {
             this.writeCommentStatus = '可填 1-10 分，高分表示該課程「上課收穫很多」。';
         }
-        if (command == 'sweet') {
+        if (command === 'sweet') {
             this.writeCommentStatus = '可填 1-10 分，高分表示該課程「上課給分較高」。';
         }
-        if (command == 'cold') {
+        if (command === 'cold') {
             this.writeCommentStatus = '可填 1-10 分，高分表示該課程「上課較為輕鬆」。';
         }
-        if (command == 'default') {
+        if (command === 'default') {
             this.writeCommentStatus = '心得最低需求 50 字，請填寫完畢後按下送出。';
         }
     }
@@ -286,11 +295,21 @@ export class WriteCommentComponent implements OnInit {
     }
 
     /**
-     * 關閉新增評論
+     * 放棄留言並關閉新增評論
      */
-    // closeWriteComment(): void {
-    //   if (this.ref) {
-    //     this.ref.close();
-    //   }
-    // }
+    giveUpComment(): void {
+        if (this.courseForm.get('courseReview').value.length >= 0 && this.commentGiveUp === false) {
+            this.commentGiveUp = true;
+        } else if (this.ref) {
+            this.ref.close();
+            console.log('close course comment');
+        }
+    }
+
+    /**
+     * 關閉提示放棄留言的div
+     */
+    closeWindow(): void {
+        this.commentGiveUp = false;
+    }
 }
