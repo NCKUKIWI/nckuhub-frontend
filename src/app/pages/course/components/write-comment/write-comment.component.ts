@@ -300,7 +300,7 @@ export class WriteCommentComponent implements OnInit {
     giveUpComment(): void {
         if (this.courseForm.get('courseReview').value.length >= 0 && this.commentGiveUp === false) {
             this.commentGiveUp = true;
-        } else if (this.ref) {
+        } else {
             this.ref.close();
             console.log('close course comment');
         }
