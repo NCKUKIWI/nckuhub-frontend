@@ -68,8 +68,10 @@ export class WriteCommentComponent implements OnInit {
     coursePoint: number;
     // 控制底下的div顯示的字
     writeCommentStatus: string = '心得最低需求 50 字，請填寫完畢後按下送出。';
-    // 控制是否放棄留言的div
+    // 控制是否放棄課程心得的div
     commentGiveUp: boolean = false;
+    // 課程心得已成功送出
+    commentSend: boolean = false;
 
     ngOnInit(): void {
         // 取得所有課程名稱
@@ -290,26 +292,57 @@ export class WriteCommentComponent implements OnInit {
      */
     private sendComment(): void {
         if (this.courseForm.get('courseReview').value.length >= 50) {
-            console.log(true);
+            this.commentSend = true;
+            // axios.post('/post/create/' , {
+            //     'course_name': this.courseForm.get('courseTitle').value,
+            //     'teacher': this.courseTeacher,
+            //     'semester': this.courseSemester,
+            //     'comment': this.courseForm.get('courseReview').value,
+            //     'sweet': this.courseRate.sweet,
+            //     'cold': this.courseRate.cold,
+            //     'got': this.courseRate.gain,
+            //     'catalog': this.course_dept,
+            //     'point': this.coursePoint
+            // })
         }
     }
 
     /**
      * 放棄留言並關閉新增評論
      */
-    giveUpComment(): void {
-        if (this.courseForm.get('courseReview').value.length >= 0 && this.commentGiveUp === false) {
+    private giveUpComment(): void {
+        if (this.courseForm.get('courseReview').value.length > 0 && this.commentGiveUp === false) {
             this.commentGiveUp = true;
         } else {
-            this.ref.close();
-            console.log('close course comment');
+            this.backToHomePage();
         }
     }
 
     /**
      * 關閉提示放棄留言的div
      */
-    closeWindow(): void {
+    private closeWindow(): void {
         this.commentGiveUp = false;
+    }
+
+    /**
+     * 關閉填寫課程心得的dialog並回到首頁
+     */
+    private backToHomePage(): void {
+        this.commentSend = false;
+        this.ref.close();
+        console.log('close course comment');
+    }
+
+    /**
+     *
+     */
+    private oneMoreComment(): void {
+        this.commentSend = false;
+        // 重新監聽CourseTitle這欄
+        this.courseForm.get('courseTitle').setValue('');
+        this.searchCourseTitle();
+        // 清空所有留言格
+        this.clearComment();
     }
 }
