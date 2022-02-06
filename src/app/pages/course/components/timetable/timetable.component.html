@@ -1,7 +1,7 @@
 <div class="left_area">
 	<div id="user_data" class="personal_data"> 
 		<div class="personal_data_image">
-			<img [src]="photoURL" >
+			<img [src]="photoURL" alt="使用者大頭貼" >
 		</div>
 		<div class="personal_data_info">
 			<p class="text_24">{{ userName }}的課表</p>
@@ -67,19 +67,19 @@
 					<div class="class_table_cont_cell"><p class="text_18 round">D</p></div>
 				</div>
 				<div class="class_table_cont_row">
-					<app-table-cell *ngFor="let item of displayedTableWorkdays[0]" [cellData]="item" (setFilter)="onSetFilter($event)"></app-table-cell>
+					<app-table-cell *ngFor="let item of displayedTableWorkdays[0]" [lockStatus]="isLocked" [cellData]="item" (setFilter)="onSetFilter($event)"></app-table-cell>
 				</div>
 				<div class="class_table_cont_row">
-					<app-table-cell *ngFor="let item of displayedTableWorkdays[1]" [cellData]="item" (setFilter)="onSetFilter($event)"></app-table-cell>
+					<app-table-cell *ngFor="let item of displayedTableWorkdays[1]" [lockStatus]="isLocked" [cellData]="item" (setFilter)="onSetFilter($event)"></app-table-cell>
 				</div>
 				<div class="class_table_cont_row">
-					<app-table-cell *ngFor="let item of displayedTableWorkdays[2]" [cellData]="item" (setFilter)="onSetFilter($event)"></app-table-cell>
+					<app-table-cell *ngFor="let item of displayedTableWorkdays[2]" [lockStatus]="isLocked" [cellData]="item" (setFilter)="onSetFilter($event)"></app-table-cell>
 				</div>
 				<div class="class_table_cont_row">
-					<app-table-cell *ngFor="let item of displayedTableWorkdays[3]" [cellData]="item" (setFilter)="onSetFilter($event)"></app-table-cell>
+					<app-table-cell *ngFor="let item of displayedTableWorkdays[3]" [lockStatus]="isLocked" [cellData]="item" (setFilter)="onSetFilter($event)"></app-table-cell>
 				</div>
 				<div class="class_table_cont_row">
-					<app-table-cell *ngFor="let item of displayedTableWorkdays[4]" [cellData]="item" (setFilter)="onSetFilter($event)"></app-table-cell>
+					<app-table-cell *ngFor="let item of displayedTableWorkdays[4]" [lockStatus]="isLocked" [cellData]="item" (setFilter)="onSetFilter($event)"></app-table-cell>
 				</div>
 			</div>
 			<div *ngIf="displayedTableOtherDays.length" class="class_table_cont__other">

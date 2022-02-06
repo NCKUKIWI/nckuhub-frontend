@@ -16,6 +16,7 @@ export class TimetableComponent implements OnInit, OnDestroy {
 
     // 當前課表 是否 鎖定
     isLocked: boolean = false;
+    // 當前課表 是否 篩選時段中
     isFiltering: TimeObject | null = null;
 
     // 暫時的使用者課表
@@ -50,8 +51,8 @@ export class TimetableComponent implements OnInit, OnDestroy {
     courseSearchResult: CourseModel[] = [];
 
     constructor(private timetableService: TimetableService,
-        private courseService: CourseService,
-        private wishListService: WishListService) { }
+                private courseService: CourseService,
+                private wishListService: WishListService) { }
 
     ngOnInit(): void {
         // 從courseService 獲取 本學期的 所有課程
@@ -124,9 +125,7 @@ export class TimetableComponent implements OnInit, OnDestroy {
         );
     }
 
-    /**
-     * TODO: ecfack 切換 課表的鎖定狀態
-     */
+    // TODO: ecfack 切換 課表的鎖定狀態
     switchToEdit(): void {
         this.isLocked = !this.isLocked;
         // vue_fixed_button.switchLockStatus();
@@ -161,7 +160,7 @@ export class TimetableComponent implements OnInit, OnDestroy {
      */
     @HostListener('compositionend', ['$event.target.value'])
     searchCourse(keyword: string): void {
-        this.keyword.replace(/\s+/g, '');
+        this.keyword=this.keyword.replace(/\s+/g, '');
         const textToFind = this.formatKeyword(this.keyword);
         if (textToFind) {
             // 被比對的 課程資訊
@@ -212,14 +211,14 @@ export class TimetableComponent implements OnInit, OnDestroy {
      * 接收 子元件 發出的 更動字串請求
      * @param refreshedKeyword 更動後的字串
      */
-    onRefreshKeyword(refreshedKeyword: string):void {
+    onRefreshKeyword(refreshedKeyword: string): void {
         this.keyword = refreshedKeyword;
     }
 
     /**
      * 取消時間篩選
      */
-     clearFilter(): void {
+    clearFilter(): void {
         if (!this.isLocked) {
             this.timetableService.setTimeFilter(null);
         }
@@ -229,7 +228,7 @@ export class TimetableComponent implements OnInit, OnDestroy {
      * 開啟時間篩選
      * @param setedTime 
      */
-    onSetFilter(setedTime: TimeObject): void{
+    onSetFilter(setedTime: TimeObject): void {
         // console.log("get event",setedTime);
         if (!this.isLocked) {
             this.timetableService.setTimeFilter(setedTime);
@@ -240,10 +239,10 @@ export class TimetableComponent implements OnInit, OnDestroy {
      * 根據 當前是否 開啟時間篩選，切換 要展示的願望清單
      * @param filter 時間篩選條件
      */
-    setDishplayedWishList(): void{
-        const filter = this.isFiltering;
+    setDishplayedWishList(): void {
+        const timeFilter = this.isFiltering;
         // 如果 有開啟 時間篩選
-        if (filter) {
+        if (timeFilter) {
             this.displayedUserWishList = [];
 
             // 對每個願望 做時間篩選
@@ -256,7 +255,7 @@ export class TimetableComponent implements OnInit, OnDestroy {
                     wishEnd = wishStart + wishTime[j].hrs - 1;
 
                     // 如果課程時段 包含 當前篩選條件
-                    if (filter.day === wishDay && filter.start >= wishStart && filter.start <= wishEnd) {
+                    if (timeFilter.day === wishDay && timeFilter.start >= wishStart && timeFilter.start <= wishEnd) {
                         this.displayedUserWishList.push(this.userWishList[i]);
                         break;
                     }

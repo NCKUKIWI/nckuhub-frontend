@@ -100,10 +100,10 @@ export class TimeObject {
         // 將陣列中的文字 轉成 排課資訊
         let day: string, time: string, start: string, end: string, hrs: number;
         let timeItem: TimeObject[] = [];
-        for (let i = 0; i < timeSplit.length; ++i) {
+        for (let classTime of timeSplit) {
             // 把字串 切成 「星期幾」和「上課節次」
-            day = timeSplit[i].match(RE_DAY)[0].match(RE_NUM)[0];
-            time = timeSplit[i].replace('\[' + day + '\]', '');
+            day = classTime.match(RE_DAY)[0].match(RE_NUM)[0];
+            time = classTime.replace('\[' + day + '\]', '');
             // 把節次 切成 「開始節次」和「持續時間」
             if (time.toString().match('~')) {
                 start = time[0];
@@ -130,7 +130,7 @@ export class TimeObject {
         // console.log ( time_item );
         return timeItem;
     }
-};
+}
 
 /**
  * 把「上課時段文字」轉成「真實時段順序」

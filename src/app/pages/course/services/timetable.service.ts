@@ -62,10 +62,10 @@ export class TimetableService {
     // 如果 此門課程 非平日時段
     if (!timeItem.length) {
       const isInDisplayedTable = this.displayedTableOtherDays.find(course => course.id === courseItem.id);
-      const isInuserTable = this.tempUserTable.includes(courseItem.id);
+      const isInUserTable = this.tempUserTable.includes(courseItem.id);
       // 此判斷式缺一不可
       // 缺前者：造成 refreshTable() 無法放入 非平日時段課程，缺後者：無法區分 此課程 是否是 預覽中
-      if (isInDisplayedTable && isInuserTable)
+      if (isInDisplayedTable && isInUserTable)
         return true;
       else
         return false;
@@ -73,10 +73,10 @@ export class TimetableService {
 
     // 檢測 特定課程的 各個時段狀況
     let day, start, hrs;
-    for (let i = 0; i < timeItem.length; ++i) {
-      day = timeItem[i].day;
-      start = timeItem[i].start;
-      hrs = timeItem[i].hrs;
+    for(let classTime of timeItem) {
+      day = classTime.day;
+      start = classTime.start;
+      hrs = classTime.hrs;
 
       for (let j = 0; j < hrs; ++j) {
         let checkCell = tableItem[day][start + j];
@@ -134,8 +134,8 @@ export class TimetableService {
 
     this.credits = 0;
 
-    for (let i = 0; i < this.tempUserTable.length; ++i) {
-      const targetId = this.tempUserTable[i];
+    for (let courseId of this.tempUserTable) {
+      const targetId = courseId;
       this.addToDisplayedTable(targetId, false);
     }
 
@@ -309,11 +309,11 @@ export class TimetableService {
       else {
         let day, start, hrs, fillCell: TableCellData;
         // 將各起始時段 填入 展示版課表
-        for (let i = 0; i < timeItem.length; ++i) {
+        for (let classTime of timeItem) {
           // console.log(time_item);
-          day = timeItem[i].day;
-          start = timeItem[i].start;
-          hrs = timeItem[i].hrs;
+          day = classTime.day;
+          start = classTime.start;
+          hrs = classTime.hrs;
 
           // 把當前起始時段 填入 展示版課表
           fillCell = this.displayedTableWorkdays[day][start];

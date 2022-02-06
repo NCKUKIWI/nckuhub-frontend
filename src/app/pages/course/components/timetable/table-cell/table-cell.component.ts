@@ -10,6 +10,9 @@ import { TableCellData,TimeObject } from '../../../models/Timetable.model';
 })
 export class TableCellComponent implements OnInit {
 
+  @Input()
+  lockStatus:boolean=false;
+
   // 展示版課表中的 此格資料
   @Input()
   cellData: TableCellData;

@@ -1,5 +1,4 @@
-<!-- <div *ngIf="courseItem.isSeen" class="list_course_item" (mouseover)="mouseoverItem()" (mouseout)="mouseoutItem()" > -->
-    <div class="list_course_item" (mouseover)="mouseoverItem()" (mouseout)="mouseoutItem()" >
+<div class="list_course_item" (mouseover)="mouseoverItem()" (mouseout)="mouseoutItem()" >
     <div class="list_course_item_left">
         <p class="list_course_item_category text_20 text_white clickable" (click)="deleteItem()" [ngClass]="getClass()"> {{ deptTransCat(courseItem.deptId,courseItem.deptName) }} </p>
     </div>
