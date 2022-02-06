@@ -1,10 +1,9 @@
 import { Component, OnInit, Optional } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import { map, filter } from 'rxjs/operators';
 import { CourseRateModel } from '../../models/CourseRate.model';
 import { CourseWithCommentModel, CourseComment } from '../../models/CourseComment.model';
 import { CourseService } from '../../services/course.service';
-import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { DynamicDialogRef } from 'primeng/dynamicdialog';
 
 @Component({
     selector: 'app-write-comment',
@@ -16,9 +15,7 @@ export class WriteCommentComponent implements OnInit {
         private courseService: CourseService,
         private fb: FormBuilder,
         @Optional()
-        public ref: DynamicDialogRef,
-        @Optional()
-        public config: DynamicDialogConfig
+        public ref: DynamicDialogRef
     ) {}
 
     courseForm = this.fb.group({

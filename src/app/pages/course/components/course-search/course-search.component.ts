@@ -164,16 +164,11 @@ export class CourseSearchComponent implements OnInit, AfterViewInit, OnDestroy {
      */
     addCourseComment(): void {
         this.ref = this.dialogService.open(WriteCommentComponent, {
-            width: '100%',
-            height: '100%',
+            width: '100vw',
+            height: '100vh',
             baseZIndex: 10000,
             transitionOptions: null,
-            style: { marginTop: '-75px' },
-        });
-
-        this.ref.onClose.subscribe(() => {
-            console.log('The dialog was closed');
-            this.router.navigateByUrl('/');
+            style: { marginTop: '-10vh' },
         });
     }
 
