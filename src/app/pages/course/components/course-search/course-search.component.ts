@@ -7,6 +7,7 @@ import { WishListService } from '../../services/wish-list.service';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { Router } from '@angular/router';
 import { CourseContentComponent } from '../course-content/course-content.component';
+import { WriteCommentComponent } from '../write-comment/write-comment.component';
 
 @Component({
     selector: 'app-course-search',
@@ -14,11 +15,7 @@ import { CourseContentComponent } from '../course-content/course-content.compone
     styleUrls: ['./course-search.component.scss'],
 })
 export class CourseSearchComponent implements OnInit, AfterViewInit, OnDestroy {
-    constructor(private courseService: CourseService,
-        private dialogService: DialogService,
-        private wishListService: WishListService,
-        private router: Router,
-    ) { }
+    constructor(private courseService: CourseService, private dialogService: DialogService, private wishListService: WishListService, private router: Router) {}
 
     // 完整的本學期課程
     allCourseInNewSemester: CourseModel[] = [];
@@ -71,19 +68,25 @@ export class CourseSearchComponent implements OnInit, AfterViewInit, OnDestroy {
      */
     private getCourseData(): void {
         // 加filter是因為可能會收到空陣列
-        this.courseService.getCourseData().pipe(filter(data => data.length !== 0), take(1)).subscribe(
-            (courseData) => {
-                this.allCourseInNewSemester = courseData;
-                this.displayCourseList = this.allCourseInNewSemester.slice(0, this.MAX_COURSE_DISPLAY_NUM);
-                this.allCourseListWithComment = this.allCourseInNewSemester.filter((course) => course.commentNum > 0);
-                // console.log('get course data', courseData.length);
-            },
-            (err: any) => {
-                if (err) {
-                    console.error(err);
+        this.courseService
+            .getCourseData()
+            .pipe(
+                filter((data) => data.length !== 0),
+                take(1)
+            )
+            .subscribe(
+                (courseData) => {
+                    this.allCourseInNewSemester = courseData;
+                    this.displayCourseList = this.allCourseInNewSemester.slice(0, this.MAX_COURSE_DISPLAY_NUM);
+                    this.allCourseListWithComment = this.allCourseInNewSemester.filter((course) => course.commentNum > 0);
+                    // console.log('get course data', courseData.length);
+                },
+                (err: any) => {
+                    if (err) {
+                        console.error(err);
+                    }
                 }
-            }
-        );
+            );
     }
 
     /**
@@ -148,6 +151,24 @@ export class CourseSearchComponent implements OnInit, AfterViewInit, OnDestroy {
             transitionOptions: null,
             style: { marginTop: '-75px' },
             data: { courseId },
+        });
+
+        this.ref.onClose.subscribe(() => {
+            console.log('The dialog was closed');
+            this.router.navigateByUrl('/');
+        });
+    }
+
+    /**
+     * 打開課程心得留言
+     */
+    addCourseComment(): void {
+        this.ref = this.dialogService.open(WriteCommentComponent, {
+            width: '100%',
+            height: '100%',
+            baseZIndex: 10000,
+            transitionOptions: null,
+            style: { marginTop: '-75px' },
         });
 
         this.ref.onClose.subscribe(() => {
@@ -228,8 +249,7 @@ export class CourseSearchComponent implements OnInit, AfterViewInit, OnDestroy {
         this.deptSearchResult = [];
         if (this.keyword === '') {
             this.deleteSearch();
-        }
-        else {
+        } else {
             // 顯現 所有可能搜尋結果
             const dropdownElement = document.getElementsByClassName('quick_search_dropdown--course');
             // 這個判斷式是因為不知為啥會出現 找不到的情況
@@ -248,7 +268,7 @@ export class CourseSearchComponent implements OnInit, AfterViewInit, OnDestroy {
 
             // 此時課程列表 顯示 上次搜尋結果，如果未曾執行過搜尋，無限下拉會幫忙塞課程
             // 如果 曾搜尋系所
-            if (this.keyPrefix !== "") {
+            if (this.keyPrefix !== '') {
                 // 如果 有開啟評論篩選功能
                 if (this.isCommentOnly === true) {
                     this.displayCourseList = this.allCourseListWithComment.filter((course) => course.deptId === this.keyPrefix);
@@ -307,9 +327,11 @@ export class CourseSearchComponent implements OnInit, AfterViewInit, OnDestroy {
             (entries, observer) => {
                 let needAddCourse = true;
                 // 是否要 插入課程
-                needAddCourse = needAddCourse &&
+                needAddCourse =
+                    needAddCourse &&
                     // 無 篩選條件
-                    (this.isCommentOnly === false && this.isDeptOnly === false) &&
+                    this.isCommentOnly === false &&
+                    this.isDeptOnly === false &&
                     // 未 塞完所有課程
                     this.displayCourseList.length < this.allCourseInNewSemester.length;
 
