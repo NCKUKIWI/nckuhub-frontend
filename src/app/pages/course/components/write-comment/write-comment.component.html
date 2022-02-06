@@ -91,6 +91,20 @@
     </div>
     <div class="add_review__background"></div>
 
+    <!-- 心得送出成功 -->
+    <div class="window add_review_success" *ngIf="commentSend">
+        <div class="window__background">
+            <div class="window__self">
+                <div class="window__self__title text_bold text_26">已送出心得！</div>
+                <div class="window__self__detail">感謝您熱心提供課程心得，幫助所有對這門課有興趣的同學，更加認識了課程！</div>
+                <div class="window__self__button_area">
+                    <a (click)="backToHomePage()" class="window__self__button_area__button text_dark">返回頁面</a>
+                    <a (click)="oneMoreComment()" class="window__self__button_area__button text_deep_blue">再填一份</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- 放棄心得提醒 -->
     <div class="window add_review_give_up" *ngIf="commentGiveUp">
         <div class="window__background">
