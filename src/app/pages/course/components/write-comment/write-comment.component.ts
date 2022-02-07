@@ -18,25 +18,8 @@ export class WriteCommentComponent implements OnInit {
         public ref: DynamicDialogRef
     ) {}
 
-    courseForm = this.fb.group({
-        // 和輸入課程欄位互相響應
-        courseTitle: '',
-        // 和輸入心得欄位互相響應
-        courseReview: '',
-        // 和選擇課程評分互相響應
-        // courseRate: this.fb.group({
-        //     gain: '',
-        //     sweet:'',
-        //     cold: '',
-        // })
-    });
-
-    // 資料送出時打包會需要的(但目前沒用到)
-    // courseDeptSuggestion: string[];
-    // courseDept = '';
-    // courseIdSuggestion: string[] = [];
-    // courseId = '';
-
+    // 課程心得表單
+    courseForm: FormGroup;
     // 存取所有課程以便searchCourseTitle搜尋可能的課程列表
     courseData: string[] = [];
     // 可能的課程列表
@@ -69,14 +52,38 @@ export class WriteCommentComponent implements OnInit {
     commentGiveUp: boolean = false;
     // 課程心得已成功送出
     commentSend: boolean = false;
+    // 資料送出時打包會需要的(但目前沒用到)
+    // courseDeptSuggestion: string[];
+    // courseDept = '';
+    // courseIdSuggestion: string[] = [];
+    // courseId = '';
 
     ngOnInit(): void {
+        // 創建課程心得表單
+        this.createForm();
         // 取得所有課程名稱
         this.getCourseData();
         // 監聽courseTitle以呈現可能的課程列表
         this.searchCourseTitle();
     }
 
+    /**
+     *
+     */
+    private createForm(): void {
+        this.courseForm = this.fb.group({
+            // 和輸入課程欄位互相響應
+            courseTitle: '',
+            // 和輸入心得欄位互相響應
+            courseReview: '',
+            // 和選擇課程評分互相響應
+            // courseRate: this.fb.group({
+            //     gain: '',
+            //     sweet:'',
+            //     cold: '',
+            // })
+        });
+    }
     /**
      * 取得所有課程名稱
      */
@@ -131,10 +138,8 @@ export class WriteCommentComponent implements OnInit {
         this.courseForm.get('courseTitle').valueChanges.subscribe((enterTitle: string) => {
             // 將input的資料整理
             enterTitle = this.getREValidText(enterTitle);
-
             // 清空可能課程的陣列及取消學期及老師的dropdown
             this.clearComment();
-
             // 尋找可能的課程名單
             if (enterTitle !== '') {
                 this.courseData.forEach((Title) => {
@@ -301,6 +306,7 @@ export class WriteCommentComponent implements OnInit {
             //     'catalog': this.course_dept,
             //     'point': this.coursePoint
             // })
+        } else {
         }
     }
 
