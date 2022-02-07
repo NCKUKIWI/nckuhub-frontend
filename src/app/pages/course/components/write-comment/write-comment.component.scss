@@ -94,18 +94,22 @@
                     &::placeholder {
                         color: $black;
                     }
-                    &.title {
-                        width: 50%;
-                        // flex: 6;
+
+                    @media only screen and (min-width: 966px) {
+                        &.title {
+                            width: 50%;
+                            // flex: 6;
+                        }
+                        &.semester {
+                            width: 20%;
+                            // flex: 2;
+                        }
+                        &.teacher {
+                            width: 30%;
+                            // flex: 3;
+                        }
                     }
-                    &.semester {
-                        width: 20%;
-                        // flex: 2;
-                    }
-                    &.teacher {
-                        width: 30%;
-                        // flex: 3;
-                    }
+
                     &.semester,
                     &.teacher {
                         background-image: url('../../../../../assets/images/add_review/icon_down_arrow.svg');
@@ -172,20 +176,22 @@
                             height: auto;
                             max-height: 180px;
                         }
-                        &.title {
-                            max-height: 180px;
-                            // flex:6;
-                            width: 50%;
-                        }
-                        &.semester {
-                            // flex:2
-                            width: 20%;
-                            margin-left: 50%;
-                        }
-                        &.teacher {
-                            // flex:3
-                            width: 30%;
-                            margin-left: 70%;
+                        @media only screen and (min-width: 966px) {
+                            &.title {
+                                max-height: 180px;
+                                // flex:6;
+                                width: 50%;
+                            }
+                            &.semester {
+                                // flex:2;
+                                width: 20%;
+                                margin-left: 50%;
+                            }
+                            &.teacher {
+                                // flex:3;
+                                width: 30%;
+                                margin-left: 70%;
+                            }
                         }
                     }
                 }
