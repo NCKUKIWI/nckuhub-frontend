@@ -338,7 +338,7 @@ export class WriteCommentComponent implements OnInit {
     }
 
     /**
-     *
+     * 再填寫一份留言
      */
     private oneMoreComment(): void {
         this.commentSend = false;
