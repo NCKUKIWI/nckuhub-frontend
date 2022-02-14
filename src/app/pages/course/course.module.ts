@@ -13,10 +13,9 @@ import { WriteCommentComponent } from './components/write-comment/write-comment.
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DynamicDialogModule } from 'primeng/dynamicdialog';
 import { DialogService } from 'primeng/dynamicdialog';
-import { SearchFilterPipe } from './search-filter.pipe';
 
 @NgModule({
-    declarations: [CourseContentComponent, CourseComponent, TimetableComponent, NavbarComponent, CourseSearchComponent, WishListComponent, CourseUserComponent, WriteCommentComponent, SearchFilterPipe],
+    declarations: [CourseContentComponent, CourseComponent, TimetableComponent, NavbarComponent, CourseSearchComponent, WishListComponent, CourseUserComponent, WriteCommentComponent],
     imports: [CourseRoutingModule, CommonModule, SharedModule, FormsModule, ReactiveFormsModule, DynamicDialogModule],
     providers: [DialogService],
 })
