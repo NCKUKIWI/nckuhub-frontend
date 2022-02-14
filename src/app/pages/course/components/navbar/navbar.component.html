@@ -5,12 +5,9 @@
 
             <input class="hub_navbar__search" type="text" placeholder="搜尋「課程名」或「教師名」" [(ngModel)]="query" />
             <div class="hub_navbar__search__cancel"></div>
-            <ng-container *ngIf="query">
+            <ng-container *ngIf="query && (displayCourseList | searchFilter:query) as filterResult">
                 <div class="hub_navbar__search__dropdown">
-                    <!---->
-                    <p class="hub_navbar__search__dropdown__no_result text_dark" [hidden]="result.length && query">查無此關鍵字結果。</p>
-
-                    <div class="list_course_item" *ngFor="let course of displayCourseList | searchFilter:query as result">
+                    <div class="list_course_item" *ngFor="let course of filterResult">
                         <div class="list_course_item_left">
                             <p class="list_course_item_category text_white text_20" [ngClass]="course.deptId">
                                 {{deptTransCat(course.deptId,course.deptName)}}</p>
@@ -22,8 +19,8 @@
                             </p>
                         </div>
                         <div class="list_course_item_right"></div>
-
                     </div>
+                    <p class="hub_navbar__search__dropdown__no_result text_dark" *ngIf="filterResult.length == 0">查無此關鍵字結果。</p>
                 </div>
             </ng-container>
 
