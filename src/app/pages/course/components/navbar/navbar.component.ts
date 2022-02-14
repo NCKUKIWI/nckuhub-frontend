@@ -34,7 +34,7 @@ export class NavbarComponent implements OnInit, OnChanges {
     /**
      *  打API拿 完整課程資料，取出部分初始化 展示用課程資料 和 有評論的課程資料
      */
-     private getCourseData(): void {
+     getCourseData(): void {
         // 加filter是因為可能會收到空陣列
         this.courseService.getCourseData().pipe(filter(data => data.length !== 0), take(1)).subscribe(
             (courseData) => {
@@ -50,35 +50,10 @@ export class NavbarComponent implements OnInit, OnChanges {
             }
         );
     }
- /**
-     * 回傳 傳入課程 的所屬系所簡稱
-     * @param deptID 傳入課程的系所代號
-     * @param deptName 傳入課程的系所名稱
-     * @returns 傳入課程的所屬系所簡稱
-     */
-  deptTransCat(deptID: string, deptName: string): string {
-    let category: string;
-    switch (deptID) {
-        case 'A9':
-            category = '通';
-            break;
-        case 'A6':
-            category = '服';
-            break;
-        case 'A7':
-            category = '國';
-            break;
-        case 'A1':
-            category = '外';
-            break;
-        case 'A2':
-            category = '體';
-            break;
-        default:
-            category = deptName.substring(0, 1);
-    }
-    return category;
-}
+
+    deptTransCat(deptID: string, deptName: string): string{
+        return this.courseService.deptTransCat(deptID,deptName)
+   }
 
     ngOnChanges():void{
         console.log(this.query)

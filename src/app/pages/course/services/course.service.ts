@@ -115,4 +115,34 @@ export class CourseService {
                 take(1)
             );
     }
+
+    /**
+     * 回傳 傳入課程 的所屬系所簡稱
+     * @param deptID 傳入課程的系所代號
+     * @param deptName 傳入課程的系所名稱
+     * @returns 傳入課程的所屬系所簡稱
+     */
+  deptTransCat(deptID: string, deptName: string): string {
+    let category: string;
+    switch (deptID) {
+        case 'A9':
+            category = '通';
+            break;
+        case 'A6':
+            category = '服';
+            break;
+        case 'A7':
+            category = '國';
+            break;
+        case 'A1':
+            category = '外';
+            break;
+        case 'A2':
+            category = '體';
+            break;
+        default:
+            category = deptName.substring(0, 1);
+    }
+    return category;
+}
 }
