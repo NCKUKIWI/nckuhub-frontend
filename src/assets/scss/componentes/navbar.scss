@@ -1,5 +1,7 @@
 @import 'src/assets/scss/import';
+
 // Nav Bar
+
 .hub_navbar {
     position: fixed;
     display: block;
@@ -274,7 +276,7 @@
                 position: relative;
                 display: flex;
                 flex-direction: column;
-                &>a {
+                & > a {
                     position: relative;
                     display: block;
                     font-size: 14px;
