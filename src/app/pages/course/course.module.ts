@@ -8,15 +8,20 @@ import { NavbarComponent } from './components/navbar/navbar.component';
 import { CourseSearchComponent } from './components/course-search/course-search.component';
 import { WishListComponent } from './components/wish-list/wish-list.component';
 import { CourseUserComponent } from './components/user/course-user.component';
-import { CourseContentComponent } from './components/course-content/course-content.component';
+import {CourseContentComponent} from './components/course-content/course-content.component';
 import { WriteCommentComponent } from './components/write-comment/write-comment.component';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { DynamicDialogModule } from 'primeng/dynamicdialog';
-import { DialogService } from 'primeng/dynamicdialog';
 
 @NgModule({
-    declarations: [CourseContentComponent, CourseComponent, TimetableComponent, NavbarComponent, CourseSearchComponent, WishListComponent, CourseUserComponent, WriteCommentComponent],
-    imports: [CourseRoutingModule, CommonModule, SharedModule, FormsModule, ReactiveFormsModule, DynamicDialogModule],
-    providers: [DialogService],
+    declarations: [
+        CourseContentComponent,
+        CourseComponent,
+        TimetableComponent,
+        NavbarComponent,
+        CourseSearchComponent,
+        WishListComponent,
+        CourseUserComponent,
+        WriteCommentComponent,
+    ],
+    imports: [CourseRoutingModule, CommonModule, SharedModule],
 })
 export class CourseModule {}
