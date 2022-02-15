@@ -7,7 +7,6 @@ import { WishListService } from '../../services/wish-list.service';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { Router } from '@angular/router';
 import { CourseContentComponent } from '../course-content/course-content.component';
-import { WriteCommentComponent } from '../write-comment/write-comment.component';
 
 @Component({
     selector: 'app-course-search',
