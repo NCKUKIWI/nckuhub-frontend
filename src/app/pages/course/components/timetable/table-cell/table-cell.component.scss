@@ -1,0 +1,55 @@
+@import "src/assets/scss/componentes/table.scss";
+@import "src/assets/scss/componentes/course.scss";
+
+.locked {
+    .class_table_cont_cell.class_cell {
+        &:hover {
+            background: $white;
+            opacity: 1 !important;
+            border-top: $light_2 1px solid;
+            cursor: default !important;
+            .class_table_cont_cell_title {
+                opacity: 0;
+            }
+            .class_table_cont_cell_id {
+                opacity: 0;
+            }
+        }
+        &:active {
+            opacity: 1 !important;
+        }
+        &.occupied,
+        &.occupied.other {
+            background: $light_1 !important;
+            cursor: default !important;
+            &:hover {
+                border-top: $default 2px solid;
+            }
+            &.A9:hover {
+                border-top: $red 2px solid;
+                background-color:blue;
+            }
+            &.A6:hover {
+                border-top: $blue 2px solid;
+            }
+            &.A7 {
+                border-top: $pink 2px solid;
+            }
+            &.A1 {
+                border-top: $green 2px solid;
+            }
+            &.A2 {
+                border-top: $deep_blue 2px solid;
+            }
+            .class_table_cont_cell_title {
+                opacity: 1 !important;
+            }
+            .class_table_cont_cell_id {
+                opacity: 1 !important;
+            }
+        }
+    }
+    .class_table_cont_cell_button {
+        display: none;
+    }
+}

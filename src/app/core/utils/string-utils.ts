@@ -45,6 +45,12 @@ export class StringUtils {
     private static regexChinese = new RegExp(/[\u4e00-\u9fa5]/g);
 
     /**
+     * 課程時間 regex
+     */
+    public static readonly regexCourseTimeForm1 = new RegExp(/\[[1-5]\][A-DN1-9]~[A-DN1-9]/);
+    public static readonly regexCourseTimeForm2 = new RegExp(/\[[1-5]\][A-DN1-9]/);
+
+    /**
      * 預設空白
      */
     private static defaultToWhiteSpace(characters: string) {
@@ -855,6 +861,22 @@ export class StringUtils {
         return /\W+/g.test(withoutChinese);
     }
 
+    /**
+     * 是否是 課程時間形式1
+     * @param str 被檢測的字串
+     */
+    public static isCourseTimeForm1(str: string): boolean {
+        return this.regexCourseTimeForm1.test(str);
+    }
+
+    /**
+     * 是否是 課程時間形式2
+     * @param str 被檢測的字串
+     */
+     public static isCourseTimeForm2(str: string): boolean {
+        return this.regexCourseTimeForm2.test(str);
+    }
+
     public static appendIfMissing(str: string, missingStr: string): string {
         if (str && !this.isEmptyStr(str) && !this.endsWith(str, missingStr)) {
             return str + missingStr;
@@ -867,5 +889,44 @@ export class StringUtils {
             return missingStr + str;
         }
         return str ?? '';
+    }
+
+    /**
+     * 把「上課時段文字」轉成「真實時段順序」
+     * @param text 上課時段文字
+     * @returns 真實時段順序，即一天中的 第0~13堂課
+     */
+    public static textTransTime(text: string): number {
+        let realTime: number = 0;
+        if (text > '0' && text <= '4') {
+            realTime = parseInt(text) - 1;
+        }
+        else if (text >= '5' && text <= '9') {
+            realTime = parseInt(text);
+        }
+        else {
+            switch (text) {
+                case 'N':
+                    realTime = 4;
+                    break;
+                case 'A':
+                    realTime = 10;
+                    break;
+                case 'B':
+                    realTime = 11;
+                    break;
+                case 'C':
+                    realTime = 12;
+                    break;
+                case 'D':
+                    realTime = 13;
+                    break;
+                default:
+                    realTime = 0;
+                    // realTime = 'other_time';
+                    break;
+            }
+        }
+        return realTime;
     }
 }

@@ -1,1 +1,99 @@
-<p>timetable works!</p>
+<div class="left_area">
+	<div id="user_data" class="personal_data"> 
+		<div class="personal_data_image">
+			<img [src]="photoURL" alt="使用者大頭貼" >
+		</div>
+		<div class="personal_data_info">
+			<p class="text_24">{{ userName }}的課表</p>
+			<p class="text_16 text_dark">目前已排課 {{ credits }} 學分</p>		
+		</div>
+	</div>
+	<div id="quick_search" class="quick_search"> 
+		<div class="block_title">
+			<p class="text_18 "> {{ searchBarTitle }} </p>
+		</div>
+		<div class="quick_search_area" [ngClass]="{ filter_mode: isFiltering }"  (click)="clearFilter()">
+			<div *ngIf="isFiltering" class="quick_search_clear_filter"></div>
+			<input class="quick_search_input" type="text" [(ngModel)]="keyword" (compositionend)="searchCourse($event.target.value)" (keydown)="keyEventHandler($event)" [disabled]="isFiltering || isLocked" [ngClass]="{ locked: isLocked }" placeholder="輸入「課程名」或「教師名」" ><br>
+		</div>
+		<div *ngIf="keyword!= '' && !isFiltering && !isLocked" class="quick_search_dropdown">
+			<!-- <span> {{ courseSearchResult }} </span> -->
+			<p *ngIf="!courseSearchResult.length && !isFiltering && !isLocked" class="quick_search_dropdown__no_result text_dark">查無此關鍵字結果。</p>
+			<app-result-list-item *ngFor="let item of courseSearchResult" [courseData]="item" (refreshKeyword)="onRefreshKeyword($event)"></app-result-list-item>
+		</div>
+	</div>
+	<div id="wishlist_in_table" class="wishlist in_table">
+		<div class="block_title">
+			<p *ngIf="!isFiltering" class="text_18">願望清單（{{ userWishList.length }}） </p>
+			<p *ngIf=" isFiltering" class="text_18">願望清單（符合所選時段） </p>
+		</div>
+		<div class="wishlist_cont" [ngClass]="{ locked: isLocked }" >
+			<p *ngIf="!userWishList.length && !isFiltering" class="wishlist_cont__no_result text_dark">尚未新增任何課程進入願望清單。</p>
+			<p *ngIf="!displayedUserWishList.length && isFiltering" class="wishlist_cont__no_result text_dark">願望清單內無符合本時段之項目。</p>
+			<app-wishlist-item *ngFor="let item of displayedUserWishList" [courseItem]="item"></app-wishlist-item>
+		</div>
+	</div>
+</div>
+
+<div class="right_area">
+	<div id="class_table" class="class_table" [ngClass]="{ locked: isLocked }">
+		<div *ngIf="!tempUserTable.length && isLocked" (click)="switchToEdit()" class="class_table__empty_hint">
+			<p class="class_table__empty_hint__text text_bold">目前課表為空，來安排下學期的課程吧！</p>
+		</div>
+		<div class="class_table_title">
+			<div class="class_table_title_cell left">　</div>
+			<div class="class_table_title_cell"><p class="text_18">Mon</p></div>
+			<div class="class_table_title_cell"><p class="text_18">Tue</p></div>
+			<div class="class_table_title_cell"><p class="text_18">Wed</p></div>
+			<div class="class_table_title_cell"><p class="text_18">Thu</p></div>
+			<div class="class_table_title_cell"><p class="text_18">Fri</p></div>
+		</div>
+		<div class="class_table_cont">
+			<div class="class_table_cont__normal">
+				<div class="class_table_cont_row left">
+					<div class="class_table_cont_cell"><p class="text_18 round">1</p></div>
+					<div class="class_table_cont_cell"><p class="text_18 round">2</p></div>
+					<div class="class_table_cont_cell"><p class="text_18 round">3</p></div>
+					<div class="class_table_cont_cell"><p class="text_18 round">4</p></div>
+					<div class="class_table_cont_cell"><p class="text_18 round">N</p></div>
+					<div class="class_table_cont_cell"><p class="text_18 round">5</p></div>
+					<div class="class_table_cont_cell"><p class="text_18 round">6</p></div>
+					<div class="class_table_cont_cell"><p class="text_18 round">7</p></div>
+					<div class="class_table_cont_cell"><p class="text_18 round">8</p></div>
+					<div class="class_table_cont_cell"><p class="text_18 round">9</p></div>
+					<div class="class_table_cont_cell"><p class="text_18 round">A</p></div>
+					<div class="class_table_cont_cell"><p class="text_18 round">B</p></div>
+					<div class="class_table_cont_cell"><p class="text_18 round">C</p></div>
+					<div class="class_table_cont_cell"><p class="text_18 round">D</p></div>
+				</div>
+				<div class="class_table_cont_row">
+					<app-table-cell *ngFor="let item of displayedTableWorkdays[0]" [lockStatus]="isLocked" [cellData]="item" (setFilter)="onSetFilter($event)"></app-table-cell>
+				</div>
+				<div class="class_table_cont_row">
+					<app-table-cell *ngFor="let item of displayedTableWorkdays[1]" [lockStatus]="isLocked" [cellData]="item" (setFilter)="onSetFilter($event)"></app-table-cell>
+				</div>
+				<div class="class_table_cont_row">
+					<app-table-cell *ngFor="let item of displayedTableWorkdays[2]" [lockStatus]="isLocked" [cellData]="item" (setFilter)="onSetFilter($event)"></app-table-cell>
+				</div>
+				<div class="class_table_cont_row">
+					<app-table-cell *ngFor="let item of displayedTableWorkdays[3]" [lockStatus]="isLocked" [cellData]="item" (setFilter)="onSetFilter($event)"></app-table-cell>
+				</div>
+				<div class="class_table_cont_row">
+					<app-table-cell *ngFor="let item of displayedTableWorkdays[4]" [lockStatus]="isLocked" [cellData]="item" (setFilter)="onSetFilter($event)"></app-table-cell>
+				</div>
+			</div>
+			<div *ngIf="displayedTableOtherDays.length" class="class_table_cont__other">
+				<div class="class_table_cont_row left">
+					<div class="class_table_cont_cell other"><p class="text_18">其他</p></div>
+				</div>
+				<div class="class_table_cont_row right_full">
+					<div *ngFor="let item of displayedTableOtherDays" class="class_table_cont_cell other class_cell occupied" [ngClass]="item.deptId">
+						<div class="class_table_cont_cell_button other"  (click)="deleteItem( item )"></div>
+						<p class="class_table_cont_cell_id other text_12"> {{ item.time }}</p>
+						<p class="class_table_cont_cell_title other text_16 text_bold"> {{ item.courseName }} </p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
