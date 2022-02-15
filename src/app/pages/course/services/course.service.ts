@@ -48,6 +48,7 @@ export class CourseService {
      * 取得 當學期 所有課程
      */
     getCourseData(): Observable<CourseModel[]> {
+        this.initCurrentSemesterCourses();
         return this.newSemesterCourseList$.pipe(take(1), share());
     }
 
@@ -81,6 +82,20 @@ export class CourseService {
         // TODO: cache search result by map
         return this.newSemesterCourseList$.pipe(
             map((courseList) => courseList.find((course) => course.id === courseId)),
+            take(1)
+        );
+    }
+
+    /**
+     * 利用courseName抓取相同課程名稱過去的資料
+     * @param courseName
+     * @returns `Course`
+     */
+    getCourseByCourseName(courseName: string): Observable<CourseModel> {
+        this.initCurrentSemesterCourses();
+        // TODO: cache search result by map
+        return this.newSemesterCourseList$.pipe(
+            map((courseList) => courseList.find((course) => course.courseName === courseName)),
             take(1)
         );
     }
