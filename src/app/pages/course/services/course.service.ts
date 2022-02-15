@@ -87,20 +87,6 @@ export class CourseService {
     }
 
     /**
-     * 利用courseName抓取相同課程名稱過去的資料
-     * @param courseName
-     * @returns `Course`
-     */
-    getCourseByCourseName(courseName: string): Observable<CourseModel> {
-        this.initCurrentSemesterCourses();
-        // TODO: cache search result by map
-        return this.newSemesterCourseList$.pipe(
-            map((courseList) => courseList.find((course) => course.courseName === courseName)),
-            take(1)
-        );
-    }
-
-    /**
      * 資料轉型態 CourseRawModel => CourseModel
      * @param rawCourse: CourseRawModel
      * @private
