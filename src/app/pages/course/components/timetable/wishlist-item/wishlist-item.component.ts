@@ -2,6 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { CourseModel } from '../../../models/Course.model';
 import { TimetableService } from '../../../services/timetable.service';
 import { WishListService } from '../../../services/wish-list.service';
+import { CourseService } from '../../../services/course.service';
 
 @Component({
   selector: 'app-wishlist-item',
@@ -14,7 +15,11 @@ export class WishlistItemComponent implements OnInit {
   @Input()
   courseItem: CourseModel;
 
-  constructor(private timetableService: TimetableService, private wishListService: WishListService) { }
+  constructor(
+    private timetableService: TimetableService, 
+    private wishListService: WishListService,
+    private courseService: CourseService
+  ) { }
 
   ngOnInit(): void {
   }
@@ -32,6 +37,7 @@ export class WishlistItemComponent implements OnInit {
    */
   addToTable() {
     if (!this.timetableService.isConflicted(this.courseItem)) {
+      //TODO: setNotification ( '成功加入課表！', 'blue' );
       this.timetableService.setTimeFilter(null);
       this.wishListService.removeWish(this.courseItem.id);
       this.timetableService.addToTempUserTable(this.courseItem);
@@ -70,26 +76,6 @@ export class WishlistItemComponent implements OnInit {
     * @returns 傳入課程的所屬系所簡稱
     */
   deptTransCat(deptID: string, deptName: string): string {
-    let category: string;
-    switch (deptID) {
-      case 'A9':
-        category = '通';
-        break;
-      case 'A6':
-        category = '服';
-        break;
-      case 'A7':
-        category = '國';
-        break;
-      case 'A1':
-        category = '外';
-        break;
-      case 'A2':
-        category = '體';
-        break;
-      default:
-        category = deptName.substring(0, 1);
-    }
-    return category;
+    return this.courseService.deptTransCat(deptID, deptName);
   }
 }

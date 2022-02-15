@@ -64,7 +64,9 @@ export class WishListService {
                 this.wishList.push(wish);
                 this.wishList$.next(this.wishList);
             }
+            //TODO: setNotification ( '成功加入願望清單！', 'blue' );
         }
+        //TODO: setNotification ( '此課程已在願望清單內！', 'red' );
     }
 
     /**

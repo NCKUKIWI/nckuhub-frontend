@@ -1,4 +1,5 @@
 import { CourseModel } from "./Course.model";
+import { StringUtils } from "src/app/core/utils/string-utils";
 
 /**
  * 課表的相關資訊
@@ -58,9 +59,6 @@ export class TimeObject {
      */
     static getTimeObject(courseTime: string): TimeObject[] {
         // 正規表達式
-        const RE_CHINESE = /[\u4e00-\u9fa5]/g;
-        const RE_COURSE_TIME_FROM1 = /\[[1-5]\][A-DN1-9]~[A-DN1-9]/;
-        const RE_COURSE_TIME_FROM2 = /\[[1-5]\][A-DN1-9]/;
         const RE_DAY = /\[[1-5]\]/;
         const RE_NUM = /[A-DN1-9]/;
 
@@ -69,12 +67,12 @@ export class TimeObject {
         // 刪掉 所有多餘空格
         text = text.replace(/\s+/g, '');
         // 檢測 是否 出現 中文
-        if (text.match(RE_CHINESE)) {
+        if (StringUtils.isChinese(text)) {
             // console.log('getTime: 出現中文 ');
             return [];
         }
         // 檢查 是否為 合理值
-        if (!text.match(RE_COURSE_TIME_FROM2)) {
+        if (!StringUtils.isCourseTimeForm2(text)) {
             // console.log('getTime: 無效的時間 ');
             return [];
         }
@@ -82,13 +80,13 @@ export class TimeObject {
         // 將上課時間 分段存入 陣列
         let timeSplit: string[] = [], result: RegExpMatchArray;
         while (text != '') {
-            if (text.match(RE_COURSE_TIME_FROM1)) {
-                result = text.match(RE_COURSE_TIME_FROM1);
+            if (StringUtils.isCourseTimeForm1(text)) {
+                result = text.match(StringUtils.regexCourseTimeForm1);
                 text = text.replace(result[0], '');
                 timeSplit.push(result[0]);
             }
-            else if (text.match(RE_COURSE_TIME_FROM2)) {
-                result = text.match(RE_COURSE_TIME_FROM2);
+            else if (StringUtils.isCourseTimeForm2(text)) {
+                result = text.match(StringUtils.regexCourseTimeForm2);
                 text = text.replace(result[0], '');
                 timeSplit.push(result[0]);
             }
@@ -108,7 +106,7 @@ export class TimeObject {
             if (time.toString().match('~')) {
                 start = time[0];
                 end = time[2];
-                hrs = textTransTime(end) - textTransTime(start) + 1;
+                hrs = StringUtils.textTransTime(end) - StringUtils.textTransTime(start) + 1;
             }
             else {
                 start = time[0];
@@ -119,7 +117,7 @@ export class TimeObject {
                 // 轉換為 time_item
                 timeItem.push({
                     day: parseInt(day) - 1,
-                    start: textTransTime(start),
+                    start: StringUtils.textTransTime(start),
                     hrs: hrs
                 });
             }
@@ -130,43 +128,4 @@ export class TimeObject {
         // console.log ( time_item );
         return timeItem;
     }
-}
-
-/**
- * 把「上課時段文字」轉成「真實時段順序」
- * @param text 上課時段文字
- * @returns 真實時段順序，即一天中的 第0~13堂課
- */
-function textTransTime(text: string): number {
-    let realTime: number = 0;
-    if (text > '0' && text <= '4') {
-        realTime = parseInt(text) - 1;
-    }
-    else if (text >= '5' && text <= '9') {
-        realTime = parseInt(text);
-    }
-    else {
-        switch (text) {
-            case 'N':
-                realTime = 4;
-                break;
-            case 'A':
-                realTime = 10;
-                break;
-            case 'B':
-                realTime = 11;
-                break;
-            case 'C':
-                realTime = 12;
-                break;
-            case 'D':
-                realTime = 13;
-                break;
-            default:
-                realTime = 0;
-                // realTime = 'other_time';
-                break;
-        }
-    }
-    return realTime;
 }

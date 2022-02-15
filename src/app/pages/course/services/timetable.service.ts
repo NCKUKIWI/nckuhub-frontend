@@ -21,6 +21,8 @@ export class TimetableService {
   // 平日上課時間的展示資料，屬於 展示版課表
   // 5*14的陣列，代表 每周5個工作日 和 每天14節課
   private displayedTableWorkdays: TableCellData[][] = [];
+  private static WORKDAYS = 5;
+  private static COURSES_PER_WORKDAY = 14;
   // 非平日上課時間的展示資料，屬於 展示版課表
   private displayedTableOtherDays: CourseModel[] = [];
 
@@ -191,8 +193,8 @@ export class TimetableService {
       const hrs = setedTime.hrs;
       if (!hrs) {
         // 標註在展示板課表
-        for (let i = 0; i < 5; ++i) {
-          for (let j = 0; j < 14; ++j) {
+        for (let i = 0; i < TimetableService.WORKDAYS; ++i) {
+          for (let j = 0; j < TimetableService.COURSES_PER_WORKDAY; ++j) {
             // 如果 對應位置之前為篩選條件(true)，則代表 清空 時間篩選條件，因此 需標註為false
             // 若非 則正常標註
             if(i===day && j===start)
@@ -211,8 +213,8 @@ export class TimetableService {
     }
     else {
       // 標註在展示板課表
-      for (let i = 0; i < 5; ++i) {
-        for (let j = 0; j < 14; ++j) {
+      for (let i = 0; i < TimetableService.WORKDAYS; ++i) {
+        for (let j = 0; j < TimetableService.COURSES_PER_WORKDAY; ++j) {
           this.displayedTableWorkdays[i][j].isFilterTime = false;
         }
       }
@@ -257,10 +259,10 @@ export class TimetableService {
 
     let tableCellData: TableCellData;
     // 星期一到五
-    for (let i = 0; i < 5; ++i) {
+    for (let i = 0; i < TimetableService.WORKDAYS; ++i) {
       this.displayedTableWorkdays.push([]);
       // 一天14節課
-      for (let j = 0; j < 14; ++j) {
+      for (let j = 0; j < TimetableService.COURSES_PER_WORKDAY; ++j) {
         tableCellData = new TableCellData();
         tableCellData.time.day = i;
         tableCellData.time.start = j;
@@ -276,7 +278,7 @@ export class TimetableService {
    */
   private fetchUserTable(): void {
     this.tempUserTable.length = 0;
-    //fake data
+    // TODO: fake data
     this.tempUserTable.push(1730, 2059, 409, 9728);
   }
 
