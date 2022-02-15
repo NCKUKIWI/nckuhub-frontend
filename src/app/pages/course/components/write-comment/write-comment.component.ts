@@ -389,7 +389,7 @@ export class WriteCommentComponent implements OnInit {
      * 放棄留言並關閉新增評論
      */
     private giveUpComment(): void {
-        if (this.passValidator && !this.commentGiveUp) {
+        if (this.courseCommentForm.get('courseComment').value.length > 0 && !this.commentGiveUp) {
             this.commentGiveUp = true;
         } else {
             this.backToHomePage();
