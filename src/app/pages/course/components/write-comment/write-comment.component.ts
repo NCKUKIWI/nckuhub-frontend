@@ -1,7 +1,9 @@
 import { Component, OnInit, Optional } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { CourseRateModel } from '../../models/CourseRate.model';
-import { CourseWithCommentModel, CourseComment } from '../../models/CourseComment.model';
+import { HistoryCourseModel } from '../../models/Course.model';
+import { CourseFormModel } from '../../models/CourseForm.model';
 import { CourseService } from '../../services/course.service';
 import { DynamicDialogRef } from 'primeng/dynamicdialog';
 
@@ -15,17 +17,22 @@ export class WriteCommentComponent implements OnInit {
         private courseService: CourseService,
         private fb: FormBuilder,
         @Optional()
-        public ref: DynamicDialogRef
+        public ref: DynamicDialogRef,
+        private http: HttpClient
     ) {}
 
-    // 課程心得表單
+    // 課程心得表單(For post)
     courseForm: FormGroup;
+    // 監督課程名稱及課程心得的表單
+    courseCommentForm: FormGroup;
     // 存取所有課程以便searchCourseTitle搜尋可能的課程列表
     courseData: string[] = [];
     // 可能的課程列表
     courseTitleSuggestion: string[] = [];
     // 紀錄最終選擇的課程
     courseTitleFilled: string;
+    // 利用選擇的課程抓取到的過去資料
+    historyCourseData: HistoryCourseModel[] = [];
     // 紀錄最終選擇的開課學期
     courseSemester: string = '選擇學期';
     // 是否選擇開課學期這個欄位
@@ -38,6 +45,8 @@ export class WriteCommentComponent implements OnInit {
     isChoosingTeacher: boolean = false;
     // 該課程可能的開課教師
     courseTeacherSuggestion: string[] = [];
+    // 紀錄最終選擇的開課系所
+    courseDept = '';
     // 紀錄課程評分
     courseRate: CourseRateModel = {
         gain: 5,
@@ -50,17 +59,14 @@ export class WriteCommentComponent implements OnInit {
     writeCommentStatus: string = '心得最低需求 50 字，請填寫完畢後按下送出。';
     // 控制是否放棄課程心得的div
     commentGiveUp: boolean = false;
+    // 檢查字數是否超過50字
+    passValidator: boolean = false;
     // 課程心得已成功送出
     commentSend: boolean = false;
-    // 資料送出時打包會需要的(但目前沒用到)
-    // courseDeptSuggestion: string[];
-    // courseDept = '';
-    // courseIdSuggestion: string[] = [];
-    // courseId = '';
 
     ngOnInit(): void {
         // 創建課程心得表單
-        this.createForm();
+        this.createCourseCommentForm();
         // 取得所有課程名稱
         this.getCourseData();
         // 監聽courseTitle以呈現可能的課程列表
@@ -68,27 +74,39 @@ export class WriteCommentComponent implements OnInit {
     }
 
     /**
-     *
+     * 創建課程心得表單
      */
-    private createForm(): void {
-        this.courseForm = this.fb.group({
+    private createCourseCommentForm(): void {
+        this.courseCommentForm = this.fb.group({
             // 和輸入課程欄位互相響應
             courseTitle: '',
             // 和輸入心得欄位互相響應
-            courseReview: '',
-            // 和選擇課程評分互相響應
-            // courseRate: this.fb.group({
-            //     gain: '',
-            //     sweet:'',
-            //     cold: '',
-            // })
+            courseComment: { value: '', disabled: true },
         });
     }
+
+    /**
+     * 創建課程表單 (For post)
+     */
+    private createPostForm(): void {
+        this.courseForm = this.fb.group({
+            course_name: this.courseTitleFilled,
+            teacher: this.courseTeacher,
+            semester: this.courseSemester,
+            catalog: this.courseDept,
+            comment: this.courseCommentForm.get('courseComment').value,
+            sweet: this.courseRate.sweet,
+            cold: this.courseRate.cold,
+            got: this.courseRate.gain,
+            point: this.coursePoint,
+        });
+    }
+
     /**
      * 取得所有課程名稱
      */
     private getCourseData(): void {
-        this.courseService.getCourseData().subscribe((courseAllData) => {
+        this.courseService.getHistoryCourseModel().subscribe((courseAllData) => {
             courseAllData.forEach((course) => {
                 // 避免相同課程被重複篩選
                 if (this.courseData.indexOf(course.courseName) === -1) {
@@ -99,22 +117,50 @@ export class WriteCommentComponent implements OnInit {
     }
 
     /**
-     * 取得該課程有開課的學期(需修改，目前只有抓取到110-2這個學期的課程)
+     * 取得該課程有開課的學期及開課教師
      * @param courseTitleFilled
      */
-    private getCourseSemester(courseTitle: string): void {
+    private getHistoryCourseData(courseTitle: string): void {
         this.courseService.getCourseByCourseName(courseTitle).subscribe((courseData) => {
-            // courseData.forEach((course) => {
-            //     if (this.courseSemesterSuggestion.indexOf(courseData.semester) === -1) {
-            //         this.courseData.push(courseData.semester);
-            //     }
-            //     if (this.courseSemesterSuggestion.indexOf(courseData.teacher) === -1) {
-            //         this.courseData.push(courseData.teacher);
-            //     }
-            // })
+            this.historyCourseData = courseData;
+            // 篩選該課程有開課的學期
+            this.getCourseSemester();
+        });
+    }
 
-            this.courseSemesterSuggestion.push('110-2'); //目前courseModel資料內沒有學期的資料
-            this.courseTeacherSuggestion.push(courseData.teacher);
+    /**
+     * 篩選該課程有開課的學期
+     */
+    private getCourseSemester(): void {
+        this.historyCourseData.forEach((course) => {
+            if (this.courseSemesterSuggestion.indexOf(course.semester) === -1) {
+                this.courseSemesterSuggestion.push(course.semester);
+            }
+        });
+    }
+
+    /**
+     * 篩選特定學期有開該課程的教師
+     * @param courseSemester
+     */
+    private getCourseTeacher(courseSemester: string): void {
+        this.historyCourseData.forEach((course) => {
+            if (course.semester === courseSemester && this.courseTeacherSuggestion.indexOf(this.getREValidText(course.teacher)) === -1) {
+                this.courseTeacherSuggestion.push(this.getREValidText(course.teacher));
+            }
+        });
+    }
+
+    /**
+     * 找出開該課程的系所
+     * @param courseSemester & courseTeacher
+     *
+     */
+    private getCourseDept(courseSemester: string, courseTeacher: string): void {
+        this.historyCourseData.forEach((course) => {
+            if (course.semester === courseSemester && course.teacher === courseTeacher) {
+                this.courseDept = course.deptId;
+            }
         });
     }
 
@@ -123,9 +169,10 @@ export class WriteCommentComponent implements OnInit {
      * @param text
      */
     private getREValidText(text: string): string {
-        var invalid = /[()\[\]{}]+/g;
+        var invalid = /^\s*|\s*$/g;
         if (text.match(invalid)) {
             text = text.replace(invalid, '');
+            text = text.replace('*', '');
             return text.toUpperCase();
         }
         return text.toUpperCase();
@@ -135,7 +182,7 @@ export class WriteCommentComponent implements OnInit {
      * 尋找可能的課程清單
      */
     private searchCourseTitle(): void {
-        this.courseForm.get('courseTitle').valueChanges.subscribe((enterTitle: string) => {
+        this.courseCommentForm.get('courseTitle').valueChanges.subscribe((enterTitle: string) => {
             // 將input的資料整理
             enterTitle = this.getREValidText(enterTitle);
             // 清空可能課程的陣列及取消學期及老師的dropdown
@@ -167,8 +214,10 @@ export class WriteCommentComponent implements OnInit {
         this.isChoosingTeacher = false;
         this.courseTeacher = '選擇開課教師';
         this.courseTeacherSuggestion = [];
-        // 清空留言
-        this.courseForm.get('courseReview').setValue('');
+        // 清空課程心得
+        this.courseCommentForm.get('courseComment').setValue('');
+        // 鎖定課程心得欄位
+        this.courseCommentForm.get('courseComment').disable();
         // 清空評分紀錄
         this.courseRateInit();
         // 清空給予的點數
@@ -181,15 +230,14 @@ export class WriteCommentComponent implements OnInit {
      */
     private fillTitle(title: string): void {
         // 重新監聽CourseTitle這欄
-        this.courseForm.get('courseTitle').setValue(title);
+        this.courseCommentForm.get('courseTitle').setValue(title);
         this.searchCourseTitle();
         // 將選擇的課程放入courseTitleFilled
         this.courseTitleFilled = title;
-        // console.log(this.courseTitleFilled);
         // 清空可能的課程列表
         this.courseTitleSuggestion = [];
         // 利用課程名稱搜尋其可能的開課學期及教師
-        this.getCourseSemester(title);
+        this.getHistoryCourseData(title);
     }
 
     /**
@@ -197,6 +245,7 @@ export class WriteCommentComponent implements OnInit {
      */
     private chooseSemester(): void {
         this.isChoosingSemester = true;
+        this.isChoosingTeacher = false;
     }
 
     /**
@@ -204,14 +253,20 @@ export class WriteCommentComponent implements OnInit {
      * @param semester 開課學期
      */
     private fillSemester(semester: string): void {
+        // 填入開課學期欄位並關閉dropdown
         this.courseSemester = semester;
         this.isChoosingSemester = false;
+        // 清空開課教師的欄位並重新搜尋該學期可能的開課教師
+        this.courseTeacher = '選擇開課教師';
+        this.courseTeacherSuggestion = [];
+        this.getCourseTeacher(semester);
     }
 
     /**
      * 選擇開課教師這個欄位，並展開dropdown
      */
     private chooseTeacher(): void {
+        this.isChoosingSemester = false;
         this.isChoosingTeacher = true;
     }
 
@@ -220,9 +275,16 @@ export class WriteCommentComponent implements OnInit {
      * @param semester 開課學期
      */
     private fillTeacher(teacher: string): void {
+        // 填入開課學期欄位並關閉dropdown
         this.courseTeacher = teacher;
         this.isChoosingTeacher = false;
+        // 搜尋開課的系所
+        this.getCourseDept(this.courseSemester, this.courseTeacher);
+        // 給予填寫心得的點數
         this.coursePoint = 3;
+        // 使下方填寫心得欄位可以使用並隨時檢查心得字數是否達到50字
+        this.courseCommentForm.get('courseComment').enable();
+        this.courseCommentValidator();
     }
 
     /**
@@ -251,9 +313,6 @@ export class WriteCommentComponent implements OnInit {
         this.courseRate.gain = 5;
         this.courseRate.sweet = 5;
         this.courseRate.cold = 5;
-        // this.courseForm.get('courseRate').get('gain').setValue(5);
-        // this.courseForm.get('courseRate').get('sweet').setValue(5);
-        // this.courseForm.get('courseRate').get('cold').setValue(5);
     }
 
     /**
@@ -263,15 +322,12 @@ export class WriteCommentComponent implements OnInit {
     private giveRate(index: string, num: number): void {
         if (index === 'gain') {
             this.courseRate.gain = this.courseRateCalc(this.courseRate.gain + num);
-            // this.courseForm.get('courseRate').get('gain').setValue(this.courseRateCalc(this.courseForm.get('courseRate').get('gain').value + num))
         }
         if (index === 'sweet') {
             this.courseRate.sweet = this.courseRateCalc(this.courseRate.sweet + num);
-            // this.courseForm.get('courseRate').get('sweet').setValue(this.courseRateCalc(this.courseForm.get('courseRate').get('sweet').value + num))
         }
         if (index === 'cold') {
             this.courseRate.cold = this.courseRateCalc(this.courseRate.cold + num);
-            // this.courseForm.get('courseRate').get('cold').setValue(this.courseRateCalc(this.courseForm.get('courseRate').get('cold').value+ num))
         }
     }
 
@@ -290,23 +346,42 @@ export class WriteCommentComponent implements OnInit {
     }
 
     /**
+     * 檢查課程心得留言是否有50字以上
+     */
+    private courseCommentValidator(): void {
+        this.courseCommentForm.get('courseComment').valueChanges.subscribe((comment: string) => {
+            // 將comment過濾特殊符號
+            let validComment = this.getREValidText(comment);
+            // 檢查是否已滿足50字的條件
+            if (validComment.length >= 50) {
+                this.passValidator = true;
+            } else {
+                this.passValidator = false;
+            }
+        });
+    }
+
+    /**
      * 打包留言並送出
      */
     private sendComment(): void {
-        if (this.courseForm.get('courseReview').value.length >= 50) {
-            this.commentSend = true;
-            // axios.post('/post/create/' , {
-            //     'course_name': this.courseForm.get('courseTitle').value,
-            //     'teacher': this.courseTeacher,
-            //     'semester': this.courseSemester,
-            //     'comment': this.courseForm.get('courseReview').value,
-            //     'sweet': this.courseRate.sweet,
-            //     'cold': this.courseRate.cold,
-            //     'got': this.courseRate.gain,
-            //     'catalog': this.course_dept,
-            //     'point': this.coursePoint
-            // })
-        } else {
+        if (this.passValidator) {
+            // 創建courseForm(For post)
+            this.createPostForm();
+            // post request
+            let options = {
+                headers: new HttpHeaders({ 'Content-Type': 'multipart/form-data' }),
+            };
+            this.http.post<CourseFormModel>('https://nckuhub.com/post/create', this.courseForm.value, options).subscribe(
+                (res) => {
+                    // 展開訊息已成功送出div(移到post裡面)
+                    this.commentSend = true;
+                    console.log(res);
+                },
+                (err: any) => {
+                    console.log('送出心得: ' + err);
+                }
+            );
         }
     }
 
@@ -314,7 +389,7 @@ export class WriteCommentComponent implements OnInit {
      * 放棄留言並關閉新增評論
      */
     private giveUpComment(): void {
-        if (this.courseForm.get('courseReview').value.length > 0 && this.commentGiveUp === false) {
+        if (this.passValidator && !this.commentGiveUp) {
             this.commentGiveUp = true;
         } else {
             this.backToHomePage();
@@ -334,7 +409,6 @@ export class WriteCommentComponent implements OnInit {
     private backToHomePage(): void {
         this.commentSend = false;
         this.ref.close();
-        console.log('close course comment');
     }
 
     /**
@@ -343,7 +417,7 @@ export class WriteCommentComponent implements OnInit {
     private oneMoreComment(): void {
         this.commentSend = false;
         // 重新監聽CourseTitle這欄
-        this.courseForm.get('courseTitle').setValue('');
+        this.courseCommentForm.get('courseTitle').setValue('');
         this.searchCourseTitle();
         // 清空所有留言格
         this.clearComment();

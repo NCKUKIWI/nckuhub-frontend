@@ -11,7 +11,7 @@
             </div>
         </div>
 
-        <div class="add_review__window__mid_cont" [formGroup]="courseForm">
+        <div class="add_review__window__mid_cont" [formGroup]="courseCommentForm">
             <div class="add_review__window__mid_cont__top_row">
                 <!-- 利用formGroup顯示當前輸入值 course_title -->
                 <input class="add_review_info title text_16" type="text" formControlName="courseTitle" placeholder="輸入課程名稱" />
@@ -34,7 +34,7 @@
                 class="add_review__window__mid_cont__mid_area add_review_paragraph text_16"
                 placeholder="上課形式、課堂要求、學習內容... 對這門課說些什麼吧！"
                 [ngClass]="{ disabled: !courseTitleFilled || courseSemester == '選擇學期' || courseTeacher == '選擇開課教師' }"
-                formControlName="courseReview"
+                formControlName="courseComment"
             ></textarea>
             <div [ngClass]="{ enabled: courseTitleFilled && courseSemester != '選擇學期' && courseTeacher != '選擇開課教師' }" class="add_review__window__mid_cont__bottom_row">
                 <div class="add_review_rate text_16 gain" (mouseover)="changeStatus('gain')" (mouseout)="changeStatus('default')">
@@ -78,10 +78,9 @@
                 <div class="add_review_button give_up text_16 enabled" (click)="giveUpComment()">放棄</div>
                 <!-- <div v-if="course_point == 0" :class="{ enabled: course_review.replace(/\s/g, '').length >= 50 }" 
                      class="add_review_button send_review text_16" @click="sendReview">送出心得</div> -->
-                <!-- 心得要多一個replace(/\s/g, '')來確保是否有50個字 -->
-                <div [ngClass]="{ enabled: courseForm.get('courseReview').value.length >= 50 }" class="add_review_button send_review text_16" (click)="sendComment()">
-                    <img *ngIf="courseForm.get('courseReview').value.length >= 50" src="../../../../../assets/images/add_review/icon_send.svg" />
-                    <img *ngIf="courseForm.get('courseReview').value.length < 50" src="../../../../../assets/images/add_review/icon_send_disabled.svg" />
+                <div [ngClass]="{ enabled: passValidator }" class="add_review_button send_review text_16" (click)="sendComment()">
+                    <img *ngIf="passValidator" src="../../../../../assets/images/add_review/icon_send.svg" />
+                    <img *ngIf="!passValidator" src="../../../../../assets/images/add_review/icon_send_disabled.svg" />
                     <p>
                         送出心得<span *ngIf="coursePoint > 0">，獲得積分 {{ coursePoint }} 點</span>
                     </p>

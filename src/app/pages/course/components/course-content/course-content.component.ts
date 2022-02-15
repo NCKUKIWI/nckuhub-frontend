@@ -123,6 +123,10 @@ export class CourseContentComponent implements OnInit {
      * 打開課程心得留言
      */
     addCourseComment(): void {
+        // 關閉先前的ref
+        if (this.ref) {
+            this.closeCourseContent();
+        }
         this.ref = this.dialogService.open(WriteCommentComponent, {
             width: '100vw',
             height: '100vh',

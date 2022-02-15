@@ -36,3 +36,19 @@ export class CourseRawModel {
     選必修: string;
     選課序號: string;
 }
+
+export class HistoryCourseModel {
+    id: number;
+    semester: string;
+    deptId: string;
+    teacher: string;
+    courseName: string;
+}
+
+export class HistoryCourseRawModel {
+    id: number; // 82912
+    semester: string; // "110-1"
+    系號: string; // "KZ"
+    老師: string; // "林長寬*,林朝成"
+    課程名稱: string; // "現代佛教、跨界及國際政治"
+}
