@@ -35,7 +35,7 @@ export class AppUrl {
     /** 取得 課程 大綱 */
     public static GET_COURSE_OUTLINE = (deptCode: string, courseCode: string): string => `http://course-query.acad.ncku.edu.tw/crm/course_map/course.php?dept=${deptCode}&cono=${courseCode}`;
     /** 上傳 課程 心得 */
-    public static ADD_COURSECOMMENT = (): string => `post/create`;
+    public static ADD_COURSECOMMENT = (): string => `/post/create`;
 
     /** User 使用者 */
     /** 取得 使用者 課表、願望清單資訊 */

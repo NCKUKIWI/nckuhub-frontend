@@ -1,6 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { NavigationEnd, Event, NavigationError, Router } from '@angular/router';
-import { Subscription } from 'rxjs';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { WriteCommentComponent } from '../write-comment/write-comment.component';
 

@@ -1,11 +1,11 @@
 import { Component, OnInit, Optional } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { CourseRateModel } from '../../models/CourseRate.model';
 import { HistoryCourseModel } from '../../models/Course.model';
-import { CourseFormModel } from '../../models/CourseForm.model';
 import { CourseService } from '../../services/course.service';
 import { DynamicDialogRef } from 'primeng/dynamicdialog';
+import { AppService } from '../../../../core/http/app.service';
+import { AppUrl } from 'src/app/core/http/app.setting';
 
 @Component({
     selector: 'app-write-comment',
@@ -15,10 +15,10 @@ import { DynamicDialogRef } from 'primeng/dynamicdialog';
 export class WriteCommentComponent implements OnInit {
     constructor(
         private courseService: CourseService,
+        private appService: AppService,
         private fb: FormBuilder,
         @Optional()
-        public ref: DynamicDialogRef,
-        private http: HttpClient
+        public ref: DynamicDialogRef
     ) {}
 
     // 課程心得表單(For post)
@@ -264,6 +264,10 @@ export class WriteCommentComponent implements OnInit {
         this.courseTeacher = '選擇開課教師';
         this.courseTeacherSuggestion = [];
         this.getCourseTeacher(semester);
+        // 清空課程心得
+        this.courseCommentForm.get('courseComment').setValue('');
+        // 鎖定課程心得欄位
+        this.courseCommentForm.get('courseComment').disable();
     }
 
     /**
@@ -373,19 +377,15 @@ export class WriteCommentComponent implements OnInit {
             // 創建courseForm(For post)
             this.createPostForm();
             // post request
-            let options = {
-                headers: new HttpHeaders({ 'Content-Type': 'multipart/form-data' }),
-            };
-            this.http.post<CourseFormModel>('https://nckuhub.com/post/create', this.courseForm.value, options).subscribe(
-                (res) => {
-                    // 展開訊息已成功送出div(移到post裡面)
+            this.appService
+                .post({
+                    url: AppUrl.ADD_COURSECOMMENT(),
+                    body: this.courseForm.value,
+                })
+                .subscribe((res: any) => {
                     this.commentSend = true;
                     console.log(res);
-                },
-                (err: any) => {
-                    console.log('送出心得: ' + err);
-                }
-            );
+                });
         }
     }
 
