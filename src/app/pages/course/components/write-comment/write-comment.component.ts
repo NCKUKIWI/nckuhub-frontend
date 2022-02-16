@@ -63,6 +63,11 @@ export class WriteCommentComponent implements OnInit {
     passValidator: boolean = false;
     // 課程心得已成功送出
     commentSend: boolean = false;
+    // 資料送出時打包會需要的(但目前沒用到)
+    // courseDeptSuggestion: string[];
+    // courseDept = '';
+    // courseIdSuggestion: string[] = [];
+    // courseId = '';
 
     ngOnInit(): void {
         // 創建課程心得表單
