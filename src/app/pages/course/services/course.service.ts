@@ -5,7 +5,7 @@ import { AppUrl } from '../../../core/http/app.setting';
 import { CourseModel, CourseRawModel } from '../models/Course.model';
 import { Injectable } from '@angular/core';
 import { CourseWithCommentModel } from '../models/CourseComment.model';
-import {UserService} from '../../../core/service/user.service';
+import { UserService } from '../../../core/service/user.service';
 import { DepartmentModel } from '../models/Department.model';
 
 /**
@@ -100,12 +100,12 @@ export class CourseService {
             id: rawCourse.id,
         };
         return courseModelData;
-    }
+    };
 
     /**
      * 抓取所有系所資料
      */
-     fetchDepartments(): Observable<DepartmentModel[]> {
+    fetchDepartments(): Observable<DepartmentModel[]> {
         return this.appService
             .get({
                 url: AppUrl.GET_COURSE_DEPT_INFO(),
@@ -117,32 +117,32 @@ export class CourseService {
     }
 
     /**
-    * 回傳 傳入課程 的所屬系所簡稱
-    * @param deptID 傳入課程的系所代號
-    * @param deptName 傳入課程的系所名稱
-    * @returns 傳入課程的所屬系所簡稱
-    */
-  deptTransCat(deptID: string, deptName: string): string {
-    let category: string;
-    switch (deptID) {
-      case 'A9':
-        category = '通';
-        break;
-      case 'A6':
-        category = '服';
-        break;
-      case 'A7':
-        category = '國';
-        break;
-      case 'A1':
-        category = '外';
-        break;
-      case 'A2':
-        category = '體';
-        break;
-      default:
-        category = deptName.substring(0, 1);
+     * 回傳 傳入課程 的所屬系所簡稱
+     * @param deptID 傳入課程的系所代號
+     * @param deptName 傳入課程的系所名稱
+     * @returns 傳入課程的所屬系所簡稱
+     */
+    deptTransCat(deptID: string, deptName: string): string {
+        let category: string;
+        switch (deptID) {
+            case 'A9':
+                category = '通';
+                break;
+            case 'A6':
+                category = '服';
+                break;
+            case 'A7':
+                category = '國';
+                break;
+            case 'A1':
+                category = '外';
+                break;
+            case 'A2':
+                category = '體';
+                break;
+            default:
+                category = deptName.substring(0, 1);
+        }
+        return category;
     }
-    return category;
-  }
 }
