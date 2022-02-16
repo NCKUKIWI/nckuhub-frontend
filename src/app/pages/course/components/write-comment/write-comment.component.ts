@@ -63,11 +63,6 @@ export class WriteCommentComponent implements OnInit {
     passValidator: boolean = false;
     // 課程心得已成功送出
     commentSend: boolean = false;
-    // 資料送出時打包會需要的(但目前沒用到)
-    // courseDeptSuggestion: string[];
-    // courseDept = '';
-    // courseIdSuggestion: string[] = [];
-    // courseId = '';
 
     ngOnInit(): void {
         // 創建課程心得表單
@@ -219,6 +214,7 @@ export class WriteCommentComponent implements OnInit {
         this.isChoosingTeacher = false;
         this.courseTeacher = '選擇開課教師';
         this.courseTeacherSuggestion = [];
+        // 清空課程心得
         this.courseCommentForm.get('courseComment').setValue('');
         // 鎖定課程心得欄位
         this.courseCommentForm.get('courseComment').disable();
@@ -227,7 +223,8 @@ export class WriteCommentComponent implements OnInit {
         // 清空給予的點數
         this.coursePoint = 0;
     }
-    /*
+
+    /**
      * 將點選的課程名稱填入，並清空courseTitleSuggestion
      * @param title  課程名稱
      */
@@ -237,7 +234,6 @@ export class WriteCommentComponent implements OnInit {
         this.searchCourseTitle();
         // 將選擇的課程放入courseTitleFilled
         this.courseTitleFilled = title;
-        // console.log(this.courseTitleFilled);
         // 清空可能的課程列表
         this.courseTitleSuggestion = [];
         // 利用課程名稱搜尋其可能的開課學期及教師
@@ -264,10 +260,6 @@ export class WriteCommentComponent implements OnInit {
         this.courseTeacher = '選擇開課教師';
         this.courseTeacherSuggestion = [];
         this.getCourseTeacher(semester);
-        // 清空課程心得
-        this.courseCommentForm.get('courseComment').setValue('');
-        // 鎖定課程心得欄位
-        this.courseCommentForm.get('courseComment').disable();
     }
 
     /**
