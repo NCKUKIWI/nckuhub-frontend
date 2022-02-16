@@ -374,6 +374,7 @@ export class WriteCommentComponent implements OnInit {
      */
     private sendComment(): void {
         if (this.passValidator) {
+            this.commentSend = true;
             // 創建courseForm(For post)
             this.createPostForm();
             // post request
@@ -383,7 +384,7 @@ export class WriteCommentComponent implements OnInit {
                     body: this.courseForm.value,
                 })
                 .subscribe((res: any) => {
-                    this.commentSend = true;
+                    // this.commentSend = true;
                     console.log(res);
                 });
         }
