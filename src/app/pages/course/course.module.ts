@@ -16,9 +16,23 @@ import { DialogService } from 'primeng/dynamicdialog';
 import { TableCellComponent } from './components/timetable/table-cell/table-cell.component';
 import { ResultListItemComponent } from './components/timetable/result-list-item/result-list-item.component';
 import { WishlistItemComponent } from './components/timetable/wishlist-item/wishlist-item.component';
+import { ButtonComponent } from './components/button/button.component';
 
 @NgModule({
-    declarations: [CourseContentComponent, CourseComponent, TimetableComponent, NavbarComponent, CourseSearchComponent, WishListComponent, CourseUserComponent, WriteCommentComponent, TableCellComponent, ResultListItemComponent, WishlistItemComponent],
+    declarations: [
+        CourseContentComponent,
+        CourseComponent,
+        TimetableComponent,
+        NavbarComponent,
+        CourseSearchComponent,
+        WishListComponent,
+        CourseUserComponent,
+        WriteCommentComponent,
+        TableCellComponent,
+        ResultListItemComponent,
+        WishlistItemComponent,
+        ButtonComponent,
+    ],
     imports: [CourseRoutingModule, CommonModule, SharedModule, FormsModule, ReactiveFormsModule, DynamicDialogModule],
     providers: [DialogService],
 })

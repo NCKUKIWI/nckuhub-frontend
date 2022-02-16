@@ -1,0 +1,12 @@
+<!-- 主頁右下角的按鈕 -->
+<!-- 需增加一個變數判斷使用者是否登入 -->
+<div id="fixed_button_table" class="fixed_button_area">
+    <!-- 新增心得按鈕 -->
+    <div *ngIf="!isInTimeTable" class="major_button red_add" (click)="addCourseComment()"></div>
+    <!-- 編輯課表按鈕 -->
+    <div *ngIf="isInTimeTable && !isEditTable" class="major_button deep_blue_edit" (click)="editTimeTable()"></div>
+    <!-- 儲存課表 -->
+    <div *ngIf="isInTimeTable && isEditTable" class="major_button red_done" (click)="saveTimeTable()"></div>
+    <!-- 取消課表 -->
+    <div *ngIf="isInTimeTable && isEditTable" class="minor_button dark_cancel" (click)="cancelTimeTable()"></div>
+</div>

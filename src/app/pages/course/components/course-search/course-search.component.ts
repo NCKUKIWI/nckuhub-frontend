@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, HostListener, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewInit, Component, HostListener, OnInit } from '@angular/core';
 import { CourseService } from '../../services/course.service';
 import { CourseModel } from '../../models/Course.model';
 import { DepartmentModel } from '../../models/Department.model';
@@ -7,14 +7,13 @@ import { WishListService } from '../../services/wish-list.service';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { Router } from '@angular/router';
 import { CourseContentComponent } from '../course-content/course-content.component';
-import { WriteCommentComponent } from '../write-comment/write-comment.component';
 
 @Component({
     selector: 'app-course-search',
     templateUrl: './course-search.component.html',
     styleUrls: ['./course-search.component.scss'],
 })
-export class CourseSearchComponent implements OnInit, AfterViewInit, OnDestroy {
+export class CourseSearchComponent implements OnInit, AfterViewInit {
     constructor(private courseService: CourseService, private dialogService: DialogService, private wishListService: WishListService, private router: Router) {}
 
     // 完整的本學期課程
@@ -157,25 +156,6 @@ export class CourseSearchComponent implements OnInit, AfterViewInit, OnDestroy {
             console.log('The dialog was closed');
             this.router.navigateByUrl('/');
         });
-    }
-
-    /**
-     * 打開課程心得留言
-     */
-    addCourseComment(): void {
-        this.ref = this.dialogService.open(WriteCommentComponent, {
-            width: '100vw',
-            height: '100vh',
-            baseZIndex: 10000,
-            transitionOptions: null,
-            style: { marginTop: '-10vh' },
-        });
-    }
-
-    ngOnDestroy(): void {
-        if (this.ref) {
-            this.ref.close();
-        }
     }
 
     /**
