@@ -1,6 +1,7 @@
 @import 'src/assets/scss/import';
 
 .add_review {
+    font-family: 'Roboto', sans-serif;
     z-index: 200;
     &__window {
         position: fixed;
@@ -184,11 +185,13 @@
                             }
                             &.semester {
                                 // flex:2;
+                                max-height: 180px;
                                 width: 20%;
                                 margin-left: 50%;
                             }
                             &.teacher {
                                 // flex:3;
+                                max-height: 180px;
                                 width: 30%;
                                 margin-left: 70%;
                             }
@@ -454,14 +457,17 @@
         flex-wrap: wrap;
     }
     .add_review_dropdown.title {
+        max-height: 180px;
         flex: auto !important;
         top: 1px;
     }
     .add_review_dropdown.semester {
+        max-height: 180px;
         flex: 1;
         top: 47px;
     }
     .add_review_dropdown.teacher {
+        max-height: 180px;
         flex: 3;
         top: 47px;
     }

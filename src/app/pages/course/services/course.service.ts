@@ -2,7 +2,7 @@ import { Observable, Subject } from 'rxjs';
 import { map, take, share } from 'rxjs/operators';
 import { AppService } from '../../../core/http/app.service';
 import { AppUrl } from '../../../core/http/app.setting';
-import { CourseModel, CourseRawModel } from '../models/Course.model';
+import { CourseModel, CourseRawModel, HistoryCourseModel, HistoryCourseRawModel } from '../models/Course.model';
 import { Injectable } from '@angular/core';
 import { CourseWithCommentModel } from '../models/CourseComment.model';
 import { UserService } from '../../../core/service/user.service';
@@ -20,9 +20,14 @@ import { DepartmentModel } from '../models/Department.model';
 export class CourseService {
     // 當學期課程
     private newSemesterCourseList$ = new Subject<CourseModel[]>();
+    // 過去學期課程
+    private historyCourseList$ = new Observable<HistoryCourseModel[]>();
 
     constructor(private appService: AppService, private userService: UserService) {
+        // 取得當學期的課程
         this.initCurrentSemesterCourses();
+        // 取得過去學期的課程
+        this.historyCourseList$ = this.fetchHistoryCourses();
     }
 
     /**
@@ -43,7 +48,6 @@ export class CourseService {
      * 取得 當學期 所有課程
      */
     getCourseData(): Observable<CourseModel[]> {
-        this.initCurrentSemesterCourses();
         return this.newSemesterCourseList$.pipe(take(1), share());
     }
 
@@ -77,20 +81,6 @@ export class CourseService {
         // TODO: cache search result by map
         return this.newSemesterCourseList$.pipe(
             map((courseList) => courseList.find((course) => course.id === courseId)),
-            take(1)
-        );
-    }
-
-    /**
-     * 利用courseName抓取相同課程名稱過去的資料
-     * @param courseName
-     * @returns `Course`
-     */
-    getCourseByCourseName(courseName: string): Observable<CourseModel> {
-        this.initCurrentSemesterCourses();
-        // TODO: cache search result by map
-        return this.newSemesterCourseList$.pipe(
-            map((courseList) => courseList.find((course) => course.courseName === courseName)),
             take(1)
         );
     }
@@ -160,4 +150,58 @@ export class CourseService {
         }
         return category;
     }
+
+    /*
+     * 抓取所有歷史課程資料
+     */
+    fetchHistoryCourses(): Observable<HistoryCourseModel[]> {
+        return this.appService
+            .get({
+                url: AppUrl.GET_HISTORY_COURSE(),
+            })
+            .pipe(
+                map((res) => this.convertToHistoryCourseModel(res.model) as HistoryCourseModel[]),
+                take(1)
+            );
+    }
+
+    /**
+     * @param courseName
+     * @returns
+     */
+    getHistoryCourseModel(): Observable<HistoryCourseModel[]> {
+        return this.historyCourseList$;
+    }
+
+    /**
+     * 利用courseName抓取相同課程名稱過去的資料
+     * @param courseName
+     * @returns `HistoryCourseModel[]`
+     */
+    getCourseByCourseName(courseName: string): Observable<HistoryCourseModel[]> {
+        return this.historyCourseList$.pipe(
+            map((courseList) => courseList.filter((course) => course.courseName === courseName)),
+            take(1)
+        );
+    }
+
+    /**
+     * 資料轉型態 HistoryCourseRawModel => HistoryCourseModel
+     * @param rawCourse: HistoryCourseRawModel[]
+     */
+    private convertToHistoryCourseModel = (rawCourse: HistoryCourseRawModel[]): HistoryCourseModel[] => {
+        const historyCourseData: HistoryCourseModel[] = [];
+        rawCourse.forEach((course) => {
+            // 將轉換每筆資料從HistoryCourseRawModel 轉換成 HistoryCourseModel
+            const data = {
+                id: course.id,
+                semester: course.semester,
+                deptId: course.系號,
+                teacher: course.老師,
+                courseName: course.課程名稱,
+            };
+            historyCourseData.push(data);
+        });
+        return historyCourseData;
+    };
 }
