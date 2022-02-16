@@ -232,6 +232,7 @@ export class WriteCommentComponent implements OnInit {
         this.searchCourseTitle();
         // 將選擇的課程放入courseTitleFilled
         this.courseTitleFilled = title;
+        // console.log(this.courseTitleFilled);
         // 清空可能的課程列表
         this.courseTitleSuggestion = [];
         // 利用課程名稱搜尋其可能的開課學期及教師
