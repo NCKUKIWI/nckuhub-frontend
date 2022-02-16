@@ -214,7 +214,6 @@ export class WriteCommentComponent implements OnInit {
         this.isChoosingTeacher = false;
         this.courseTeacher = '選擇開課教師';
         this.courseTeacherSuggestion = [];
-        // 清空課程心得
         this.courseCommentForm.get('courseComment').setValue('');
         // 鎖定課程心得欄位
         this.courseCommentForm.get('courseComment').disable();
@@ -223,8 +222,7 @@ export class WriteCommentComponent implements OnInit {
         // 清空給予的點數
         this.coursePoint = 0;
     }
-
-    /**
+    /*
      * 將點選的課程名稱填入，並清空courseTitleSuggestion
      * @param title  課程名稱
      */

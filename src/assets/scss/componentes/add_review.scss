@@ -174,14 +174,19 @@
                             max-height: 180px;
                         }
                         &.title {
-                            width: 55%;
                             max-height: 180px;
+                            // flex:6;
+                            width: 50%;
                         }
                         &.semester {
+                            // flex:2
                             width: 20%;
+                            margin-left: 50%;
                         }
                         &.teacher {
-                            width: 25%;
+                            // flex:3
+                            width: 30%;
+                            margin-left: 70%;
                         }
                     }
                 }
