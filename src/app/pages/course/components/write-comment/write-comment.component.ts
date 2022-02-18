@@ -366,19 +366,23 @@ export class WriteCommentComponent implements OnInit {
      */
     private sendComment(): void {
         if (this.passValidator) {
-            this.commentSend = true;
             // 創建courseForm(For post)
             this.createPostForm();
             // post request
             this.appService
                 .post({
                     url: AppUrl.ADD_COURSECOMMENT(),
-                    body: this.courseForm.value,
+                    body: JSON.stringify(this.courseForm.value),
                 })
-                .subscribe((res: any) => {
-                    // this.commentSend = true;
-                    console.log(res);
-                });
+                .subscribe(
+                    (res: any) => {
+                        this.commentSend = true;
+                        console.log(res);
+                    },
+                    (err: any) => {
+                        console.log(err);
+                    }
+                );
         }
     }
 
