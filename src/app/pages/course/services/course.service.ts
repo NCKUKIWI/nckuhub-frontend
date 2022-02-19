@@ -2,10 +2,10 @@ import { Observable, Subject } from 'rxjs';
 import { map, take, share } from 'rxjs/operators';
 import { AppService } from '../../../core/http/app.service';
 import { AppUrl } from '../../../core/http/app.setting';
-import { CourseModel, CourseRawModel } from '../models/Course.model';
+import { CourseModel, CourseRawModel, HistoryCourseModel, HistoryCourseRawModel } from '../models/Course.model';
 import { Injectable } from '@angular/core';
 import { CourseWithCommentModel } from '../models/CourseComment.model';
-import {UserService} from '../../../core/service/user.service';
+import { UserService } from '../../../core/service/user.service';
 import { DepartmentModel } from '../models/Department.model';
 
 /**
@@ -20,9 +20,14 @@ import { DepartmentModel } from '../models/Department.model';
 export class CourseService {
     // 當學期課程
     private newSemesterCourseList$ = new Subject<CourseModel[]>();
+    // 過去學期課程
+    private historyCourseList$ = new Observable<HistoryCourseModel[]>();
 
     constructor(private appService: AppService, private userService: UserService) {
+        // 取得當學期的課程
         this.initCurrentSemesterCourses();
+        // 取得過去學期的課程
+        this.historyCourseList$ = this.fetchHistoryCourses();
     }
 
     /**
@@ -43,6 +48,7 @@ export class CourseService {
      * 取得 當學期 所有課程
      */
     getCourseData(): Observable<CourseModel[]> {
+        this.initCurrentSemesterCourses();
         return this.newSemesterCourseList$.pipe(take(1), share());
     }
 
@@ -100,12 +106,12 @@ export class CourseService {
             id: rawCourse.id,
         };
         return courseModelData;
-    }
+    };
 
     /**
      * 抓取所有系所資料
      */
-     fetchDepartments(): Observable<DepartmentModel[]> {
+    fetchDepartments(): Observable<DepartmentModel[]> {
         return this.appService
             .get({
                 url: AppUrl.GET_COURSE_DEPT_INFO(),
@@ -117,32 +123,86 @@ export class CourseService {
     }
 
     /**
-    * 回傳 傳入課程 的所屬系所簡稱
-    * @param deptID 傳入課程的系所代號
-    * @param deptName 傳入課程的系所名稱
-    * @returns 傳入課程的所屬系所簡稱
-    */
-  deptTransCat(deptID: string, deptName: string): string {
-    let category: string;
-    switch (deptID) {
-      case 'A9':
-        category = '通';
-        break;
-      case 'A6':
-        category = '服';
-        break;
-      case 'A7':
-        category = '國';
-        break;
-      case 'A1':
-        category = '外';
-        break;
-      case 'A2':
-        category = '體';
-        break;
-      default:
-        category = deptName.substring(0, 1);
+     * 回傳 傳入課程 的所屬系所簡稱
+     * @param deptID 傳入課程的系所代號
+     * @param deptName 傳入課程的系所名稱
+     * @returns 傳入課程的所屬系所簡稱
+     */
+    deptTransCat(deptID: string, deptName: string): string {
+        let category: string;
+        switch (deptID) {
+            case 'A9':
+                category = '通';
+                break;
+            case 'A6':
+                category = '服';
+                break;
+            case 'A7':
+                category = '國';
+                break;
+            case 'A1':
+                category = '外';
+                break;
+            case 'A2':
+                category = '體';
+                break;
+            default:
+                category = deptName.substring(0, 1);
+        }
+        return category;
     }
-    return category;
-  }
+
+    /*
+     * 抓取所有歷史課程資料
+     */
+    fetchHistoryCourses(): Observable<HistoryCourseModel[]> {
+        return this.appService
+            .get({
+                url: AppUrl.GET_HISTORY_COURSE(),
+            })
+            .pipe(
+                map((res) => this.convertToHistoryCourseModel(res.model) as HistoryCourseModel[]),
+                take(1)
+            );
+    }
+
+    /**
+     * @param courseName
+     * @returns
+     */
+    getHistoryCourseModel(): Observable<HistoryCourseModel[]> {
+        return this.historyCourseList$;
+    }
+
+    /**
+     * 利用courseName抓取相同課程名稱過去的資料
+     * @param courseName
+     * @returns `HistoryCourseModel[]`
+     */
+    getCourseByCourseName(courseName: string): Observable<HistoryCourseModel[]> {
+        return this.historyCourseList$.pipe(
+            map((courseList) => courseList.filter((course) => course.courseName === courseName)),
+            take(1)
+        );
+    }
+
+    /**
+     * 資料轉型態 HistoryCourseRawModel => HistoryCourseModel
+     * @param rawCourse: HistoryCourseRawModel[]
+     */
+    private convertToHistoryCourseModel = (rawCourse: HistoryCourseRawModel[]): HistoryCourseModel[] => {
+        const historyCourseData: HistoryCourseModel[] = [];
+        rawCourse.forEach((course) => {
+            // 將轉換每筆資料從HistoryCourseRawModel 轉換成 HistoryCourseModel
+            const data = {
+                id: course.id,
+                semester: course.semester,
+                deptId: course.系號,
+                teacher: course.老師,
+                courseName: course.課程名稱,
+            };
+            historyCourseData.push(data);
+        });
+        return historyCourseData;
+    };
 }

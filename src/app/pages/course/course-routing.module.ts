@@ -1,12 +1,12 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { CourseComponent } from './course.component';
-import { TimetableComponent } from './components/timetable/timetable.component';
+import { CourseContentComponent } from './components/course-content/course-content.component';
 import { CourseSearchComponent } from './components/course-search/course-search.component';
+import { TimetableComponent } from './components/timetable/timetable.component';
 import { CourseUserComponent } from './components/user/course-user.component';
+import { CourseComponent } from './course.component';
 import { CourseService } from './services/course.service';
 import { WishListService } from './services/wish-list.service';
-import { CourseContentComponent } from './components/course-content/course-content.component';
 
 const routes: Routes = [
     {

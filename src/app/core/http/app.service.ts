@@ -22,7 +22,15 @@ export class AppService {
      */
     post(context: AppRequestContext): Observable<NckuhubResponse> {
         // setting httpOptions for POST
-        const httpOptions = this.setHttpOptions(context.param);
+        // const httpOptions = this.setHttpOptions(context.param);
+        const httpOptions: any = {
+            headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
+            params: context.param,
+            // for cookie
+            withCredentials: true,
+            responseType: 'text',
+        };
+
         return this.sendRequest(context, this.http.post(AppSettings.API_ENDPOINT + context.url, context.body ?? {}, httpOptions));
     }
 
@@ -69,7 +77,7 @@ export class AppService {
             return method.pipe(
                 // 設定幾秒鐘timeout
                 // timeout(AppSettings.APP_TIME_OUT),
-                map(this.dataMapping),
+                map(this.dataMapping)
             );
         });
     }
@@ -83,7 +91,7 @@ export class AppService {
         const newRes = new NckuhubResponse();
         newRes.model = res;
         return newRes;
-    }
+    };
 
     /**
      * 設定 http options

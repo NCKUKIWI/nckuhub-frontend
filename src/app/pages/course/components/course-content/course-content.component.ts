@@ -1,10 +1,12 @@
-import {Component, OnInit, Optional} from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
-import {CourseService} from '../../services/course.service';
-import {CourseComment, CourseWithCommentModel} from '../../models/CourseComment.model';
-import {CourseModel} from '../../models/Course.model';
-import {AppUrl} from '../../../../core/http/app.setting';
-import {DynamicDialogConfig, DynamicDialogRef} from 'primeng/dynamicdialog';
+import { Component, OnInit, Optional } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { CourseService } from '../../services/course.service';
+import { CourseComment, CourseWithCommentModel } from '../../models/CourseComment.model';
+import { CourseModel } from '../../models/Course.model';
+import { AppUrl } from '../../../../core/http/app.setting';
+import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { DialogService } from 'primeng/dynamicdialog';
+import { WriteCommentComponent } from '../write-comment/write-comment.component';
 
 /**
  * 課程內頁
@@ -34,7 +36,8 @@ export class CourseContentComponent implements OnInit {
         @Optional()
         public ref: DynamicDialogRef,
         @Optional()
-        public config: DynamicDialogConfig
+        public config: DynamicDialogConfig,
+        private dialogService: DialogService
     ) {
         // 抓取該課程的資料
         this.route.params.subscribe((param) => {
@@ -114,5 +117,22 @@ export class CourseContentComponent implements OnInit {
             this.wishList.push(id);
             localStorage.setItem('wishList', JSON.stringify(this.wishList));
         }
+    }
+
+    /**
+     * 打開課程心得留言
+     */
+    addCourseComment(): void {
+        // 關閉先前的ref
+        if (this.ref) {
+            this.closeCourseContent();
+        }
+        this.ref = this.dialogService.open(WriteCommentComponent, {
+            width: '100vw',
+            height: '100vh',
+            baseZIndex: 10000,
+            transitionOptions: null,
+            style: { marginTop: '-10vh' },
+        });
     }
 }

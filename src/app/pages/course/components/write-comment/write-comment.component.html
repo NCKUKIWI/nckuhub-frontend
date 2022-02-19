@@ -1,1 +1,120 @@
-<p>write-comment works!</p>
+<div id="add_review" class="add_review">
+    <div class="add_review__window">
+        <div class="add_review__window__top_bar">
+            <div class="add_review__window__top_bar__title">
+                <p class="add_review_title text_18">提供心得</p>
+            </div>
+            <div class="add_review__window__top_bar__icons">
+                <div class="add_review_icon minimize"></div>
+                <div class="add_review_icon strech"></div>
+                <div class="add_review_icon close" (click)="giveUpComment()"></div>
+            </div>
+        </div>
+
+        <div class="add_review__window__mid_cont" [formGroup]="courseCommentForm">
+            <div class="add_review__window__mid_cont__top_row">
+                <!-- 利用formGroup顯示當前輸入值 course_title -->
+                <input class="add_review_info title text_16" type="text" formControlName="courseTitle" placeholder="輸入課程名稱" />
+                <div [ngClass]="{ enabled: courseTitleFilled }" class="add_review_info semester text_16" (click)="chooseSemester()">{{ courseSemester }}</div>
+                <div [ngClass]="{ enabled: courseTitleFilled && courseSemester != '選擇學期' }" class="add_review_info teacher text_16" (click)="chooseTeacher()">{{ courseTeacher }}</div>
+                <div class="add_review_dropdowns">
+                    <div *ngIf="courseTitleSuggestion.length > 0" class="add_review_dropdown title text_16">
+                        <p *ngFor="let title of courseTitleSuggestion" (click)="fillTitle(title)">{{ title }}</p>
+                    </div>
+                    <div *ngIf="isChoosingSemester" class="add_review_dropdown semester text_16">
+                        <p *ngFor="let semester of courseSemesterSuggestion" (click)="fillSemester(semester)">{{ semester }}</p>
+                    </div>
+                    <div *ngIf="isChoosingTeacher" class="add_review_dropdown teacher text_16">
+                        <p *ngFor="let teacher of courseTeacherSuggestion" (click)="fillTeacher(teacher)">{{ teacher }}</p>
+                    </div>
+                </div>
+            </div>
+            <!-- 利用formGroup顯示當前輸入值 course_review-->
+            <textarea
+                class="add_review__window__mid_cont__mid_area add_review_paragraph text_16"
+                placeholder="上課形式、課堂要求、學習內容... 對這門課說些什麼吧！"
+                [ngClass]="{ disabled: !courseTitleFilled || courseSemester == '選擇學期' || courseTeacher == '選擇開課教師' }"
+                formControlName="courseComment"
+            ></textarea>
+            <div [ngClass]="{ enabled: courseTitleFilled && courseSemester != '選擇學期' && courseTeacher != '選擇開課教師' }" class="add_review__window__mid_cont__bottom_row">
+                <div class="add_review_rate text_16 gain" (mouseover)="changeStatus('gain')" (mouseout)="changeStatus('default')">
+                    <div class="add_review_rate__left_area">
+                        <p class="add_review_rate__name gain">課堂收穫</p>
+                    </div>
+                    <div class="add_review_rate__right_area">
+                        <div (click)="giveRate('gain', -1)" class="add_review_rate__button go_down gain"></div>
+                        <p class="add_review_rate__score gain">{{ courseRate.gain }}</p>
+                        <div (click)="giveRate('gain', 1)" class="add_review_rate__button go_up gain"></div>
+                    </div>
+                </div>
+                <div class="add_review_rate text_16 sweet" (mouseover)="changeStatus('sweet')" (mouseout)="changeStatus('default')">
+                    <div class="add_review_rate__left_area">
+                        <p class="add_review_rate__name sweet">分數甜度</p>
+                    </div>
+                    <div class="add_review_rate__right_area">
+                        <div (click)="giveRate('sweet', -1)" class="add_review_rate__button go_down sweet"></div>
+                        <p class="add_review_rate__score sweet">{{ courseRate.sweet }}</p>
+                        <div (click)="giveRate('sweet', 1)" class="add_review_rate__button go_up sweet"></div>
+                    </div>
+                </div>
+                <div class="add_review_rate text_16 cold" (mouseover)="changeStatus('cold')" (mouseout)="changeStatus('default')">
+                    <div class="add_review_rate__left_area">
+                        <p class="add_review_rate__name cold">上課涼度</p>
+                    </div>
+                    <div class="add_review_rate__right_area">
+                        <div (click)="giveRate('cold', -1)" class="add_review_rate__button go_down cold"></div>
+                        <p class="add_review_rate__score cold">{{ courseRate.cold }}</p>
+                        <div (click)="giveRate('cold', 1)" class="add_review_rate__button go_up cold"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="add_review__window__bottom_bar">
+            <div class="add_review__window__bottom_bar__status">
+                <p class="add_review_status text_14">{{ writeCommentStatus }}</p>
+            </div>
+            <div class="add_review__window__bottom_bar__buttons">
+                <div class="add_review_button give_up text_16 enabled" (click)="giveUpComment()">放棄</div>
+                <!-- <div v-if="course_point == 0" :class="{ enabled: course_review.replace(/\s/g, '').length >= 50 }" 
+                     class="add_review_button send_review text_16" @click="sendReview">送出心得</div> -->
+                <div [ngClass]="{ enabled: passValidator }" class="add_review_button send_review text_16" (click)="sendComment()">
+                    <img *ngIf="passValidator" src="../../../../../assets/images/add_review/icon_send.svg" />
+                    <img *ngIf="!passValidator" src="../../../../../assets/images/add_review/icon_send_disabled.svg" />
+                    <p>
+                        送出心得<span *ngIf="coursePoint > 0">，獲得積分 {{ coursePoint }} 點</span>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="add_review__background"></div>
+
+    <!-- 心得送出成功 -->
+    <div class="window add_review_success" *ngIf="commentSend">
+        <div class="window__background">
+            <div class="window__self">
+                <div class="window__self__title text_bold text_26">已送出心得！</div>
+                <div class="window__self__detail">感謝您熱心提供課程心得，幫助所有對這門課有興趣的同學，更加認識了課程！</div>
+                <div class="window__self__button_area">
+                    <a (click)="backToHomePage()" class="window__self__button_area__button text_dark">返回頁面</a>
+                    <a (click)="oneMoreComment()" class="window__self__button_area__button text_deep_blue">再填一份</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 放棄心得提醒 -->
+    <div class="window add_review_give_up" *ngIf="commentGiveUp">
+        <div class="window__background">
+            <div class="window__self">
+                <div class="window__self__title text_bold text_26">離開頁面？</div>
+                <div class="window__self__detail">心得尚未儲存。您要放棄目前內容並且離開此頁嗎？</div>
+                <div class="window__self__button_area">
+                    <a class="window__self__button_area__button text_dark" (click)="closeWindow()">返回填寫</a>
+                    <a class="window__self__button_area__button text_red" (click)="giveUpComment()">放棄內容</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
