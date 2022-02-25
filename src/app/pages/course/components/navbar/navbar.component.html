@@ -7,7 +7,7 @@
             <div class="hub_navbar__search__cancel"></div>
             <ng-container *ngIf="query && (displayCourseList | searchFilter:query) as filterResult">
                 <div class="hub_navbar__search__dropdown">
-                    <div class="list_course_item" *ngFor="let course of filterResult">
+                    <div class="list_course_item" *ngFor="let course of filterResult" (click)="openCoursePage(course.id)">
                         <div class="list_course_item_left">
                             <p class="list_course_item_category text_white text_20" [ngClass]="course.deptId">
                                 {{deptTransCat(course.deptId,course.deptName)}}</p>
