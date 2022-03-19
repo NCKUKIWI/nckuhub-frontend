@@ -36,3 +36,10 @@ export class CourseRawModel {
     選必修: string;
     選課序號: string;
 }
+
+export class CourseRawModel2 {
+    id: number;
+    課程名稱: string;
+    老師: string;
+    系號: string;
+}

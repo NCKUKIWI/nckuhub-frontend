@@ -2,7 +2,7 @@ import { Observable, Subject } from 'rxjs';
 import { map, take, share } from 'rxjs/operators';
 import { AppService } from '../../../core/http/app.service';
 import { AppUrl } from '../../../core/http/app.setting';
-import { CourseModel, CourseRawModel } from '../models/Course.model';
+import { CourseModel, CourseRawModel, CourseRawModel2 } from '../models/Course.model';
 import { Injectable } from '@angular/core';
 import { CourseWithCommentModel } from '../models/CourseComment.model';
 import {UserService} from '../../../core/service/user.service';
@@ -20,6 +20,7 @@ import { DepartmentModel } from '../models/Department.model';
 export class CourseService {
     // 當學期課程
     private newSemesterCourseList$ = new Subject<CourseModel[]>();
+    private allCourseList$ = new Subject<CourseModel[]>();
 
     constructor(private appService: AppService, private userService: UserService) {
         this.initCurrentSemesterCourses();
@@ -40,10 +41,35 @@ export class CourseService {
     }
 
     /**
+     * 抓取 歷年 所有課程資料
+     * @private
+     */
+     private initHistorySemesterCourses(): void {
+        this.appService.get({ url: AppUrl.GET_HISTORY_COURSE() }).subscribe((res) => {
+            // 除去 中文屬性
+            // console.log("AppUrl.GET_HISTORY_COURSE(): ",AppUrl.GET_HISTORY_COURSE())
+            // console.log("res.model.courses2: ",res)
+            const courses = (res.model as CourseRawModel2[]).map(this.convertToHistoryCourseModel);
+            // 排序: 心得數 大 -> 小
+            courses.sort((a, b) => (a.commentNum > b.commentNum ? -1 : 1));
+            this.allCourseList$.next(courses);
+        });
+    }
+    
+    /**
      * 取得 當學期 所有課程
      */
     getCourseData(): Observable<CourseModel[]> {
         return this.newSemesterCourseList$.pipe(take(1), share());
+    }
+
+    /**
+     * 取得 歷年 所有課程
+     */
+    
+    getAllCourseData(): Observable<CourseModel[]> {
+        // console.log("this.allCourseList: ",this.allCourseList$)
+        return this.allCourseList$.pipe(take(1), share());
     }
 
     /**
@@ -102,6 +128,28 @@ export class CourseService {
         return courseModelData;
     }
 
+    /**
+     * 資料轉型態 CourseRawModel => CourseModel
+     * @param rawCourse: CourseRawModel
+     * @private
+     */
+     private convertToHistoryCourseModel = (rawCourse: CourseRawModel2): CourseModel => {
+        const courseModelData = {
+            courseId: "None",
+            commentNum: null,
+            courseCredit: null,
+            courseIndex: null,
+            courseName: rawCourse.課程名稱,
+            courseType: "None",
+            teacher: rawCourse.老師,
+            deptId: rawCourse.系號,
+            deptName: "None",
+            time: "None",
+            id: null,
+        };
+        return courseModelData;
+    }    
+    
     /**
      * 抓取所有系所資料
      */
