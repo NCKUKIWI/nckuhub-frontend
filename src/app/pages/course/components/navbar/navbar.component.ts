@@ -5,6 +5,7 @@ import { CourseService } from '../../services/course.service';
 import { take, filter } from 'rxjs/operators';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { CourseContentComponent } from '../course-content/course-content.component';
+import { UserService } from '../../../../core/service/user.service'
 
 
 @Component({
@@ -13,17 +14,22 @@ import { CourseContentComponent } from '../course-content/course-content.compone
     styleUrls: ['./navbar.component.scss', '../../course.component.css'],
 })
 export class NavbarComponent implements OnInit, OnChanges {
-    public query: string = "";
-    public isDropdownOpen: Boolean=false;
-    private allCourseInNewSemester: CourseModel[] = [];
-    displayCourseList: CourseModel[] = [];
-    result: CourseModel[] = [];
     MAX_COURSE_DISPLAY_NUM = 200;
-    public search: any = '';
+    private allCourseInNewSemester: CourseModel[] = [];
+
+    search_query: string = "";
+    isSearchListOpen: Boolean=false;
+    displayCourseList: CourseModel[] = [];
+    searchInput_focused = false;
+    searchList_hovered = true;
+    user_sign_in: boolean = false;
+    user_pic: string = "/assets/images/course/sad_hugecat.png";
+
 
     constructor(
         private router: Router,
         private courseService: CourseService,
+        private userService: UserService,
         @Optional()
         public ref: DynamicDialogRef,
         private dialogService: DialogService,
@@ -31,14 +37,15 @@ export class NavbarComponent implements OnInit, OnChanges {
     ) {}
 
     ngOnInit(): void {
-        this.getCourseData();
+        this.getAllCourseData();
+        this.getUserPic();
         
     }
 
     /**
      *  打API拿 完整課程資料，取出部分初始化 展示用課程資料 和 有評論的課程資料
      */
-     getCourseData(): void {
+     getAllCourseData(): void {
         // 加filter是因為可能會收到空陣列
         this.courseService.getCourseData().pipe(filter(data => data.length !== 0), take(1)).subscribe(
             (courseData) => {
@@ -77,7 +84,44 @@ export class NavbarComponent implements OnInit, OnChanges {
     }
 
     ngOnChanges():void{
-        console.log(this.query)
+        // console.log(this.search_query)
     }
 
+    FocusOn():void{
+        this.searchInput_focused = true;
+    }
+
+    FocusOff():void{
+        this.searchInput_focused = false;
+    }
+
+    HoverOn():void{
+        this.searchList_hovered = true;
+    }
+
+    HoverOff():void{
+        this.searchList_hovered = false;
+    }
+
+    getUserPic():void{
+        this.userService.getUserInfo().subscribe(
+            (userData) => {
+                // console.log("userData : ",userData);
+                if (userData.model.user.fb_id || userData.model.user.fb_id!="無")
+                {
+                    const fb_id = userData.model.user.fb_id;
+                    this.user_pic = "https://graph.facebook.com/" + fb_id +"/picture?type=normal";
+                    this.user_sign_in = true;
+                    
+                }
+            },
+            (err: any) => {
+                if (err) {
+                    console.error(err);
+                }
+            }
+        );
+    }
+
+    
 }
