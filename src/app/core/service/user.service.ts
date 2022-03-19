@@ -174,4 +174,14 @@ export class UserService {
         user.userName = res.model.userName;
         return user;
     }
+
+    getUserInfo(){
+        return this.appService
+            .get({
+                url: AppUrl.GET_USER_INFO(),
+            })
+            .pipe(
+                take(1)
+            )
+    }
 }
