@@ -1,8 +1,12 @@
 // Nav Bar
-@import "src/assets/scss/componentes/mobile_navbar.scss";
-@import "src/assets/scss/componentes/navbar.scss";
-@import "src/assets/scss/componentes/course.scss";
-@import "src/assets/scss/componentes/table.scss";
-// [hidden] {
-//     display: none !important;
-// }
+
+@import 'src/assets/scss/componentes/navbar.scss';
+@import 'src/assets/scss/componentes/course.scss';
+@import 'src/assets/scss/componentes/table.scss';
+@import 'src/assets/scss/componentes/mobile_navbar.scss';
+
+@media only screen and (min-width: 966px) {
+    .hub_navbar__mobile {
+        display: none;
+    }
+}

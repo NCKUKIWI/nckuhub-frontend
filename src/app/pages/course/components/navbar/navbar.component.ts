@@ -18,6 +18,8 @@ export class NavbarComponent implements OnInit, OnChanges {
     result: CourseModel[] = [];
     MAX_COURSE_DISPLAY_NUM = 200;
     public search: any = '';
+    private searchStatus = false;
+    private dropStatus = false;
 
     constructor(private router: Router, private courseService: CourseService) {}
 
@@ -64,4 +66,24 @@ export class NavbarComponent implements OnInit, OnChanges {
     //     console.log("this.result.length:",this.result.length);
     //     console.log(this.result)
     // }
+
+    /**
+     * 控制手機板navbar的各個function
+     */
+    mobileProfile(): void {
+        this.isDropdownOpen = !this.isDropdownOpen;
+    }
+
+    //功能欠缺(需連動到course_search中class名叫quick_search_area的div)
+    mobileDrop(): void {
+        this.dropStatus = !this.dropStatus;
+    }
+
+    mobileSearch(): void {
+        this.searchStatus = true;
+    }
+
+    mobileCancellSearch(): void {
+        this.searchStatus = false;
+    }
 }
