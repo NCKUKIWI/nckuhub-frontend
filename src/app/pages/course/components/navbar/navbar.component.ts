@@ -83,6 +83,26 @@ export class NavbarComponent implements OnInit, OnChanges {
         });
     }
 
+    /**
+     * 為課程 打開課程內頁
+     * @param courseId 要打開課程內頁的課程的id
+     */
+    openCoursePage(courseId: number): void {
+        this.ref = this.dialogService.open(CourseContentComponent, {
+            width: '100%',
+            height: '100%',
+            baseZIndex: 10000,
+            transitionOptions: null,
+            style: { marginTop: '-75px' },
+            data: { courseId },
+        });
+
+        this.ref.onClose.subscribe(() => {
+            console.log('The dialog was closed');
+            this.router.navigateByUrl('/');
+        });
+    }
+
     ngOnChanges():void{
         // console.log(this.search_query)
     }

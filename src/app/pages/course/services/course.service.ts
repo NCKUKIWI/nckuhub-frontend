@@ -22,6 +22,7 @@ export class CourseService {
     private newSemesterCourseList$ = new Subject<CourseModel[]>();
     // 過去學期課程
     private historyCourseList$ = new Observable<HistoryCourseModel[]>();
+    private allCourseList$ = new Subject<CourseModel[]>();
 
     constructor(private appService: AppService, private userService: UserService) {
         // 取得當學期的課程
@@ -43,7 +44,7 @@ export class CourseService {
             this.newSemesterCourseList$.next(courses);
         });
     }
-
+    
     // /**
     //  * 抓取 歷年 所有課程資料
     //  * @private
@@ -68,14 +69,14 @@ export class CourseService {
         return this.newSemesterCourseList$.pipe(take(1), share());
     }
 
-    // /**
-    //  * 取得 歷年 所有課程
-    //  */
+    /**
+     * 取得 歷年 所有課程
+     */
     
-    // getAllCourseData(): Observable<CourseModel[]> {
-    //     // console.log("this.allCourseList: ",this.allCourseList$)
-    //     return this.allCourseList$.pipe(take(1), share());
-    // }
+    getAllCourseData(): Observable<CourseModel[]> {
+        // console.log("this.allCourseList: ",this.allCourseList$)
+        return this.allCourseList$.pipe(take(1), share());
+    }
 
     /**
      * 抓取課程資料與心得
@@ -155,6 +156,7 @@ export class CourseService {
     //     return courseModelData;
     // }    
     
+ 
     /**
      * 抓取所有系所資料
      */
@@ -199,19 +201,19 @@ export class CourseService {
         return category;
     }
 
-    // /*
-    //  * 抓取所有歷史課程資料
-    //  */
-    // fetchHistoryCourses(): Observable<HistoryCourseModel[]> {
-    //     return this.appService
-    //         .get({
-    //             url: AppUrl.GET_HISTORY_COURSE(),
-    //         })
-    //         .pipe(
-    //             map((res) => this.convertToHistoryCourseModel(res.model) as HistoryCourseModel[]),
-    //             take(1)
-    //         );
-    // }
+    /*
+     * 抓取所有歷史課程資料
+     */
+    fetchHistoryCourses(): Observable<HistoryCourseModel[]> {
+        return this.appService
+            .get({
+                url: AppUrl.GET_HISTORY_COURSE(),
+            })
+            .pipe(
+                map((res) => this.convertToHistoryCourseModel(res.model) as HistoryCourseModel[]),
+                take(1)
+            );
+    }
 
     /**
      * @param courseName
@@ -233,23 +235,23 @@ export class CourseService {
         );
     }
 
-//     /**
-//      * 資料轉型態 HistoryCourseRawModel => HistoryCourseModel
-//      * @param rawCourse: HistoryCourseRawModel[]
-//      */
-//     private convertToHistoryCourseModel = (rawCourse: HistoryCourseRawModel[]): HistoryCourseModel[] => {
-//         const historyCourseData: HistoryCourseModel[] = [];
-//         rawCourse.forEach((course) => {
-//             // 將轉換每筆資料從HistoryCourseRawModel 轉換成 HistoryCourseModel
-//             const data = {
-//                 id: course.id,
-//                 semester: course.semester,
-//                 deptId: course.系號,
-//                 teacher: course.老師,
-//                 courseName: course.課程名稱,
-//             };
-//             historyCourseData.push(data);
-//         });
-//         return historyCourseData;
-//     };
+    /**
+     * 資料轉型態 HistoryCourseRawModel => HistoryCourseModel
+     * @param rawCourse: HistoryCourseRawModel[]
+     */
+    private convertToHistoryCourseModel = (rawCourse: HistoryCourseRawModel[]): HistoryCourseModel[] => {
+        const historyCourseData: HistoryCourseModel[] = [];
+        rawCourse.forEach((course) => {
+            // 將轉換每筆資料從HistoryCourseRawModel 轉換成 HistoryCourseModel
+            const data = {
+                id: course.id,
+                semester: course.semester,
+                deptId: course.系號,
+                teacher: course.老師,
+                courseName: course.課程名稱,
+            };
+            historyCourseData.push(data);
+        });
+        return historyCourseData;
+    };
 }
