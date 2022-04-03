@@ -28,7 +28,7 @@ export class CourseService {
         // 取得當學期的課程
         this.initCurrentSemesterCourses();
         // 取得過去學期的課程
-        // this.historyCourseList$ = this.fetchHistoryCourses();
+        this.historyCourseList$ = this.fetchHistoryCourses();
     }
 
     /**
