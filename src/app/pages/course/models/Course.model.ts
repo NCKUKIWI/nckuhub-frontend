@@ -52,3 +52,9 @@ export class HistoryCourseRawModel {
     老師: string; // "林長寬*,林朝成"
     課程名稱: string; // "現代佛教、跨界及國際政治"
 }
+export class CourseRawModel2 {
+    id: number;
+    課程名稱: string;
+    老師: string;
+    系號: string;
+}

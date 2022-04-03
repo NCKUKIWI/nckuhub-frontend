@@ -113,3 +113,4 @@ $RECYCLE.BIN/
 
 # yarn
 yarn-error.log
+proxy.config.js

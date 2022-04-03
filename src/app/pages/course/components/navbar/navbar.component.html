@@ -3,11 +3,11 @@
         <div class="hub_navbar__left_area">
             <a class="hub_navbar__logo" href="/course"></a>
 
-            <input class="hub_navbar__search" type="text" placeholder="搜尋「課程名」或「教師名」" [(ngModel)]="query" />
+            <input class="hub_navbar__search" type="text" placeholder="搜尋「課程名」或「教師名」" [(ngModel)]="search_query" (focus)="FocusOn()" (blur)="FocusOff()" />
             <div class="hub_navbar__search__cancel"></div>
-            <ng-container *ngIf="query && (displayCourseList | searchFilter:query) as filterResult">
-                <div class="hub_navbar__search__dropdown">
-                    <div class="list_course_item" *ngFor="let course of filterResult">
+            <ng-container *ngIf="(searchInput_focused||searchList_hovered) && search_query && (displayCourseList | searchFilter:search_query) as filterResult">
+                <div class="hub_navbar__search__dropdown" (mouseenter)="HoverOn()" (mouseleave)="HoverOff()">
+                    <div class="list_course_item" *ngFor="let course of filterResult" (click)="openCoursePage(course.id)">
                         <div class="list_course_item_left">
                             <p class="list_course_item_category text_white text_20" [ngClass]="course.deptId">
                                 {{deptTransCat(course.deptId,course.deptName)}}</p>
@@ -30,20 +30,24 @@
             <div class="hub_navbar__link" routerLink="/course/search" routerLinkActive="on"> 找課程</div>
             <!-- <a href="/api/user/fblogin">登入</a> -->
             <div class="hub_navbar__link" routerLink="/course/timetable" routerLinkActive="on"> 排課表 <span class="wishlist_count">0</span></div>
-            <img (click)="isDropdownOpen = !isDropdownOpen" [ngClass]="{'on':isDropdownOpen}" src="/assets/images/course/sad_hugecat.png" class="hub_navbar__profile">
-            <div *ngIf="isDropdownOpen" class="hub_navbar__profile__dropdown">
-                <div class="hub_navbar__profile__dropdown__info not_login"><img src="/assets/images/course/sad_hugecat.png" class="hub_navbar__profile__dropdown__info__photo">
+            <img (click)="isSearchListOpen = !isSearchListOpen" [ngClass]="{'on':isSearchListOpen}" src="{{user_pic}}" class="hub_navbar__profile">
+            <div *ngIf="isSearchListOpen" class="hub_navbar__profile__dropdown">
+                <div class="hub_navbar__profile__dropdown__info not_login">
+                    <img src="{{user_pic}}" class="hub_navbar__profile__dropdown__info__photo">
                     <div class="hub_navbar__profile__dropdown__info__detail">
                         <div class="nav_profile_name">訪客貓咪</div>
                         <div class="nav_profile_dept">請登入網站，</div>
-                        <div class="nav_profile_grade">以使用完整功能！</div> <a class="hub_navbar__profile__dropdown__goto mobile_only" style="display: none;">開通小幫手</a></div>
-                </div> <a class="hub_navbar__profile__dropdown__goto desktop_only" style="display: none;">開通小幫手</a> <a href="/api/user/fblogin" class="hub_navbar__profile__dropdown__goto desktop_only">立即登入 / 註冊</a>
+                        <div class="nav_profile_grade">以使用完整功能！</div> <a class="hub_navbar__profile__dropdown__goto mobile_only" style="display: none;">開通小幫手</a>
+                    </div>
+                </div>
+                <a *ngIf="user_sign_in" class="hub_navbar__profile__dropdown__goto desktop_only">開通小幫手</a>
+                <a *ngIf="!user_sign_in" href="/api/user/fblogin" class="hub_navbar__profile__dropdown__goto desktop_only">立即登入 / 註冊</a>
                 <div class="hub_navbar__profile__dropdown__links">
                     <!-- <a href="/api/user/fblogin" class="mobile_only">登入網站</a> -->
                     <a href="https://www.facebook.com/nckuhub" target="_blank">粉絲專頁</a>
                     <a href="https://www.messenger.com/t/nckuhub" target="_blank">回報問題</a>
                     <a href="/privacy" target="_blank">隱私權政策</a>
-                    <a href="/user/logout" style="display: none;">登出帳戶</a></div>
+                    <a *ngIf="user_sign_in" href="/api/user/logout">登出帳戶</a></div>
             </div>
         </div>
     </div>
