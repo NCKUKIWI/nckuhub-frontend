@@ -1,0 +1,76 @@
+<!-- <div id="helper_background" class="window__background"> -->
+<!-- <div class="window_div">
+    <div id="notification" class="notification_area">
+        <div class="notification">
+            <p class="notification__text text_16 text_bold text_deep_blue"> 成功複製開通代碼！ </p>
+        </div>
+    </div>
+</div> -->
+<div id="helperContent">
+    <div class="content_nextpage" (click)="closeHelperContent()"></div>
+    <div class="window__self big helperContentBody">
+        <div class="window__self__title text_34 text_bold">選課小幫手</div>
+        <div class="window__self__detail underline">NCKU HUB 的選課小幫手，是全台灣第一個課程餘額追蹤機器人，幫助學生節省在電腦前盯哨的時間，精準選到想上的課程！</div>
+        <div class="window__self__detail text_16">
+            <p>投遞心得讓成大更好，兌換一學期使用資格！</p>
+            <p *ngIf=!is_used class="color_grey9b">您可使用的的心得積點：{{ points }} 點，尚須 {{ 5 - points}} 筆心得。</p>
+
+            <p *ngIf=is_used class="color_grey9b">您已成功兌換 109-2 學期的使用資格<br>目前還有 {{ points }} 點，請以下列代碼開通。</p>
+            <div *ngIf=is_used class="window__self__random_text">
+                <p data-clipboard-text="nckuhubgf3vswrbo59ph" (click)="copyMessengerCode()">複製開通代碼：{{messenger_code}}</p>
+            </div>
+        </div>
+        <div *ngIf="is_used" class="hub_navbar__profile__dropdown">
+            <a href="https://www.facebook.com/nckuhub/" class="helper_btn text_16">前往開通資格</a>
+        </div>
+        <div *ngIf="!is_used" class="hub_navbar__profile__dropdown">
+            <a class="helper_btn text_16" [ngClass]="{'disabled': points - 5 < 0}" (click)="OpenEnsurePage()">課程心得兌換</a>
+        </div>
+
+    </div>
+
+    <!-- 
+
+<div id="helperContent">
+    <div class="content_nextpage" (click)="closeHelperContent()"></div>
+    <div class="courseContentBody">
+        <div class="window__self__title text_34 text_bold">選課小幫手</div>
+        <div class="window__self__detail underline">NCKU HUB 的選課小幫手，是全台灣第一個課程餘額追蹤機器人，幫助學生節省在電腦前盯哨的時間，精準選到想上的課程！</div>
+        <div class="window__self__detail text_16">
+            <p>投遞心得讓成大更好，兌換一學期使用資格！</p>
+            <p class="color_grey9b">您可使用的的心得積點：{{ points }} 點，尚須 {{ 5 - points}} 筆心得。</p>
+            
+        </div>
+        <a class="helper_btn disabled text_16">課程心得兌換</a>
+
+
+
+    </div> -->
+
+</div>
+
+<div *ngIf="ensure_page_opened" class="window helper_free_get_make_sure" id="helperEnsure">
+    <div class="window__background">
+        <div class="window__self">
+            <div class="window__self__title text_bold text_26">是否確定兌換？</div>
+            <div class="window__self__detail">您填寫的心得須符合事實，不可為無意義內容或含有辱罵、中傷文字。若心得遭檢舉下架，NCKU HUB 將終止您的小幫手使用權益。</div>
+            <div class="window__self__button_area ">
+                <a class="window__self__button_area__button text_dark" (click)="ClosePage($event)">返回頁面</a>
+                <a class="window__self__button_area__button text_red" (click)="StartHelper()">確定兌換</a></div>
+        </div>
+    </div>
+</div>
+
+<div *ngIf="success_page_opened" class="window helper_free_get_success" id="helperSuccess">
+    <div class="window__background">
+        <div class="window__self">
+            <div class="window__self__title text_bold text_26">兌換成功！</div>
+            <div class="window__self__detail">您已成功兌換小幫手「一學期使用資格」，目前剩餘心得積點為：{{points}} 點。使用資格期限為 {{this_semester}} 學期選課期間。</div>
+            <div class="window__self__random_text">
+                <p data-clipboard-text="nckuhubgf3vswrbo59ph" (click)="copyMessengerCode()">複製開通代碼：{{messenger_code}}</p>
+            </div>
+            <div class="window__self__button_area "><a class="window__self__button_area__button text_dark" (click)="ClosePage($event)">返回頁面</a>
+                <a href="https://m.me/nckuhub/" target="_blank" class="window__self__button_area__button text_deep_blue">前往開通</a></div>
+        </div>
+    </div>
+</div>

@@ -184,4 +184,19 @@ export class UserService {
                 take(1)
             )
     }
+    /**
+     * 獲取 使用者小幫手點數狀態
+     * @returns messenger_code, point
+     */
+    getUserHelperInfo(){
+        return this.appService
+            .get({
+                url: AppUrl.GET_HELPER_STATUS(),
+            })
+            .pipe(
+                take(1)
+            )
+    }  
+
+
 }

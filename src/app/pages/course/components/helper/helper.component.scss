@@ -1,0 +1,80 @@
+/* import _import.scss*/
+
+@import 'src/assets/scss/import';
+@import "src/assets/scss/componentes/windows.scss";
+
+/*course content*/
+
+#helperContent {
+    position: absolute;
+    background-color: rgba(66, 66, 66, 0.7);
+    height: 100vh;
+    width: 100vw;
+    z-index: 300;
+    font-family: 'Roboto', sans-serif;
+    display: flex;
+    align-items: center;
+}
+
+.content_nextpage {
+    display: flex;
+    position: absolute;
+    justify-content: space-between;
+    align-items: center;
+    z-index: -1;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+}
+
+.helperContentBody {
+    margin: 0 auto;
+    // background-color: rgba(255, 255, 255, 1);
+    // width: 70%;
+    // min-width: 800px;
+    // box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.5);
+    // transition: -webkit-box-shadow 0.25s;
+    // transition: box-shadow 0.25s;
+    // display: flex;
+    // height: 100vh;
+}
+
+.color_grey9b {
+    color: #9b9b9b;
+}
+
+// .window__self__detail {
+//     padding: 0 10px;
+//     margin-bottom: 15px;
+// }
+.underline {
+    padding: 0 10px 15px!important;
+    border-bottom: 1px solid #eee;
+    text-decoration: none;
+}
+
+.helper_btn.disabled {
+    color: #cbcbcb;
+    border: 1px solid #cbcbcb;
+    cursor: default;
+    transition: 0s;
+}
+
+.helper_btn {
+    padding: 6px 14px;
+    border-radius: 18px;
+    border: 1px solid #1a6cbd;
+    text-align: center;
+    color: #1a6cbd;
+    font-weight: 600;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 10px;
+    cursor: pointer;
+    transition: .2s;
+}
+
+.text_16 {
+    font-size: 14px;
+}
