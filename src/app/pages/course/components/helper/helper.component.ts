@@ -14,6 +14,8 @@ import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 })
 export class HelperComponent implements OnInit {
   points: number = 0;
+  threshold_points: number = 5; 
+  need_points = this.threshold_points - this.points
   ensure_page_opened: boolean = false;
   success_page_opened: boolean = false;
   messenger_code: string = "";
@@ -32,6 +34,10 @@ export class HelperComponent implements OnInit {
   ngOnInit(): void {
     this.getUserHelperPoints()
   }
+  Update_needPoint()
+  {
+    this.need_points = this.threshold_points - this.points
+  }
 
   getUserHelperPoints():void{
     this.userService.getUserHelperInfo().subscribe(
@@ -44,7 +50,8 @@ export class HelperComponent implements OnInit {
                 // const fb_id = userData.model.user.fb_id;
                 this.messenger_code = userData.model.messenger_code
                 this.points = userData.model.point;
-                // this.points = 5
+                this.points = 5
+                this.Update_needPoint()
             //     this.user_sign_in = true;
                 
             // }

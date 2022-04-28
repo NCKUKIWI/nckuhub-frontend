@@ -13,7 +13,7 @@
         <div class="window__self__detail underline">NCKU HUB 的選課小幫手，是全台灣第一個課程餘額追蹤機器人，幫助學生節省在電腦前盯哨的時間，精準選到想上的課程！</div>
         <div class="window__self__detail text_16">
             <p>投遞心得讓成大更好，兌換一學期使用資格！</p>
-            <p *ngIf=!is_used class="color_grey9b">您可使用的的心得積點：{{ points }} 點，尚須 {{ 5 - points}} 筆心得。</p>
+            <p *ngIf=!is_used class="color_grey9b">您可使用的的心得積點：{{ points }} 點，尚須 {{ need_points}} 筆心得。</p>
 
             <p *ngIf=is_used class="color_grey9b">您已成功兌換 109-2 學期的使用資格<br>目前還有 {{ points }} 點，請以下列代碼開通。</p>
             <div *ngIf=is_used class="window__self__random_text">
@@ -21,31 +21,13 @@
             </div>
         </div>
         <div *ngIf="is_used" class="hub_navbar__profile__dropdown">
-            <a href="https://www.facebook.com/nckuhub/" class="helper_btn text_16">前往開通資格</a>
+            <a href="https://m.me/nckuhub/" class="helper_btn text_16">前往開通資格</a>
         </div>
         <div *ngIf="!is_used" class="hub_navbar__profile__dropdown">
-            <a class="helper_btn text_16" [ngClass]="{'disabled': points - 5 < 0}" (click)="OpenEnsurePage()">課程心得兌換</a>
+            <a class="helper_btn text_16" [ngClass]="{'disabled': need_points > 0}" (click)="OpenEnsurePage()">課程心得兌換</a>
         </div>
 
     </div>
-
-    <!-- 
-
-<div id="helperContent">
-    <div class="content_nextpage" (click)="closeHelperContent()"></div>
-    <div class="courseContentBody">
-        <div class="window__self__title text_34 text_bold">選課小幫手</div>
-        <div class="window__self__detail underline">NCKU HUB 的選課小幫手，是全台灣第一個課程餘額追蹤機器人，幫助學生節省在電腦前盯哨的時間，精準選到想上的課程！</div>
-        <div class="window__self__detail text_16">
-            <p>投遞心得讓成大更好，兌換一學期使用資格！</p>
-            <p class="color_grey9b">您可使用的的心得積點：{{ points }} 點，尚須 {{ 5 - points}} 筆心得。</p>
-            
-        </div>
-        <a class="helper_btn disabled text_16">課程心得兌換</a>
-
-
-
-    </div> -->
 
 </div>
 
