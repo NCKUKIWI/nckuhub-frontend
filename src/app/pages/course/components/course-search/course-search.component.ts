@@ -5,16 +5,21 @@ import { DepartmentModel } from '../../models/Department.model';
 import { filter, take } from 'rxjs/operators';
 import { WishListService } from '../../services/wish-list.service';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
-import { Router } from '@angular/router';
 import { CourseContentComponent } from '../course-content/course-content.component';
+import {Location} from '@angular/common';
 
 @Component({
     selector: 'app-course-search',
     templateUrl: './course-search.component.html',
     styleUrls: ['./course-search.component.scss'],
 })
-export class CourseSearchComponent implements OnInit, AfterViewInit {
-    constructor(private courseService: CourseService, private dialogService: DialogService, private wishListService: WishListService, private router: Router) {}
+export class CourseSearchComponent implements OnInit, AfterViewInit{
+    constructor(
+        private courseService: CourseService,
+        private dialogService: DialogService,
+        private wishListService: WishListService,
+        private location: Location
+    ) { }
 
     // 完整的本學期課程
     allCourseInNewSemester: CourseModel[] = [];
@@ -144,19 +149,24 @@ export class CourseSearchComponent implements OnInit, AfterViewInit {
      */
     openCoursePage(courseId: number): void {
         this.ref = this.dialogService.open(CourseContentComponent, {
-            width: '100%',
-            height: '100%',
+            width: '100vw',
+            height: '100vh',
             baseZIndex: 10000,
             transitionOptions: null,
-            style: { marginTop: '-75px' },
+            style: { marginTop: '-10vh' },
             data: { courseId },
         });
 
         this.ref.onClose.subscribe(() => {
-            console.log('The dialog was closed');
-            this.router.navigateByUrl('/');
+            this.location.replaceState('/course/search');
         });
     }
+    // TODO: why comment the ngOnDestroy()? by Nick
+    // ngOnDestroy(): void {
+    //     if (this.ref) {
+    //         this.ref.close();
+    //     }
+    // }
 
     /**
      * 解除 課程篩選狀態，依據評論篩選狀態 初始化 當前要展示的課程列表

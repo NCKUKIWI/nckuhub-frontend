@@ -1,11 +1,15 @@
-import { Component, OnInit, Optional } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { CourseService } from '../../services/course.service';
-import { CourseComment, CourseWithCommentModel } from '../../models/CourseComment.model';
-import { CourseModel } from '../../models/Course.model';
-import { AppUrl } from '../../../../core/http/app.setting';
-import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
+import {Component, OnInit, Optional} from '@angular/core';
+import {ActivatedRoute} from '@angular/router';
+import {CourseService} from '../../services/course.service';
+import {CourseComment, CourseWithCommentModel} from '../../models/CourseComment.model';
+import {CourseModel} from '../../models/Course.model';
+import {AppUrl} from '../../../../core/http/app.setting';
+import {DynamicDialogConfig, DynamicDialogRef} from 'primeng/dynamicdialog';
+import {map, take} from 'rxjs/operators';
+import {WishListService} from '../../services/wish-list.service';
+import {Observable, of} from 'rxjs';
 import { DialogService } from 'primeng/dynamicdialog';
+import {Location} from '@angular/common';
 import { WriteCommentComponent } from '../write-comment/write-comment.component';
 
 /**
@@ -25,35 +29,44 @@ export class CourseContentComponent implements OnInit {
     courseData: CourseModel;
     // score_data中的comment(留言)
     commentData: CourseComment[];
-    // 使用者的wishlist
-    wishList: number[] = [];
-    // // 課程內頁是否展示
-    // display: boolean = true;
+    // 該課程是否已在wishList
+    inWishList: boolean;
 
     constructor(
         private route: ActivatedRoute,
         private courseService: CourseService,
+        private wishListService: WishListService,
         @Optional()
         public ref: DynamicDialogRef,
         @Optional()
         public config: DynamicDialogConfig,
+        private location: Location,
         private dialogService: DialogService
     ) {
-        // 抓取該課程的資料
-        this.route.params.subscribe((param) => {
-            if (param.courseId) {
-                this.fetchCourseByCourseId(param.courseId);
-            }
-        });
     }
 
     ngOnInit(): void {
-        // 抓取該課程的資料
+        // 取得 courseId
+        this.getCourseIdByDiffSource().pipe(take(1)).subscribe(courseId => {
+            // 取得課程內容
+            this.fetchCourseByCourseId(courseId);
+            // 是否 在願望清單
+            this.inWishList = this.wishListService.isInWishList(courseId);
+        });
+    }
+
+    /**
+     * 取得 courseId by 不同來源
+     * 來源ㄧ: 使用 DialogService 傳入 config
+     * 來源二: 使用 url 找param 的courseId
+     */
+    getCourseIdByDiffSource(): Observable<number> {
+        // 抓取該課程的資料(For dialog)
         if (this.config !== null) {
-            this.fetchCourseByCourseId(this.config.data.courseId);
+            return of(this.config.data.courseId);
         }
-        // 取得 願望清單
-        this.getUserWishList();
+        // 抓取該課程的資料(For website url)
+        return this.route.params.pipe(map(param => param.courseId));
     }
 
     /**
@@ -70,13 +83,16 @@ export class CourseContentComponent implements OnInit {
             this.scoreData.got = Math.round(parseFloat(this.scoreData.got)).toString();
             this.scoreData.sweet = Math.round(parseFloat(this.scoreData.sweet)).toString();
             this.scoreData.cold = Math.round(parseFloat(this.scoreData.cold)).toString();
+
+            // route是否為該課程的網址
+            this.location.replaceState('/course/' + this.config.data.courseId);
         });
     }
 
     /**
-     * 關閉課程內頁
+     * 關閉課程Dialog
      */
-    closeCourseContent(): void {
+    closeCourseDialog(): void {
         if (this.ref) {
             this.ref.close();
         }
@@ -93,30 +109,18 @@ export class CourseContentComponent implements OnInit {
     }
 
     /**
-     * 取得 願望清單
-     */
-    getUserWishList(): void {
-        this.wishList = JSON.parse(localStorage.getItem('wishList'));
-        if (this.wishList === null) {
-            this.wishList = [];
-        }
-    }
-
-    /**
      * 新增&刪除 願望清單
-     * @param id
+     * @param courseId
      */
-    setWishlist(id: number): void {
-        if (this.wishList.includes(id)) {
+    setWishlist(courseId: number): void {
+        if (this.inWishList) {
             // 刪除 該課程
-            const index = this.wishList.findIndex((x) => x === id);
-            this.wishList.splice(index, 1);
-            localStorage.setItem('wishList', JSON.stringify(this.wishList));
+            this.wishListService.removeWish(courseId);
         } else {
             // 新增 該課程
-            this.wishList.push(id);
-            localStorage.setItem('wishList', JSON.stringify(this.wishList));
+            this.wishListService.addWish(courseId);
         }
+        this.inWishList = !this.inWishList;
     }
 
     /**
@@ -125,7 +129,7 @@ export class CourseContentComponent implements OnInit {
     addCourseComment(): void {
         // 關閉先前的ref
         if (this.ref) {
-            this.closeCourseContent();
+            this.closeCourseDialog();
         }
         this.ref = this.dialogService.open(WriteCommentComponent, {
             width: '100vw',

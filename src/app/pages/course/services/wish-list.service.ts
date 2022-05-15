@@ -15,7 +15,6 @@ import { take, filter, share } from 'rxjs/operators';
     providedIn: 'root',
 })
 export class WishListService {
-
     // 用於 發送 當前最新的願望清單
     private wishList$ = new BehaviorSubject<CourseModel[]>([]);
     // 當前最新的願望清單
@@ -33,17 +32,23 @@ export class WishListService {
      */
     private getCourseData(): void {
         // 加filter是因為可能會收到空陣列
-        this.courseService.getCourseData().pipe(filter(data => data.length != 0), take(1)).subscribe(
-            (courseData) => {
-                this.allCourseInNewSemester = courseData;
-                console.log("願望清單獲取總課程成功", this.allCourseInNewSemester.length);
-            },
-            (err: any) => {
-                if (err) {
-                    console.error(err);
+        this.courseService
+            .getCourseData()
+            .pipe(
+                filter((data) => data.length !== 0),
+                take(1)
+            )
+            .subscribe(
+                (courseData) => {
+                    this.allCourseInNewSemester = courseData;
+                    console.log('願望清單獲取總課程成功', this.allCourseInNewSemester.length);
+                },
+                (err: any) => {
+                    if (err) {
+                        console.error(err);
+                    }
                 }
-            }
-        );
+            );
     }
 
     /**
@@ -74,7 +79,7 @@ export class WishListService {
      * @param courseId 願望(課程)的id
      */
     removeWish(courseId: number): void {
-        this.wishList = this.wishList.filter(wish => wish.id !== courseId);
+        this.wishList = this.wishList.filter((wish) => wish.id !== courseId);
         this.wishList$.next(this.wishList);
     }
 

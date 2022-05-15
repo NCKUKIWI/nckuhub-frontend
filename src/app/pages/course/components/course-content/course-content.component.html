@@ -1,6 +1,6 @@
 <ng-container *ngIf="scoreData">
     <div id="courseContent">
-        <div class="content_nextpage" (click)="closeCourseContent()">
+        <div class="content_nextpage" (click)="closeCourseDialog()">
             <!-- <img style="cursor: pointer" src="../../../../../assets/images/course/left-btn.svg" /> -->
             <!-- <img style="cursor: pointer" src="../../../../../assets/images/course/right-btn.svg" /> -->
         </div>
@@ -19,8 +19,8 @@
 
                 <!-- 應改成能判斷加入或移除 -->
                 <div class="flex-container icon-span desktop_only" (click)="setWishlist(courseData.id)">
-                    <div *ngIf="!wishList.includes(courseData.id)"><span class="content-icon add_wishlist"></span><span>加入願望清單</span></div>
-                    <div *ngIf="wishList.includes(courseData.id)"><span class="content-icon already_add_wishlist"></span><span style="color: #f35a5a">移除願望清單</span></div>
+                    <div *ngIf="!this.inWishList"><span class="content-icon add_wishlist"></span><span>加入願望清單</span></div>
+                    <div *ngIf="this.inWishList"><span class="content-icon already_add_wishlist"></span><span style="color: #f35a5a">移除願望清單</span></div>
                 </div>
 
                 <!-- <div class="flex-container icon-span">
