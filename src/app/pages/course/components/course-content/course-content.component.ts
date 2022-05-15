@@ -1,6 +1,6 @@
 import {Component, OnInit, Optional} from '@angular/core';
 import {Location} from '@angular/common';
-import {ActivatedRoute, Router} from '@angular/router';
+import {ActivatedRoute} from '@angular/router';
 import {CourseService} from '../../services/course.service';
 import {WishListService} from '../../services/wish-list.service';
 import {CourseComment, CourseWithCommentModel} from '../../models/CourseComment.model';
@@ -32,7 +32,6 @@ export class CourseContentComponent implements OnInit {
 
     constructor(
       private route: ActivatedRoute,
-      private router: Router,
       private courseService: CourseService,
       private wishListService: WishListService,
       @Optional()
