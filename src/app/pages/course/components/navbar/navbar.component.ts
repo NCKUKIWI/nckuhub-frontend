@@ -70,12 +70,12 @@ export class NavbarComponent implements OnInit, OnChanges {
      */
     openCoursePage(courseId: number): void {
         this.ref = this.dialogService.open(CourseContentComponent, {
-            width: '100%',
-            height: '100%',
+            width: '100vw',
+            height: '100vh',
             baseZIndex: 10000,
             transitionOptions: null,
-            style: { marginTop: '-75px' },
-            data: { courseId },
+            style: {marginTop: '-10vh'},
+            data: {courseId},
         });
 
         this.ref.onClose.subscribe(() => {
