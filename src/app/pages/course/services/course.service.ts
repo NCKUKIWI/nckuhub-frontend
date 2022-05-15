@@ -1,8 +1,8 @@
-import { Observable, Subject } from 'rxjs';
+import { BehaviorSubject, Observable, ReplaySubject, Subject } from 'rxjs';
 import { map, take, share } from 'rxjs/operators';
 import { AppService } from '../../../core/http/app.service';
 import { AppUrl } from '../../../core/http/app.setting';
-import { CourseModel, CourseRawModel,CourseRawModel2, HistoryCourseModel, HistoryCourseRawModel } from '../models/Course.model';
+import { CourseModel, CourseRawModel, HistoryCourseModel, HistoryCourseRawModel } from '../models/Course.model';
 import { Injectable } from '@angular/core';
 import { CourseWithCommentModel } from '../models/CourseComment.model';
 import { UserService } from '../../../core/service/user.service';
@@ -19,16 +19,17 @@ import { DepartmentModel } from '../models/Department.model';
 })
 export class CourseService {
     // 當學期課程
-    private newSemesterCourseList$ = new Subject<CourseModel[]>();
+    // private newSemesterCourseList$ = new Subject<CourseModel[]>();
+    private newSemesterCourseList$ = new ReplaySubject<CourseModel[]>();
     // 過去學期課程
-    private historyCourseList$ = new Observable<HistoryCourseModel[]>();
-    private allCourseList$ = new Subject<CourseModel[]>();
+    private historyCourseList$ = new ReplaySubject<HistoryCourseModel[]>();
+    // private allCourseList$ = new Subject<CourseModel[]>();
 
     constructor(private appService: AppService, private userService: UserService) {
         // 取得當學期的課程
         this.initCurrentSemesterCourses();
         // 取得過去學期的課程
-        this.historyCourseList$ = this.fetchHistoryCourses();
+        this.fetchHistoryCourses();
     }
 
     /**
@@ -44,7 +45,7 @@ export class CourseService {
             this.newSemesterCourseList$.next(courses);
         });
     }
-    
+
     // /**
     //  * 抓取 歷年 所有課程資料
     //  * @private
@@ -60,23 +61,23 @@ export class CourseService {
     //         this.allCourseList$.next(courses);
     //     });
     // }
-    
+
     /**
      * 取得 當學期 所有課程
      */
     getCourseData(): Observable<CourseModel[]> {
-        this.initCurrentSemesterCourses();
+        // this.initCurrentSemesterCourses();
         return this.newSemesterCourseList$.pipe(take(1), share());
     }
 
-    /**
-     * 取得 歷年 所有課程
-     */
-    
-    getAllCourseData(): Observable<CourseModel[]> {
-        // console.log("this.allCourseList: ",this.allCourseList$)
-        return this.allCourseList$.pipe(take(1), share());
-    }
+    // /**
+    //  * 取得 歷年 所有課程
+    //  */
+    //
+    // getAllCourseData(): Observable<CourseModel[]> {
+    //     // console.log("this.allCourseList: ",this.allCourseList$)
+    //     return this.allCourseList$.pipe(take(1), share());
+    // }
 
     /**
      * 抓取課程資料與心得
@@ -154,9 +155,9 @@ export class CourseService {
     //         id: null,
     //     };
     //     return courseModelData;
-    // }    
-    
- 
+    // }
+
+
     /**
      * 抓取所有系所資料
      */
@@ -204,23 +205,20 @@ export class CourseService {
     /*
      * 抓取所有歷史課程資料
      */
-    fetchHistoryCourses(): Observable<HistoryCourseModel[]> {
-        return this.appService
-            .get({
-                url: AppUrl.GET_HISTORY_COURSE(),
-            })
-            .pipe(
-                map((res) => this.convertToHistoryCourseModel(res.model) as HistoryCourseModel[]),
-                take(1)
-            );
+    private fetchHistoryCourses(): void {
+        this.appService.get({ url: AppUrl.GET_HISTORY_COURSE() }).subscribe((res) => {
+            // 轉換歷史資料
+            const historyCourses = this.convertToHistoryCourseModel(res.model) as HistoryCourseModel[];
+            this.historyCourseList$.next(historyCourses);
+        });
     }
 
     /**
-     * @param courseName
-     * @returns
+     * 取得所有的歷史課程資料
      */
     getHistoryCourseModel(): Observable<HistoryCourseModel[]> {
-        return this.historyCourseList$;
+        // this.fetchHistoryCourses();
+        return this.historyCourseList$.pipe(take(1), share());
     }
 
     /**
@@ -229,6 +227,7 @@ export class CourseService {
      * @returns `HistoryCourseModel[]`
      */
     getCourseByCourseName(courseName: string): Observable<HistoryCourseModel[]> {
+        // this.fetchHistoryCourses();
         return this.historyCourseList$.pipe(
             map((courseList) => courseList.filter((course) => course.courseName === courseName)),
             take(1)
