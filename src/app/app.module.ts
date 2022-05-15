@@ -6,9 +6,10 @@ import { CourseRoutingModule } from './pages/course/course-routing.module';
 import { SharedModule } from './shared/share.module';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { HelperComponent } from './pages/course/components/helper/helper.component';
 
 @NgModule({
-    declarations: [AppComponent],
+    declarations: [AppComponent, HelperComponent],
     imports: [
         BrowserModule.withServerTransition({ appId: 'serverApp' }),
         SharedModule,

@@ -40,7 +40,7 @@
                         <div class="nav_profile_grade">以使用完整功能！</div> <a class="hub_navbar__profile__dropdown__goto mobile_only" style="display: none;">開通小幫手</a>
                     </div>
                 </div>
-                <a *ngIf="user_sign_in" class="hub_navbar__profile__dropdown__goto desktop_only">開通小幫手</a>
+                <a *ngIf="user_sign_in" (click)="openHelperPage()" class="hub_navbar__profile__dropdown__goto desktop_only">開通小幫手</a>
                 <a *ngIf="!user_sign_in" href="/api/user/fblogin" class="hub_navbar__profile__dropdown__goto desktop_only">立即登入 / 註冊</a>
                 <div class="hub_navbar__profile__dropdown__links">
                     <!-- <a href="/api/user/fblogin" class="mobile_only">登入網站</a> -->

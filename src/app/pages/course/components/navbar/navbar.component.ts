@@ -5,6 +5,7 @@ import { CourseService } from '../../services/course.service';
 import { take, filter } from 'rxjs/operators';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { CourseContentComponent } from '../course-content/course-content.component';
+import { HelperComponent } from '../helper/helper.component';
 import { UserService } from '../../../../core/service/user.service'
 
 
@@ -24,7 +25,7 @@ export class NavbarComponent implements OnInit, OnChanges {
     searchList_hovered = true;
     user_sign_in: boolean = false;
     user_pic: string = "/assets/images/course/sad_hugecat.png";
-
+    open_HelperPage = false;
 
     constructor(
         private router: Router,
@@ -76,6 +77,27 @@ export class NavbarComponent implements OnInit, OnChanges {
             style: { marginTop: '-75px' },
             data: { courseId },
         });
+
+        this.ref.onClose.subscribe(() => {
+            console.log('The dialog was closed');
+            this.router.navigateByUrl('/');
+        });
+    }
+
+    /**
+     * 為課程 打開小幫手內頁
+     */
+     openHelperPage(): void {
+        this.ref = this.dialogService.open(HelperComponent, {
+            width: '100%',
+            height: '100%',
+            baseZIndex: 10000,
+            transitionOptions: null,
+            style: { marginTop: '-75px' },
+            // data: { userId },
+        });
+
+        this.open_HelperPage = true;
 
         this.ref.onClose.subscribe(() => {
             console.log('The dialog was closed');

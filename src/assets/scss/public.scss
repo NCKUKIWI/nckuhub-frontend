@@ -1,7 +1,5 @@
 @import 'import';
-
 // 基本設定
-
 body {
     background: $bg_color;
     overflow: hidden;
@@ -29,8 +27,10 @@ a {
 }
 
 // 字體大小
-
 .text {
+    &_34 {
+        font-size: 27px;
+    }
     &_26 {
         font-size: 20px;
     }
