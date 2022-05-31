@@ -1,4 +1,24 @@
 @import 'src/assets/scss/import';
+// :host ::ng-deep {
+//     .p-message-custom {
+//         background-color: #E1CFE7;
+//         border: solid #8A427A;
+//         border-width: 0 0 0 6px;
+//         color: #2c1e30;
+//     }
+//     .p-message-custom-info {
+//         background: #B3E5FC;
+//         border: solid #0891cf;
+//         border-width: 0 0 0 6px;
+//         color: #044868;
+//     }
+// }
+.fixed_notification_area {
+    position: fixed;
+    z-index: 2;
+    display: block;
+    right: 0;
+}
 
 .notification_area {
     position: fixed;
@@ -15,8 +35,7 @@
         border-radius: 6px;
         margin: 10px 0;
         overflow: hidden;
-        transition: opacity 0.3s $material_trans,
-            margin-right 0.8s $material_trans;
+        transition: opacity 0.3s $material_trans, margin-right 0.8s $material_trans;
         @include box-shadow_3();
         opacity: 0;
         height: 40px;

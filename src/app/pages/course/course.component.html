@@ -3,5 +3,16 @@
 <div style="margin-top: 64px">
     <router-outlet></router-outlet>
 </div>
+<div id="fixed_button_table" class="fixed_notification_area">
+    <!-- <p-messages [(value)]="msg" [enableService]="false" [showTransitionOptions]="'5ms'" [hideTransitionOptions]="'3ms'"> </p-messages> -->
+    <!-- <p-messages [(value)]="messageService.messageObserver" [enableService]="false" [showTransitionOptions]="'5ms'" [hideTransitionOptions]="'3ms'"> </p-messages> -->
+    <p-messages [value]="notificationsService.msg_subject$ | async" [showTransitionOptions]="'500ms'" [hideTransitionOptions]="'300ms'" [closable]="false"></p-messages>
+    <!-- <p-messages [value]="notificationsService.messageService.messageObserver| async" [showTransitionOptions]="'500ms'" [hideTransitionOptions]="'300ms'" [closable]="false"></p-messages> -->
+</div>
+<button type="button" pButton (click)="showMsg()" label="Via Service"> success | </button>
+<button type="button" pButton (click)="showErr()" label="Via Service"> Error | </button>
+<button type="button" pButton (click)="showViaService()" label="Via Service"> showViaService |</button>
+<button type="button" pButton (click)="clearViaService()" label="Via Service"> clearViaService </button>
+
 <!--寫心得-->
 <app-button></app-button>

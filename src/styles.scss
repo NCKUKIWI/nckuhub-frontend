@@ -1,11 +1,10 @@
 /* You can add global styles to this file, and also import other style files */
+
 @import 'tailwindcss/base';
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
-
 // 字體
 @import url('https://fonts.googleapis.com/css?family=Noto+Sans');
-
 // NCKUHUB 舊版scss
 //@import "src/assets/scss/import";
 //@import "assets/scss/componentes/add_review.scss";
@@ -15,10 +14,12 @@
 //@import "src/assets/scss/componentes/mobile_course.scss";
 //@import "src/assets/scss/componentes/mobile_navbar.scss";
 //@import "src/assets/scss/componentes/navbar.scss";
-//@import "src/assets/scss/componentes/notification.scss";
+@import "src/assets/scss/componentes/notification.scss";
 //@import "src/assets/scss/componentes/reset.scss";
 //@import "src/assets/scss/componentes/table.scss";
 //@import "src/assets/scss/componentes/windows.scss";
-
 // NCKUHUB 共用 scss
 @import 'assets/scss/public.scss';
+@import url("../node_modules/primeicons/primeicons.css");
+@import url("../node_modules/primeng/resources/themes/saga-orange/theme.css");
+@import url("../node_modules/primeng/resources/primeng.min.css");

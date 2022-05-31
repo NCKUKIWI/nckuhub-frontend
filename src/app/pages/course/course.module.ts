@@ -17,7 +17,8 @@ import { TableCellComponent } from './components/timetable/table-cell/table-cell
 import { ResultListItemComponent } from './components/timetable/result-list-item/result-list-item.component';
 import { WishlistItemComponent } from './components/timetable/wishlist-item/wishlist-item.component';
 import { ButtonComponent } from './components/button/button.component';
-
+import {MessagesModule} from 'primeng/messages';
+import {MessageModule} from 'primeng/message';
 @NgModule({
     declarations: [
         CourseContentComponent,
@@ -33,7 +34,7 @@ import { ButtonComponent } from './components/button/button.component';
         WishlistItemComponent,
         ButtonComponent,
     ],
-    imports: [CourseRoutingModule, CommonModule, SharedModule, FormsModule, ReactiveFormsModule, DynamicDialogModule],
+    imports: [CourseRoutingModule, CommonModule, SharedModule, FormsModule, ReactiveFormsModule, DynamicDialogModule,MessagesModule, MessageModule],
     providers: [DialogService],
 })
 export class CourseModule {}

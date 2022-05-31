@@ -7,6 +7,9 @@ import { SharedModule } from './shared/share.module';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HelperComponent } from './pages/course/components/helper/helper.component';
+import {MessagesModule} from 'primeng/messages';
+import {MessageModule} from 'primeng/message';
+import {MessageService} from 'primeng/api';
 
 @NgModule({
     declarations: [AppComponent, HelperComponent],
@@ -17,7 +20,10 @@ import { HelperComponent } from './pages/course/components/helper/helper.compone
         CourseRoutingModule,
         HttpClientModule,
         BrowserAnimationsModule,
+        MessagesModule, 
+        MessageModule
     ],
     bootstrap: [AppComponent],
+    providers: [MessageService]
 })
 export class AppModule {}
